@@ -91,6 +91,9 @@
 		4081876F1080C92500E4D4CA /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4081876E1080C92500E4D4CA /* main.c */; };
 		408187BB1080E33A00E4D4CA /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
 		4081881E1080EF2800E4D4CA /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A560FA69FC100647706 /* server.c */; };
+		CC00000000000000000D00B1 /* server_recv.c in Sources */ = {isa = PBXBuildFile; fileRef = CC00000000000000000000A1 /* server_recv.c */; };
+		CC00000000000000000D10B1 /* server_send.c in Sources */ = {isa = PBXBuildFile; fileRef = CC00000000000000000010A1 /* server_send.c */; };
+		CC00000000000000000D20B1 /* server_logic.c in Sources */ = {isa = PBXBuildFile; fileRef = CC00000000000000000020A1 /* server_logic.c */; };
 		408188431080EF9200E4D4CA /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = FDE46EC806BD2C37004F79C3 /* vector.c */; };
 		408188441080EF9200E4D4CA /* rect.c in Sources */ = {isa = PBXBuildFile; fileRef = FD969DCE07441F9C009568EF /* rect.c */; };
 		408188451080EF9200E4D4CA /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = FDCF83C5073DAA7C006B13CC /* list.c */; };
@@ -131,6 +134,9 @@
 		40A593650FBE78FC00F3E650 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = FDCF83C5073DAA7C006B13CC /* list.c */; };
 		40A593660FBE78FC00F3E650 /* rect.c in Sources */ = {isa = PBXBuildFile; fileRef = FD969DCE07441F9C009568EF /* rect.c */; };
 		40A5936A0FBE78FC00F3E650 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A560FA69FC100647706 /* server.c */; };
+		CC00000000000000000M00B1 /* server_recv.c in Sources */ = {isa = PBXBuildFile; fileRef = CC00000000000000000000A1 /* server_recv.c */; };
+		CC00000000000000000M10B1 /* server_send.c in Sources */ = {isa = PBXBuildFile; fileRef = CC00000000000000000010A1 /* server_send.c */; };
+		CC00000000000000000M20B1 /* server_logic.c in Sources */ = {isa = PBXBuildFile; fileRef = CC00000000000000000020A1 /* server_logic.c */; };
 		40A5936B0FBE78FC00F3E650 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A5E0FA6A01A00647706 /* client.c */; };
 		BB00000000000000000000B1 /* client_recv.c in Sources */ = {isa = PBXBuildFile; fileRef = BB00000000000000000000A1 /* client_recv.c */; };
 		BB00000000000000000010B1 /* client_send.c in Sources */ = {isa = PBXBuildFile; fileRef = BB00000000000000000010A1 /* client_send.c */; };
@@ -280,6 +286,10 @@
 		40A593760FBE78FD00F3E650 /* XBolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XBolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C27A550FA69FC100647706 /* server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = server.h; sourceTree = "<group>"; };
 		40C27A560FA69FC100647706 /* server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server.c; sourceTree = "<group>"; };
+		CC00000000000000000000A1 /* server_recv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server_recv.c; sourceTree = "<group>"; };
+		CC00000000000000000010A1 /* server_send.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server_send.c; sourceTree = "<group>"; };
+		CC00000000000000000020A1 /* server_logic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server_logic.c; sourceTree = "<group>"; };
+		CC000000000000000000030A1 /* server_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = server_internal.h; sourceTree = "<group>"; };
 		40C27A5D0FA6A01A00647706 /* client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client.h; sourceTree = "<group>"; };
 		40C27A5E0FA6A01A00647706 /* client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client.c; sourceTree = "<group>"; };
 		BB00000000000000000000A1 /* client_recv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_recv.c; sourceTree = "<group>"; };
@@ -387,6 +397,10 @@
 				FDA94E6B0736F2B600E4BF82 /* bolo.c */,
 				40C27A550FA69FC100647706 /* server.h */,
 				40C27A560FA69FC100647706 /* server.c */,
+				CC00000000000000000000A1 /* server_recv.c */,
+				CC00000000000000000010A1 /* server_send.c */,
+				CC00000000000000000020A1 /* server_logic.c */,
+				CC000000000000000000030A1 /* server_internal.h */,
 				40C27A5D0FA6A01A00647706 /* client.h */,
 				40C27A5E0FA6A01A00647706 /* client.c */,
 				BB00000000000000000000A1 /* client_recv.c */,
@@ -820,6 +834,9 @@
 				4081876F1080C92500E4D4CA /* main.c in Sources */,
 				408188441080EF9200E4D4CA /* rect.c in Sources */,
 				4081881E1080EF2800E4D4CA /* server.c in Sources */,
+				CC00000000000000000D00B1 /* server_recv.c in Sources */,
+				CC00000000000000000D10B1 /* server_send.c in Sources */,
+				CC00000000000000000D20B1 /* server_logic.c in Sources */,
 				4064465510826647008F913C /* terrain.c in Sources */,
 				408188581080EFE800E4D4CA /* timing.c in Sources */,
 				408188431080EF9200E4D4CA /* vector.c in Sources */,
@@ -855,6 +872,9 @@
 				404D429E0FF852DA00589EA2 /* Main.m in Sources */,
 				40A593660FBE78FC00F3E650 /* rect.c in Sources */,
 				40A5936A0FBE78FC00F3E650 /* server.c in Sources */,
+				CC00000000000000000M00B1 /* server_recv.c in Sources */,
+				CC00000000000000000M10B1 /* server_send.c in Sources */,
+				CC00000000000000000M20B1 /* server_logic.c in Sources */,
 				4064444A108250E1008F913C /* terrain.c in Sources */,
 				4064445F108251E1008F913C /* tiles.c in Sources */,
 				C2BFADE31055937F009A1EE7 /* timing.c in Sources */,
