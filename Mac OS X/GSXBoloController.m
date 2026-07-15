@@ -1,6 +1,7 @@
 #import "GSXBoloController.h"
 #import "GSBoloView.h"
 #import "GSRobot.h"
+#import "GSXBoloController+CodeUI.h"
 #import "GSStatusBar.h"
 #import "GSBuilderStatusView.h"
 #import "GSKeyCodeField.h"
@@ -224,6 +225,19 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   NSSound *sound;
 
   controller = self;
+
+  /* Windows migrated out of the frozen nib are built in code, replacing
+     their nib-loaded versions (see GSXBoloController+CodeUI.m).  This must
+     run after the nib is FULLY assembled: the old-format nib finishes
+     hierarchy assembly and outlet connections after awakeFromNib, so
+     replacing outlets any earlier races with it. */
+  [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationDidFinishLaunchingNotification
+                                                    object:nil
+                                                     queue:[NSOperationQueue mainQueue]
+                                                usingBlock:^(NSNotification *note) {
+    [self buildJoinProgressWindow];
+  }];
+
   defaults = [NSUserDefaults standardUserDefaults];
   [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"DefaultPreferences" ofType:@"plist"]]];
 

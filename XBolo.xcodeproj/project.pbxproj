@@ -33,6 +33,8 @@
 		404D42910FF8525200589EA2 /* GSStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42870FF8525200589EA2 /* GSStatusView.h */; };
 		404D42920FF8525200589EA2 /* GSStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42880FF8525200589EA2 /* GSStatusView.m */; };
 		AA00000000000000000000B2 /* TCMPortMapperStub.m in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000A2 /* TCMPortMapperStub.m */; };
+		DD000000000000000000000B1 /* GSUIDump.m in Sources */ = {isa = PBXBuildFile; fileRef = DD000000000000000000000A1 /* GSUIDump.m */; };
+		DD000000000000000000002B1 /* GSXBoloController+CodeUI.m in Sources */ = {isa = PBXBuildFile; fileRef = DD000000000000000000002A1 /* GSXBoloController+CodeUI.m */; };
 		404D429B0FF8528F00589EA2 /* GSXBoloController.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42990FF8528F00589EA2 /* GSXBoloController.h */; };
 		404D429C0FF8528F00589EA2 /* GSXBoloController.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D429A0FF8528F00589EA2 /* GSXBoloController.m */; };
 		404D429E0FF852DA00589EA2 /* Main.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D429D0FF852DA00589EA2 /* Main.m */; };
@@ -222,6 +224,9 @@
 		404D42880FF8525200589EA2 /* GSStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSStatusView.m; path = "Mac OS X/GSStatusView.m"; sourceTree = "<group>"; };
 		AA00000000000000000000A1 /* TCMPortMapperStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCMPortMapperStub.h; path = "Mac OS X/TCMPortMapperStub.h"; sourceTree = "<group>"; };
 		AA00000000000000000000A2 /* TCMPortMapperStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCMPortMapperStub.m; path = "Mac OS X/TCMPortMapperStub.m"; sourceTree = "<group>"; };
+		DD000000000000000000000A1 /* GSUIDump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSUIDump.m; path = "Mac OS X/GSUIDump.m"; sourceTree = "<group>"; };
+		DD000000000000000000001A1 /* GSXBoloController+CodeUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GSXBoloController+CodeUI.h"; path = "Mac OS X/GSXBoloController+CodeUI.h"; sourceTree = "<group>"; };
+		DD000000000000000000002A1 /* GSXBoloController+CodeUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GSXBoloController+CodeUI.m"; path = "Mac OS X/GSXBoloController+CodeUI.m"; sourceTree = "<group>"; };
 		404D42990FF8528F00589EA2 /* GSXBoloController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSXBoloController.h; path = "Mac OS X/GSXBoloController.h"; sourceTree = "<group>"; };
 		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSXBoloController.m; path = "Mac OS X/GSXBoloController.m"; sourceTree = "<group>"; };
 		404D429D0FF852DA00589EA2 /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Main.m; path = "Mac OS X/Main.m"; sourceTree = "<group>"; };
@@ -518,6 +523,9 @@
 				404D42880FF8525200589EA2 /* GSStatusView.m */,
 				AA00000000000000000000A1 /* TCMPortMapperStub.h */,
 				AA00000000000000000000A2 /* TCMPortMapperStub.m */,
+				DD000000000000000000000A1 /* GSUIDump.m */,
+				DD000000000000000000001A1 /* GSXBoloController+CodeUI.h */,
+				DD000000000000000000002A1 /* GSXBoloController+CodeUI.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -865,6 +873,8 @@
 				404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */,
 				404D42920FF8525200589EA2 /* GSStatusView.m in Sources */,
 				AA00000000000000000000B2 /* TCMPortMapperStub.m in Sources */,
+				DD000000000000000000000B1 /* GSUIDump.m in Sources */,
+				DD000000000000000000002B1 /* GSXBoloController+CodeUI.m in Sources */,
 				404D429C0FF8528F00589EA2 /* GSXBoloController.m in Sources */,
 				406444661082520D008F913C /* images.c in Sources */,
 				40A593630FBE78FC00F3E650 /* io.c in Sources */,
