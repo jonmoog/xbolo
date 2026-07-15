@@ -400,6 +400,14 @@ ERRHANDLER(0, -1)
 END
 }
 
+
+/* reads a float stored in a packed network struct without an unaligned cast */
+static float unpackfloat(const void *p) {
+  float f;
+  memcpy(&f, p, sizeof(f));
+  return f;
+}
+
 int lockclient() {
   int err;
 
@@ -1262,7 +1270,7 @@ int printmessage(int type, const char *body) {
 
 TRY
   if (client.printmessage) {
-    if (asprintf(&text, body) == -1) LOGFAIL(errno)
+    if (asprintf(&text, "%s", body) == -1) LOGFAIL(errno)
     client.printmessage(type, text);
     free(text);
     text = NULL;
@@ -1349,15 +1357,15 @@ TRY
         client.players[clupdate.hdr.player].dead = clupdate.hdr.tankstatus == kTankDead;
         client.players[clupdate.hdr.player].boat = clupdate.hdr.tankstatus == kTankOnBoat;
         client.players[clupdate.hdr.player].dir = clupdate.hdr.tankdir*((k2Pif)/FWIDTH);
-        client.players[clupdate.hdr.player].tank.x = *((float *)&clupdate.hdr.tankx);
-        client.players[clupdate.hdr.player].tank.y = *((float *)&clupdate.hdr.tanky);
-        client.players[clupdate.hdr.player].speed = *((float *)&clupdate.hdr.tankspeed);
-        client.players[clupdate.hdr.player].turnspeed = *((float *)&clupdate.hdr.tankturnspeed);
-        client.players[clupdate.hdr.player].kickdir = *((float *)&clupdate.hdr.tankkickdir);
-        client.players[clupdate.hdr.player].kickspeed = *((float *)&clupdate.hdr.tankkickspeed);
+        client.players[clupdate.hdr.player].tank.x = unpackfloat(&clupdate.hdr.tankx);
+        client.players[clupdate.hdr.player].tank.y = unpackfloat(&clupdate.hdr.tanky);
+        client.players[clupdate.hdr.player].speed = unpackfloat(&clupdate.hdr.tankspeed);
+        client.players[clupdate.hdr.player].turnspeed = unpackfloat(&clupdate.hdr.tankturnspeed);
+        client.players[clupdate.hdr.player].kickdir = unpackfloat(&clupdate.hdr.tankkickdir);
+        client.players[clupdate.hdr.player].kickspeed = unpackfloat(&clupdate.hdr.tankkickspeed);
         client.players[clupdate.hdr.player].builderstatus = clupdate.hdr.builderstatus;
-        client.players[clupdate.hdr.player].builder.x = *((float *)&clupdate.hdr.builderx);
-        client.players[clupdate.hdr.player].builder.y = *((float *)&clupdate.hdr.buildery);
+        client.players[clupdate.hdr.player].builder.x = unpackfloat(&clupdate.hdr.builderx);
+        client.players[clupdate.hdr.player].builder.y = unpackfloat(&clupdate.hdr.buildery);
         client.players[clupdate.hdr.player].buildertarget.x = clupdate.hdr.buildertargetx;
         client.players[clupdate.hdr.player].buildertarget.y = clupdate.hdr.buildertargety;
         client.players[clupdate.hdr.player].builderwait = clupdate.hdr.builderwait;
@@ -2877,7 +2885,7 @@ TRY
   srhittank->dir = ntohl(srhittank->dir);
 
   client.players[client.player].boat = 0;
-  client.players[client.player].kickdir = *((float *)&srhittank->dir);
+  client.players[client.player].kickdir = unpackfloat(&srhittank->dir);
   client.players[client.player].kickspeed = KICKFORCE;
 
   client.armour -= 5;
@@ -3065,7 +3073,7 @@ TRY
         text = NULL;
       }
       else {
-        if (asprintf(&text, "Time Limit Reached!", seconds, seconds > 1 ? "s" : "") == -1) LOGFAIL(errno)
+        if (asprintf(&text, "Time Limit Reached!") == -1) LOGFAIL(errno)
         client.printmessage(MSGGAME, text);
         free(text);
         text = NULL;
@@ -3123,7 +3131,7 @@ TRY
         text = NULL;
       }
       else {
-        if (asprintf(&text, "Base Control Reached!", seconds, seconds > 1 ? "s" : "") == -1) LOGFAIL(errno)
+        if (asprintf(&text, "Base Control Reached!") == -1) LOGFAIL(errno)
         client.printmessage(MSGGAME, text);
         free(text);
         text = NULL;
@@ -5079,7 +5087,7 @@ TRY
 
               vel = mul2f(sub2f(client.players[client.player].tank, old), TICKSPERSEC);
               compi = sub2f(vel, prj2f(diff, vel));
-              compj = mul2f(unit2f(diff), sqrtf(fabsf((SHELLVEL*SHELLVEL) - dot2f(compi, compi))));  /* fabsf is a cludge */
+              compj = mul2f(unit2f(diff), sqrtf(fabsf((float)((SHELLVEL*SHELLVEL) - dot2f(compi, compi)))));  /* fabsf is a cludge */
 
               if ((shell = (struct Shell *)malloc(sizeof(struct Shell))) == NULL) LOGFAIL(errno)
               shell->owner = client.pills[i].owner;

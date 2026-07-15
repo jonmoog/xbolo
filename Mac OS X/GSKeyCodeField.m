@@ -1,5 +1,4 @@
 #import "GSKeyCodeField.h"
-#include <Carbon/Carbon.h>
 
 NSMutableDictionary *nameDictionary;
 

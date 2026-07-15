@@ -136,7 +136,6 @@
 		40E828731055A14B00B39BB9 /* XBolo Quick Look Plug-in.qlgenerator in Copy Plugins */ = {isa = PBXBuildFile; fileRef = 40E828721055A14400B39BB9 /* XBolo Quick Look Plug-in.qlgenerator */; };
 		40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84301114B09B00B7AF32 /* Foundation.framework */; };
 		40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84361114B0BB00B7AF32 /* Cocoa.framework */; };
-		40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED89F51114B4AA00B7AF32 /* Carbon.framework */; };
 		C2765E8B105602D70007E05A /* GSRobot.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E89105602D70007E05A /* GSRobot.h */; };
 		C2765E8C105602D70007E05A /* GSRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = C2765E8A105602D70007E05A /* GSRobot.m */; };
 		C2765E8F1056031E0007E05A /* GSRobotExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = C2765E8E1056031E0007E05A /* GSRobotExternal.h */; };
@@ -285,7 +284,6 @@
 		40E8286A1055A14400B39BB9 /* XBolo Quick Look Plug-in.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "XBolo Quick Look Plug-in.xcodeproj"; path = "XBolo Quick Look Plug-in/XBolo Quick Look Plug-in.xcodeproj"; sourceTree = "<group>"; };
 		40ED84301114B09B00B7AF32 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40ED84361114B0BB00B7AF32 /* Cocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		40ED89F51114B4AA00B7AF32 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		C2765E89105602D70007E05A /* GSRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobot.h; sourceTree = "<group>"; };
 		C2765E8A105602D70007E05A /* GSRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSRobot.m; sourceTree = "<group>"; };
 		C2765E8E1056031E0007E05A /* GSRobotExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRobotExternal.h; sourceTree = "<group>"; };
@@ -335,7 +333,6 @@
 			files = (
 				40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */,
 				40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */,
-				40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,7 +425,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				40ED89F51114B4AA00B7AF32 /* Carbon.framework */,
 				40ED84361114B0BB00B7AF32 /* Cocoa.framework */,
 				40ED84301114B09B00B7AF32 /* Foundation.framework */,
 				403F6B36105ED526009C8088 /* TCMPortMapper.framework */,

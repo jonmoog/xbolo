@@ -238,13 +238,13 @@ TRY
   int one = 1;
   if ((server.listensock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
   if ((flags = fcntl(server.listensock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-  if (fcntl(server.listensock, F_SETFL, flags | O_NONBLOCK));
+  if (fcntl(server.listensock, F_SETFL, flags | O_NONBLOCK) == -1) LOGFAIL(errno)
   setsockopt(server.listensock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
 
   /* initialize dgramsock */
   if ((server.dgramsock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) LOGFAIL(errno)
   if ((flags = fcntl(server.dgramsock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-  if (fcntl(server.dgramsock, F_SETFL, flags | O_NONBLOCK));
+  if (fcntl(server.dgramsock, F_SETFL, flags | O_NONBLOCK) == -1) LOGFAIL(errno)
 
   /* initialize name to INADDR_ANY port */
   addr.sin_family = AF_INET;
@@ -449,6 +449,14 @@ CLEANUP
     RETERR(-1)
   }
 END
+}
+
+
+/* reads a float stored in a packed network struct without an unaligned cast */
+static float unpackfloat(const void *p) {
+  float f;
+  memcpy(&f, p, sizeof(f));
+  return f;
 }
 
 int lockserver() {
@@ -1309,7 +1317,7 @@ TRY
     /* initialize trackersock */
     if ((server.tracker.sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
     if ((flags = fcntl(server.tracker.sock, F_GETFL, 0)) == -1) LOGFAIL(errno)
-    if (fcntl(server.tracker.sock, F_SETFL, flags | O_NONBLOCK));
+    if (fcntl(server.tracker.sock, F_SETFL, flags | O_NONBLOCK) == -1) LOGFAIL(errno)
 
     if ((connect(server.tracker.sock, (struct sockaddr *)&server.tracker.addr, INET_ADDRSTRLEN))) {
       if (errno != EINPROGRESS) LOGFAIL(errno)
@@ -2150,8 +2158,8 @@ TRY
   cldroppills->pills = ntohs(cldroppills->pills);
   cldroppills->x = ntohl(cldroppills->x);
   cldroppills->y = ntohl(cldroppills->y);
-  x = *((float *)&cldroppills->x);
-  y = *((float *)&cldroppills->y);
+  x = unpackfloat(&cldroppills->x);
+  y = unpackfloat(&cldroppills->y);
 
   for (i = 0; i < server.npills; i++) {
     if ((cldroppills->pills & (1 << i)) && (server.pills[i].owner != player || server.pills[i].armour != ONBOARD)) {
@@ -2425,7 +2433,7 @@ TRY
   case kGrassTerrain1:
   case kGrassTerrain2:
   case kGrassTerrain3:
-    if (clbuildroad->trees >= clbuildroad->trees) {
+    if (clbuildroad->trees >= ROADTREES) {
       server.terrain[clbuildroad->y][clbuildroad->x] = kRoadTerrain;
       sendsrbuild(clbuildroad->x, clbuildroad->y);
       sendsrbuilderack(player, 0, clbuildroad->trees - ROADTREES, NOPILL);
