@@ -911,31 +911,33 @@
 		404367A50F77EFB700B24B31 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
-				GCC_VERSION = 4.0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
 			};
 			name = Development;
 		};
 		404367A60F77EFB700B24B31 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
 			};
 			name = Deployment;
 		};
 		404367A70F77EFB700B24B31 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
 			};
 			name = Default;
 		};
@@ -947,7 +949,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = "$(HOME)/bin";
 				PRODUCT_NAME = "XBolo Tracker";
 				ZERO_LINK = YES;
@@ -960,7 +961,6 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = "$(HOME)/bin";
 				PRODUCT_NAME = "XBolo Tracker";
 				ZERO_LINK = NO;
@@ -971,7 +971,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_MODEL_TUNING = G5;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = "$(HOME)/bin";
 				PRODUCT_NAME = "XBolo Tracker";
 				ZERO_LINK = YES;
@@ -986,7 +985,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = NO;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = "Dedicated Host";
@@ -1001,7 +999,6 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = "Dedicated Host";
 				ZERO_LINK = NO;
@@ -1013,7 +1010,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = "Dedicated Host";
 			};
@@ -1022,7 +1018,6 @@
 		40A593720FBE78FC00F3E650 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1037,7 +1032,6 @@
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = NO;
 				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
@@ -1072,6 +1066,8 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
 				SECTORDER_FLAGS = "";
 				SKIP_INSTALL = NO;
 				WARNING_CFLAGS = "-Wall";
@@ -1082,7 +1078,6 @@
 		40A593730FBE78FC00F3E650 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1091,13 +1086,14 @@
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "XBolo-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1112,7 +1108,6 @@
 		40A593740FBE78FC00F3E650 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1120,13 +1115,14 @@
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "XBolo-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
