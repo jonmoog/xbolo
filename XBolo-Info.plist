@@ -51,8 +51,6 @@
 	<string>XBLO</string>
 	<key>CFBundleVersion</key>
 	<string>0.4.1</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>UTExportedTypeDeclarations</key>

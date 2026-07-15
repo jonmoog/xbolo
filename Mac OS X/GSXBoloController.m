@@ -220,29 +220,23 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
 
 // NIB methods
 
-- (void)awakeFromNib {
+- (void)applicationWillFinishLaunching:(NSNotification *)notification {
   NSUserDefaults *defaults;
   NSSound *sound;
 
   controller = self;
 
-  /* Windows migrated out of the frozen nib are built in code, replacing
-     their nib-loaded versions (see GSXBoloController+CodeUI.m).  This must
-     run after the nib is FULLY assembled (the old-format nib finishes
-     hierarchy assembly and outlet connections after awakeFromNib) but
+  /* The UI is built entirely in code (the IB3 nib is gone).  Construction
+     comes first; everything below initializes the built windows.  This runs
      before applicationOpenUntitledFile: shows the New Game window. */
-  [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillFinishLaunchingNotification
-                                                    object:nil
-                                                     queue:[NSOperationQueue mainQueue]
-                                                usingBlock:^(NSNotification *note) {
-    [self buildJoinProgressWindow];
-    [self buildStatusPanel];
-    [self buildAllegiancePanel];
-    [self buildMessagesPanel];
-    [self buildMainMenu];
-    [self buildPreferencesWindow];
-    [self buildNewGameWindow];
-  }];
+  [self buildMainMenu];
+  [self buildJoinProgressWindow];
+  [self buildStatusPanel];
+  [self buildAllegiancePanel];
+  [self buildMessagesPanel];
+  [self buildPreferencesWindow];
+  [self buildNewGameWindow];
+  [self buildBoloWindow];
 
   defaults = [NSUserDefaults standardUserDefaults];
   [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"DefaultPreferences" ofType:@"plist"]]];
@@ -266,6 +260,8 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   [prefToolbar setDelegate:self];
   [prefToolbar setSelectedItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
   [preferencesWindow setToolbar:prefToolbar];
+  [prefTab selectTabViewItemWithIdentifier:[prefToolbar selectedItemIdentifier]];
+  [preferencesWindow setContentSize:NSMakeSize(443.0, 361.0)];
 
   // init bolo toolbar items
   builderToolItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSBoloToolItemIdentifier];
@@ -523,16 +519,6 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   [speechSynthesizers addObject:[[NSSpeechSynthesizer alloc] init]];
 
   zoomLevel = DEFAULT_ZOOM;
-
-  // bug in interface builder prevents this outlet from working
-  joinProgressStatusTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(76, 60, 193, 17)];
-  [joinProgressStatusTextField setBordered:NO];
-  [joinProgressStatusTextField setEditable:NO];
-  [joinProgressStatusTextField setDrawsBackground:NO];
-  [[joinProgressWindow contentView] addSubview:joinProgressStatusTextField];
-
-  joinProgressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(18, 18, 172, 20)];
-  [[joinProgressWindow contentView] addSubview:joinProgressIndicator];
 
   // setup double clicking in tracker
   [joinTrackerTableView setTarget:self];

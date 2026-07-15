@@ -12,7 +12,16 @@ TRY
 CLEANUP
   switch (ERROR) {
   case 0:
-    RETURN(NSApplicationMain(argc, argv))
+    {
+      /* no main nib: create the application and its controller directly;
+         the controller builds the entire UI in
+         applicationWillFinishLaunching: */
+      NSApplication *app = [NSApplication sharedApplication];
+      static GSXBoloController *controller;
+      controller = [[GSXBoloController alloc] init];
+      [app setDelegate:(id)controller];
+      RETURN(NSApplicationMain(argc, argv))
+    }
 
   default:
     PCRIT(ERROR);

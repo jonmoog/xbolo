@@ -19,5 +19,6 @@
 - (void)buildMainMenu;
 - (void)buildPreferencesWindow;
 - (void)buildNewGameWindow;
+- (void)buildBoloWindow;
 
 @end

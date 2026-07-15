@@ -11,6 +11,7 @@
 #import "GSBuilderStatusView.h"
 #import "GSStatusBar.h"
 #import "GSKeyCodeField.h"
+#import "GSBoloView.h"
 
 #include <float.h>
 
@@ -637,13 +638,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
      layout it produces the same top-down order. */
   [window setInitialFirstResponder:prefTab];
 
-  /* attach the toolbar (built in awakeFromNib) before restoring the saved
-     frame so the restored content height accounts for it */
-  [window setToolbar:prefToolbar];
-  [prefTab selectTabViewItemWithIdentifier:[prefToolbar selectedItemIdentifier]];
-
   [window setFrameAutosaveName:@"GSPreferencesWindow"];
-  [window setContentSize:NSMakeSize(443.0, 361.0)];
 
   preferencesWindow = window;
 }
@@ -1000,6 +995,31 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [window setContentSize:NSMakeSize(640, 480)];
 
   newGameWindow = window;
+}
+
+
+- (void)buildBoloWindow {
+  NSWindow *window =
+    [[NSWindow alloc] initWithContentRect:NSMakeRect(9.0, 115.0, 1186.0, 744.0)
+                                styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskResizable)
+                                  backing:NSBackingStoreBuffered
+                                    defer:YES];
+  [window setTitle:@"XBolo"];
+  [window setReleasedWhenClosed:NO];
+  [window setDelegate:(id)self];
+
+  NSScrollView *scroll = [[NSScrollView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 1186.0, 744.0)];
+  [scroll setHasVerticalScroller:YES];
+  [scroll setHasHorizontalScroller:YES];
+  [scroll setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
+
+  boloView = [[GSBoloView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 4096.0, 4096.0)];
+  [scroll setDocumentView:boloView];
+
+  [[window contentView] addSubview:scroll];
+  [window setFrameAutosaveName:@"GSXBoloWindow"];
+
+  boloWindow = window;
 }
 
 @end

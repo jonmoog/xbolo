@@ -56,12 +56,17 @@ The engine records an error trace (file/function/line) when a call fails;
   mid-function), and playtest after converting a module — the protocol and
   simulation code has no test suite.
 
+## UI
+
+The entire interface is built in code (`Mac OS X/GSXBoloController+CodeUI.m`),
+constructed at applicationWillFinishLaunching:.  There is no nib.  The
+original IB3 nib's structure is preserved in `nib-ui-spec.json`, captured
+with the GSUIDump tool (`XBolo -GSDumpUI YES [-GSDumpUIPath <file>]`), which
+dumps the live window/view/outlet/menu tree as JSON for regression-diffing
+UI changes.
+
 ## Known legacy items
 
-- `English.lproj/MainMenu.nib` is a compiled binary nib.  It loads fine at
-  runtime, but it depends on an Interface Builder 3 plug-in, so modern Xcode
-  cannot open it for editing.  UI changes require recreating the interface
-  in a modern xib or in code.
 - `XBolo Quick Look Plug-in/` builds a `.qlgenerator`, a plug-in format that
   no longer loads on modern macOS; it needs porting to a Quick Look app
   extension to be useful again.
