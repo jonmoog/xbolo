@@ -648,4 +648,358 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   preferencesWindow = window;
 }
 
+
+- (void)buildNewGameWindow {
+  NSWindow *window =
+    [[NSWindow alloc] initWithContentRect:NSMakeRect(436, 255, 640, 480)
+                                styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable)
+                                  backing:NSBackingStoreBuffered
+                                    defer:YES];
+  [window setTitle:@"New Game"];
+  [window setReleasedWhenClosed:NO];
+  NSView *content = [window contentView];
+
+  newGameTabView = [[NSTabView alloc] initWithFrame:NSMakeRect(13, 10, 614, 464)];
+  NSTabViewItem *item1 = [[NSTabViewItem alloc] initWithIdentifier:@"0"];
+  [item1 setLabel:@"Host"];
+  NSView *pane2 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 594, 418)];
+  hostPortField = [[NSTextField alloc] initWithFrame:NSMakeRect(237, 360, 240, 22)];
+  [hostPortField setEditable:YES];
+  [hostPortField setBezeled:YES];
+  [hostPortField setStringValue:@"50000"];
+  [hostPortField setTarget:self];
+  [hostPortField setAction:@selector(hostPort:)];
+  [pane2 addSubview:hostPortField];
+
+  NSTextField *t3 = GSLabel(@"Port:", NSMakeRect(197, 362, 34, 17));
+  [t3 setAlignment:2];
+  [pane2 addSubview:t3];
+
+  hostGameTypeMenu = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(234, 211, 214, 26) pullsDown:NO];
+  [hostGameTypeMenu addItemsWithTitles:@[@"Domination", @"Capture The Flag", @"King of the Hill", @"Kill the Man with the Ball", @"Body Count"]];
+  [hostGameTypeMenu setTarget:self];
+  [hostGameTypeMenu setAction:@selector(hostGameType:)];
+  [pane2 addSubview:hostGameTypeMenu];
+
+  NSButton *b4 = [[NSButton alloc] initWithFrame:NSMakeRect(110, 382, 87, 32)];
+  [b4 setTitle:@"Choose"];
+  [b4 setBezelStyle:1];
+  [b4 setTarget:self];
+  [b4 setAction:@selector(hostChoose:)];
+  [pane2 addSubview:b4];
+
+  NSTextField *t5 = GSLabel(@"Map:", NSMakeRect(196, 392, 35, 17));
+  [t5 setAlignment:2];
+  [pane2 addSubview:t5];
+
+  hostMapField = [[NSTextField alloc] initWithFrame:NSMakeRect(237, 390, 240, 22)];
+  [hostMapField setEditable:NO];
+  [hostMapField setBezeled:YES];
+  [hostMapField setSelectable:YES];
+  [hostMapField setStringValue:@"Cognitive Dissonance"];
+  [pane2 addSubview:hostMapField];
+
+  NSButton *b6 = [[NSButton alloc] initWithFrame:NSMakeRect(490, 12, 90, 32)];
+  [b6 setTitle:@"OK"];
+  [b6 setBezelStyle:1];
+  [b6 setKeyEquivalent:@"\r"];
+  [b6 setTarget:self];
+  [b6 setAction:@selector(hostOK:)];
+  [pane2 addSubview:b6];
+
+  hostGameTypeTab = [[NSTabView alloc] initWithFrame:NSMakeRect(112, 56, 369, 153)];
+  [hostGameTypeTab setTabViewType:4];
+  NSTabViewItem *item7 = [[NSTabViewItem alloc] initWithIdentifier:@"1"];
+  [item7 setLabel:@"Domination"];
+  NSView *pane8 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 349, 133)];
+  NSTextField *t9 = GSLabel(@"Base Control:", NSMakeRect(22, 25, 88, 17));
+  [pane8 addSubview:t9];
+
+  hostDominationBaseControlSlider = [[NSSlider alloc] initWithFrame:NSMakeRect(113, 23, 138, 26)];
+  [hostDominationBaseControlSlider setMinValue:10];
+  [hostDominationBaseControlSlider setMaxValue:60];
+  [hostDominationBaseControlSlider setDoubleValue:30];
+  [hostDominationBaseControlSlider setTarget:self];
+  [hostDominationBaseControlSlider setAction:@selector(hostDominationBaseControl:)];
+  [pane8 addSubview:hostDominationBaseControlSlider];
+
+  hostDominationBaseControlField = [[NSTextField alloc] initWithFrame:NSMakeRect(257, 23, 72, 22)];
+  [hostDominationBaseControlField setEditable:YES];
+  [hostDominationBaseControlField setBezeled:YES];
+  [hostDominationBaseControlField setStringValue:@"00:00:30"];
+  [hostDominationBaseControlField setTarget:self];
+  [hostDominationBaseControlField setAction:@selector(hostDominationBaseControl:)];
+  [pane8 addSubview:hostDominationBaseControlField];
+
+  NSButtonCell *proto10 = [[NSButtonCell alloc] init];
+  [proto10 setButtonType:NSButtonTypeRadio];
+  hostDominationTypeMatrix = [[NSMatrix alloc] initWithFrame:NSMakeRect(113, 55, 176, 58) mode:0 prototype:proto10 numberOfRows:3 numberOfColumns:1];
+  [hostDominationTypeMatrix setCellSize:NSMakeSize(176, 18)];
+  [[hostDominationTypeMatrix cellAtRow:0 column:0] setTitle:@"Open Game"];
+  [[hostDominationTypeMatrix cellAtRow:0 column:0] setTag:0];
+  [[hostDominationTypeMatrix cellAtRow:1 column:0] setTitle:@"Tournament Game"];
+  [[hostDominationTypeMatrix cellAtRow:1 column:0] setTag:1];
+  [[hostDominationTypeMatrix cellAtRow:2 column:0] setTitle:@"Strict Tournament Game"];
+  [[hostDominationTypeMatrix cellAtRow:2 column:0] setTag:2];
+  [hostDominationTypeMatrix selectCellAtRow:0 column:0];
+  [hostDominationTypeMatrix setTarget:self];
+  [hostDominationTypeMatrix setAction:@selector(hostDominationType:)];
+  [pane8 addSubview:hostDominationTypeMatrix];
+
+  NSTextField *t11 = GSLabel(@"Type:", NSMakeRect(71, 96, 39, 17));
+  [t11 setAlignment:4];
+  [pane8 addSubview:t11];
+
+  [item7 setView:pane8];
+  [hostGameTypeTab addTabViewItem:item7];
+
+  NSTabViewItem *item12 = [[NSTabViewItem alloc] initWithIdentifier:@"2"];
+  [item12 setLabel:@"Capture The Flag"];
+  NSView *pane13 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 349, 133)];
+  [item12 setView:pane13];
+  [hostGameTypeTab addTabViewItem:item12];
+
+  NSTabViewItem *item14 = [[NSTabViewItem alloc] initWithIdentifier:@"3"];
+  [item14 setLabel:@"King of the Hill"];
+  NSView *pane15 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 349, 133)];
+  [item14 setView:pane15];
+  [hostGameTypeTab addTabViewItem:item14];
+
+  NSTabViewItem *item16 = [[NSTabViewItem alloc] initWithIdentifier:@"4"];
+  [item16 setLabel:@"Kill the Man with the Ball"];
+  NSView *pane17 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 349, 133)];
+  [item16 setView:pane17];
+  [hostGameTypeTab addTabViewItem:item16];
+
+  NSTabViewItem *item18 = [[NSTabViewItem alloc] initWithIdentifier:@"5"];
+  [item18 setLabel:@"Body Count"];
+  NSView *pane19 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 349, 133)];
+  [item18 setView:pane19];
+  [hostGameTypeTab addTabViewItem:item18];
+
+  [pane2 addSubview:hostGameTypeTab];
+
+  NSTextField *t20 = GSLabel(@"Game Type:", NSMakeRect(152, 217, 79, 17));
+  [t20 setAlignment:2];
+  [pane2 addSubview:t20];
+
+  hostPasswordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect(237, 330, 240, 22)];
+  [hostPasswordField setEditable:YES];
+  [hostPasswordField setBezeled:YES];
+  [hostPasswordField setTarget:self];
+  [hostPasswordField setAction:@selector(hostPassword:)];
+  [pane2 addSubview:hostPasswordField];
+
+  hostPasswordSwitch = [[NSButton alloc] initWithFrame:NSMakeRect(144, 331, 86, 18)];
+  [hostPasswordSwitch setButtonType:NSButtonTypeSwitch];
+  [hostPasswordSwitch setTitle:@"Password:"];
+  [hostPasswordSwitch setBezelStyle:2];
+  [hostPasswordSwitch setTarget:self];
+  [hostPasswordSwitch setAction:@selector(hostPasswordSwitch:)];
+  [pane2 addSubview:hostPasswordSwitch];
+
+  hostTimeLimitSwitch = [[NSButton alloc] initWithFrame:NSMakeRect(136, 297, 94, 18)];
+  [hostTimeLimitSwitch setButtonType:NSButtonTypeSwitch];
+  [hostTimeLimitSwitch setTitle:@"Time Limit:"];
+  [hostTimeLimitSwitch setBezelStyle:2];
+  [hostTimeLimitSwitch setTarget:self];
+  [hostTimeLimitSwitch setAction:@selector(hostTimeLimitSwitch:)];
+  [pane2 addSubview:hostTimeLimitSwitch];
+
+  hostTimeLimitSlider = [[NSSlider alloc] initWithFrame:NSMakeRect(235, 296, 164, 26)];
+  [hostTimeLimitSlider setMinValue:600];
+  [hostTimeLimitSlider setMaxValue:3600];
+  [hostTimeLimitSlider setDoubleValue:1800];
+  [hostTimeLimitSlider setTarget:self];
+  [hostTimeLimitSlider setAction:@selector(hostTimeLimit:)];
+  [pane2 addSubview:hostTimeLimitSlider];
+
+  hostTimeLimitField = [[NSTextField alloc] initWithFrame:NSMakeRect(405, 296, 72, 22)];
+  [hostTimeLimitField setEditable:YES];
+  [hostTimeLimitField setBezeled:YES];
+  [hostTimeLimitField setStringValue:@"00:30:00"];
+  [hostTimeLimitField setTarget:self];
+  [hostTimeLimitField setAction:@selector(hostTimeLimit:)];
+  [pane2 addSubview:hostTimeLimitField];
+
+  NSButton *b21 = [[NSButton alloc] initWithFrame:NSMakeRect(400, 12, 90, 32)];
+  [b21 setTitle:@"Cancel"];
+  [b21 setBezelStyle:1];
+  [b21 setKeyEquivalent:@"\033"];
+  [b21 setTarget:window];
+  [b21 setAction:@selector(orderOut:)];
+  [pane2 addSubview:b21];
+
+  hostTrackerSwitch = [[NSButton alloc] initWithFrame:NSMakeRect(156, 244, 74, 18)];
+  [hostTrackerSwitch setButtonType:NSButtonTypeSwitch];
+  [hostTrackerSwitch setTitle:@"Tracker:"];
+  [hostTrackerSwitch setBezelStyle:2];
+  [hostTrackerSwitch setTarget:self];
+  [hostTrackerSwitch setAction:@selector(hostTrackerSwitch:)];
+  [pane2 addSubview:hostTrackerSwitch];
+
+  hostTrackerField = [[NSTextField alloc] initWithFrame:NSMakeRect(237, 243, 240, 22)];
+  [hostTrackerField setEditable:YES];
+  [hostTrackerField setBezeled:YES];
+  [hostTrackerField setStringValue:@"tracker.xbolo.org"];
+  [hostTrackerField setAlignment:4];
+  [hostTrackerField setTarget:self];
+  [hostTrackerField setAction:@selector(tracker:)];
+  [pane2 addSubview:hostTrackerField];
+
+  hostHiddenMinesSwitch = [[NSButton alloc] initWithFrame:NSMakeRect(117, 272, 113, 18)];
+  [hostHiddenMinesSwitch setButtonType:NSButtonTypeSwitch];
+  [hostHiddenMinesSwitch setTitle:@"Hidden Mines:"];
+  [hostHiddenMinesSwitch setBezelStyle:2];
+  [hostHiddenMinesSwitch setTarget:self];
+  [hostHiddenMinesSwitch setAction:@selector(hostHiddenMinesSwitch:)];
+  [pane2 addSubview:hostHiddenMinesSwitch];
+
+  hostHiddenMinesTextField = GSLabel(@"Mines Will Always Be Visible", NSMakeRect(234, 273, 246, 17));
+  [hostHiddenMinesTextField setAlignment:4];
+  [pane2 addSubview:hostHiddenMinesTextField];
+
+  hostUPnPSwitch = [[NSButton alloc] initWithFrame:NSMakeRect(139, 361, 54, 18)];
+  [hostUPnPSwitch setButtonType:NSButtonTypeSwitch];
+  [hostUPnPSwitch setTitle:@"UPnP"];
+  [hostUPnPSwitch setBezelStyle:2];
+  [hostUPnPSwitch setTarget:self];
+  [hostUPnPSwitch setAction:@selector(hostUPnPSwitch:)];
+  [pane2 addSubview:hostUPnPSwitch];
+
+  [item1 setView:pane2];
+  [newGameTabView addTabViewItem:item1];
+
+  NSTabViewItem *item22 = [[NSTabViewItem alloc] initWithIdentifier:@"1"];
+  [item22 setLabel:@"Join"];
+  NSView *pane23 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 594, 418)];
+  NSTextField *t24 = GSLabel(@"Address:", NSMakeRect(157, 392, 60, 17));
+  [t24 setAlignment:2];
+  [pane23 addSubview:t24];
+
+  joinAddressField = [[NSTextField alloc] initWithFrame:NSMakeRect(222, 390, 240, 22)];
+  [joinAddressField setEditable:YES];
+  [joinAddressField setBezeled:YES];
+  [joinAddressField setStringValue:@"localhost"];
+  [joinAddressField setTarget:self];
+  [joinAddressField setAction:@selector(joinAddress:)];
+  [pane23 addSubview:joinAddressField];
+
+  NSButton *b25 = [[NSButton alloc] initWithFrame:NSMakeRect(490, 12, 90, 32)];
+  [b25 setTitle:@"OK"];
+  [b25 setBezelStyle:1];
+  [b25 setKeyEquivalent:@"\r"];
+  [b25 setTarget:self];
+  [b25 setAction:@selector(joinOK:)];
+  [pane23 addSubview:b25];
+
+  NSTextField *t26 = GSLabel(@"Port:", NSMakeRect(183, 362, 34, 17));
+  [t26 setAlignment:2];
+  [pane23 addSubview:t26];
+
+  joinPortField = [[NSTextField alloc] initWithFrame:NSMakeRect(222, 360, 240, 22)];
+  [joinPortField setEditable:YES];
+  [joinPortField setBezeled:YES];
+  [joinPortField setStringValue:@"50000"];
+  [joinPortField setTarget:self];
+  [joinPortField setAction:@selector(joinPort:)];
+  [pane23 addSubview:joinPortField];
+
+  joinPasswordSwitch = [[NSButton alloc] initWithFrame:NSMakeRect(130, 331, 86, 18)];
+  [joinPasswordSwitch setButtonType:NSButtonTypeSwitch];
+  [joinPasswordSwitch setTitle:@"Password:"];
+  [joinPasswordSwitch setBezelStyle:2];
+  [joinPasswordSwitch setTarget:self];
+  [joinPasswordSwitch setAction:@selector(joinPasswordSwitch:)];
+  [pane23 addSubview:joinPasswordSwitch];
+
+  joinPasswordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect(222, 330, 240, 22)];
+  [joinPasswordField setEditable:YES];
+  [joinPasswordField setBezeled:YES];
+  [joinPasswordField setTarget:self];
+  [joinPasswordField setAction:@selector(joinPassword:)];
+  [pane23 addSubview:joinPasswordField];
+
+  NSButton *b27 = [[NSButton alloc] initWithFrame:NSMakeRect(400, 12, 90, 32)];
+  [b27 setTitle:@"Cancel"];
+  [b27 setBezelStyle:1];
+  [b27 setKeyEquivalent:@"\033"];
+  [b27 setTarget:window];
+  [b27 setAction:@selector(orderOut:)];
+  [pane23 addSubview:b27];
+
+  joinTrackerField = [[NSTextField alloc] initWithFrame:NSMakeRect(222, 298, 240, 22)];
+  [joinTrackerField setEditable:YES];
+  [joinTrackerField setBezeled:YES];
+  [joinTrackerField setStringValue:@"tracker.xbolo.org"];
+  [joinTrackerField setAlignment:4];
+  [joinTrackerField setTarget:self];
+  [joinTrackerField setAction:@selector(tracker:)];
+  [pane23 addSubview:joinTrackerField];
+
+  NSScrollView *scroll28 = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 60, 554, 230)];
+  [scroll28 setBorderType:2];
+  [scroll28 setHasVerticalScroller:YES];
+  [scroll28 setHasHorizontalScroller:YES];
+  joinTrackerTableView = [[NSTableView alloc] initWithFrame:NSMakeRect(0, 0, 552, 200)];
+  NSTableColumn *col29 = [[NSTableColumn alloc] initWithIdentifier:@"GSHostPlayerColumn"];
+  [col29 setTitle:@"Host Player"];
+  [col29 setWidth:70];
+  [joinTrackerTableView addTableColumn:col29];
+  NSTableColumn *col30 = [[NSTableColumn alloc] initWithIdentifier:@"GSMapNameColumn"];
+  [col30 setTitle:@"Map Name"];
+  [col30 setWidth:104];
+  [joinTrackerTableView addTableColumn:col30];
+  NSTableColumn *col31 = [[NSTableColumn alloc] initWithIdentifier:@"GSPasswordColumn"];
+  [col31 setTitle:@"Password"];
+  [col31 setWidth:52];
+  [joinTrackerTableView addTableColumn:col31];
+  NSTableColumn *col32 = [[NSTableColumn alloc] initWithIdentifier:@"GSPlayersColumn"];
+  [col32 setTitle:@"Players"];
+  [col32 setWidth:44.4521484375];
+  [joinTrackerTableView addTableColumn:col32];
+  NSTableColumn *col33 = [[NSTableColumn alloc] initWithIdentifier:@"GSPausedColumn"];
+  [col33 setTitle:@"Paused"];
+  [col33 setWidth:36.4521484375];
+  [joinTrackerTableView addTableColumn:col33];
+  NSTableColumn *col34 = [[NSTableColumn alloc] initWithIdentifier:@"GSAllowJoinColumn"];
+  [col34 setTitle:@"Allow Join"];
+  [col34 setWidth:58.4521484375];
+  [joinTrackerTableView addTableColumn:col34];
+  NSTableColumn *col35 = [[NSTableColumn alloc] initWithIdentifier:@"GSHostnameColumn"];
+  [col35 setTitle:@"Hostname"];
+  [col35 setWidth:100];
+  [joinTrackerTableView addTableColumn:col35];
+  NSTableColumn *col36 = [[NSTableColumn alloc] initWithIdentifier:@"GSPortColumn"];
+  [col36 setTitle:@"Port"];
+  [col36 setWidth:53.4521484375];
+  [joinTrackerTableView addTableColumn:col36];
+  [joinTrackerTableView setDelegate:self];
+  [joinTrackerTableView setDataSource:self];
+  [scroll28 setDocumentView:joinTrackerTableView];
+  [pane23 addSubview:scroll28];
+
+  NSButton *b37 = [[NSButton alloc] initWithFrame:NSMakeRect(14, 12, 88, 32)];
+  [b37 setTitle:@"Refresh"];
+  [b37 setBezelStyle:1];
+  [b37 setTarget:self];
+  [b37 setAction:@selector(joinTrackerRefresh:)];
+  [pane23 addSubview:b37];
+
+  NSTextField *t38 = GSLabel(@"Tracker:", NSMakeRect(161, 300, 56, 17));
+  [t38 setAlignment:4];
+  [pane23 addSubview:t38];
+
+  [item22 setView:pane23];
+  [newGameTabView addTabViewItem:item22];
+
+  [content addSubview:newGameTabView];
+
+  [window setInitialFirstResponder:newGameTabView];
+  [window setFrameAutosaveName:@"GSNewGameWindow"];
+  [window setContentSize:NSMakeSize(640, 480)];
+
+  newGameWindow = window;
+}
+
 @end

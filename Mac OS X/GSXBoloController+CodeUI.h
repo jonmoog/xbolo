@@ -18,5 +18,6 @@
 - (void)buildMessagesPanel;
 - (void)buildMainMenu;
 - (void)buildPreferencesWindow;
+- (void)buildNewGameWindow;
 
 @end

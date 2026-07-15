@@ -228,10 +228,10 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
 
   /* Windows migrated out of the frozen nib are built in code, replacing
      their nib-loaded versions (see GSXBoloController+CodeUI.m).  This must
-     run after the nib is FULLY assembled: the old-format nib finishes
-     hierarchy assembly and outlet connections after awakeFromNib, so
-     replacing outlets any earlier races with it. */
-  [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationDidFinishLaunchingNotification
+     run after the nib is FULLY assembled (the old-format nib finishes
+     hierarchy assembly and outlet connections after awakeFromNib) but
+     before applicationOpenUntitledFile: shows the New Game window. */
+  [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillFinishLaunchingNotification
                                                     object:nil
                                                      queue:[NSOperationQueue mainQueue]
                                                 usingBlock:^(NSNotification *note) {
@@ -241,6 +241,7 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
     [self buildMessagesPanel];
     [self buildMainMenu];
     [self buildPreferencesWindow];
+    [self buildNewGameWindow];
   }];
 
   defaults = [NSUserDefaults standardUserDefaults];
