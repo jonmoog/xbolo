@@ -2,7 +2,7 @@
 
 #import <Cocoa/Cocoa.h>
 #include <sys/socket.h>
-#import "TCMPortMapper/TCMPortMapper.h"
+#import "TCMPortMapperStub.h"
 
 #include "vector.h"
 #include "rect.h"

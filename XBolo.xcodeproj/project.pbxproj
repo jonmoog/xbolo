@@ -24,7 +24,6 @@
 		402097CA0FC91E2F0018390E /* fsuperboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097BF0FC91E2F0018390E /* fsuperboom.aiff */; };
 		402097CC0FC91E2F0018390E /* ftree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097C10FC91E2F0018390E /* ftree.aiff */; };
 		402098370FC926C00018390E /* fshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402098360FC926C00018390E /* fshot.aiff */; };
-		403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; };
 		404D42890FF8525200589EA2 /* GSBoloView.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D427F0FF8525200589EA2 /* GSBoloView.h */; };
 		404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42800FF8525200589EA2 /* GSBoloView.m */; };
 		404D428B0FF8525200589EA2 /* GSBuilderStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42810FF8525200589EA2 /* GSBuilderStatusView.h */; };
@@ -35,6 +34,7 @@
 		404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42860FF8525200589EA2 /* GSStatusBar.m */; };
 		404D42910FF8525200589EA2 /* GSStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42870FF8525200589EA2 /* GSStatusView.h */; };
 		404D42920FF8525200589EA2 /* GSStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42880FF8525200589EA2 /* GSStatusView.m */; };
+		AA00000000000000000000B2 /* TCMPortMapperStub.m in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000A2 /* TCMPortMapperStub.m */; };
 		404D429B0FF8528F00589EA2 /* GSXBoloController.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42990FF8528F00589EA2 /* GSXBoloController.h */; };
 		404D429C0FF8528F00589EA2 /* GSXBoloController.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D429A0FF8528F00589EA2 /* GSXBoloController.m */; };
 		404D429E0FF852DA00589EA2 /* Main.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D429D0FF852DA00589EA2 /* Main.m */; };
@@ -96,7 +96,6 @@
 		406444651082520D008F913C /* images.h in Headers */ = {isa = PBXBuildFile; fileRef = 406444621082520D008F913C /* images.h */; };
 		406444661082520D008F913C /* images.c in Sources */ = {isa = PBXBuildFile; fileRef = 406444631082520D008F913C /* images.c */; };
 		4064465510826647008F913C /* terrain.c in Sources */ = {isa = PBXBuildFile; fileRef = 40644447108250E1008F913C /* terrain.c */; };
-		4064472B10829C15008F913C /* TCMPortMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403F6B36105ED526009C8088 /* TCMPortMapper.framework */; };
 		407333AF10F10E5100A018A1 /* XBoloMap.icns in Resources */ = {isa = PBXBuildFile; fileRef = 407333AE10F10E5100A018A1 /* XBoloMap.icns */; };
 		407C8B3F0FDC73C1006A71F7 /* tracker.c in Sources */ = {isa = PBXBuildFile; fileRef = 407C8B2A0FDC72CA006A71F7 /* tracker.c */; };
 		407ECEFB1087C371002B43CB /* buf.h in Headers */ = {isa = PBXBuildFile; fileRef = 407ECEF91087C371002B43CB /* buf.h */; };
@@ -185,7 +184,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				403F6B82105ED998009C8088 /* TCMPortMapper.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -206,7 +204,7 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		35290DD21231E4FD009A579E /* msgreceived.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = msgreceived.aiff; path = Sounds/msgreceived.aiff; sourceTree = "<group>"; };
-		400A40CC0FDAD9AD00D38BF9 /* tracker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tracker.h; sourceTree = "<group>"; };
+		400A40CC0FDAD9AD00D38BF9 /* tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tracker.h; sourceTree = "<group>"; };
 		4014422410ACA4F6008487C8 /* resolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resolver.h; sourceTree = "<group>"; };
 		4014422510ACA4F6008487C8 /* resolver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = resolver.c; sourceTree = "<group>"; };
 		402097B70FC91E2F0018390E /* fbuild.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fbuild.aiff; path = Sounds/fbuild.aiff; sourceTree = "<group>"; };
@@ -232,6 +230,8 @@
 		404D42860FF8525200589EA2 /* GSStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSStatusBar.m; path = "Mac OS X/GSStatusBar.m"; sourceTree = "<group>"; };
 		404D42870FF8525200589EA2 /* GSStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSStatusView.h; path = "Mac OS X/GSStatusView.h"; sourceTree = "<group>"; };
 		404D42880FF8525200589EA2 /* GSStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSStatusView.m; path = "Mac OS X/GSStatusView.m"; sourceTree = "<group>"; };
+		AA00000000000000000000A1 /* TCMPortMapperStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCMPortMapperStub.h; path = "Mac OS X/TCMPortMapperStub.h"; sourceTree = "<group>"; };
+		AA00000000000000000000A2 /* TCMPortMapperStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCMPortMapperStub.m; path = "Mac OS X/TCMPortMapperStub.m"; sourceTree = "<group>"; };
 		404D42990FF8528F00589EA2 /* GSXBoloController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSXBoloController.h; path = "Mac OS X/GSXBoloController.h"; sourceTree = "<group>"; };
 		404D429A0FF8528F00589EA2 /* GSXBoloController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSXBoloController.m; path = "Mac OS X/GSXBoloController.m"; sourceTree = "<group>"; };
 		404D429D0FF852DA00589EA2 /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Main.m; path = "Mac OS X/Main.m"; sourceTree = "<group>"; };
@@ -293,7 +293,7 @@
 		406444621082520D008F913C /* images.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = images.h; sourceTree = "<group>"; };
 		406444631082520D008F913C /* images.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = images.c; sourceTree = "<group>"; };
 		407333AE10F10E5100A018A1 /* XBoloMap.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = XBoloMap.icns; sourceTree = "<group>"; };
-		407C8B2A0FDC72CA006A71F7 /* tracker.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tracker.c; sourceTree = "<group>"; };
+		407C8B2A0FDC72CA006A71F7 /* tracker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tracker.c; sourceTree = "<group>"; };
 		407C8B390FDC739B006A71F7 /* XBolo Tracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "XBolo Tracker"; sourceTree = BUILT_PRODUCTS_DIR; };
 		407ECEF91087C371002B43CB /* buf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buf.h; sourceTree = "<group>"; };
 		407ECEFA1087C371002B43CB /* buf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = buf.c; sourceTree = "<group>"; };
@@ -326,8 +326,8 @@
 		F553197803E5088801924B91 /* tankshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tankshot.aiff; path = Sounds/tankshot.aiff; sourceTree = "<group>"; };
 		F553197B03E5088801924B91 /* tree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = tree.aiff; path = Sounds/tree.aiff; sourceTree = "<group>"; };
 		F562278002981B17012C88AB /* MainMenu.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MainMenu.nib; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		FD507B6F03EB7E6000360B11 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
-		FD968C280472BA17000001C9 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist; name = English; path = English.lproj/DefaultPreferences.plist; sourceTree = "<group>"; };
+		FD507B6F03EB7E6000360B11 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FD968C280472BA17000001C9 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; name = English; path = English.lproj/DefaultPreferences.plist; sourceTree = "<group>"; };
 		FD969DCD07441F9C009568EF /* rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rect.h; sourceTree = "<group>"; };
 		FD969DCE07441F9C009568EF /* rect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rect.c; sourceTree = "<group>"; };
 		FDA94E5E0736F27D00E4BF82 /* errchk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = errchk.c; sourceTree = "<group>"; };
@@ -369,7 +369,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4064472B10829C15008F913C /* TCMPortMapper.framework in Frameworks */,
 				40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */,
 				40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */,
 				40ED89F61114B4AA00B7AF32 /* Carbon.framework in Frameworks */,
@@ -585,6 +584,8 @@
 				404D42860FF8525200589EA2 /* GSStatusBar.m */,
 				404D42870FF8525200589EA2 /* GSStatusView.h */,
 				404D42880FF8525200589EA2 /* GSStatusView.m */,
+				AA00000000000000000000A1 /* TCMPortMapperStub.h */,
+				AA00000000000000000000A2 /* TCMPortMapperStub.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -973,6 +974,7 @@
 				C2765E8C105602D70007E05A /* GSRobot.m in Sources */,
 				404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */,
 				404D42920FF8525200589EA2 /* GSStatusView.m in Sources */,
+				AA00000000000000000000B2 /* TCMPortMapperStub.m in Sources */,
 				404D429C0FF8528F00589EA2 /* GSXBoloController.m in Sources */,
 				406444661082520D008F913C /* images.c in Sources */,
 				40A593630FBE78FC00F3E650 /* io.c in Sources */,

@@ -12,7 +12,6 @@
 #include <time.h>
 
 #ifdef __MACH__
-#include <CoreServices/CoreServices.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 static mach_timebase_info_data_t gMachTimebase;
@@ -35,8 +34,7 @@ void initializegetcurrenttime(void) {
 uint64_t getcurrenttime(void) {  // in nanoseconds from system boot
 #ifdef __MACH__
   uint64_t absolute = mach_absolute_time();
-  Nanoseconds nano = AbsoluteToNanoseconds(*(AbsoluteTime *)&absolute);
-  return *(uint64_t *)&nano;
+  return absolute * gMachTimebase.numer / gMachTimebase.denom;
 #elif _POSIX_TIMERS
   struct timespec time;
   clock_gettime(CLOCK_MONOTONIC, &time);
