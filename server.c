@@ -914,6 +914,7 @@ END
 int selectserver(fd_set *readfds, fd_set *writefds, struct timeval *timeout) {
   int i;
   int nfds;
+  int selecterrno;
 
 TRY
   nfds = 0;
@@ -961,15 +962,24 @@ TRY
     FD_SET(server.tracker.sock, writefds);
     nfds = MAX(nfds, server.tracker.sock);
   }
-  
-  if ((nfds = select(nfds + 1, readfds, writefds, NULL, timeout)) == -1) {
-    if (errno != EINTR) {
-      LOGFAIL(errno)
+
+  /* drop the server lock while blocked in select() so other threads are not
+     starved waiting for it; the watched fds are only closed by this thread */
+  if (unlockserver()) LOGFAIL(errno)
+
+  nfds = select(nfds + 1, readfds, writefds, NULL, timeout);
+  selecterrno = errno;
+
+  if (lockserver()) LOGFAIL(errno)
+
+  if (nfds == -1) {
+    if (selecterrno != EINTR) {
+      LOGFAIL(selecterrno)
     }
 
     nfds = 0;
   }
-  
+
 CLEANUP
   switch(ERROR) {
   case 0:

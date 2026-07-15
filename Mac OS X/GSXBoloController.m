@@ -2625,14 +2625,22 @@ TRY
           gotlock = 0;
 
           [boloView scrollRectToVisible:rect];  /* potential to call drawRect: which locks client */
+
+          if (lockclient()) LOGFAIL(errno)
+          gotlock = 1;
         }
-        if (unlockclient()) LOGFAIL(errno)
-        gotlock = 1;
 
         client.spawned = 0;
       }
-      if(centerTank)
-        [self tankCenter:nil];
+      if(centerTank) {
+        if (unlockclient()) LOGFAIL(errno)
+        gotlock = 0;
+
+        [self tankCenter:nil];  /* locks client itself and may trigger drawRect: */
+
+        if (lockclient()) LOGFAIL(errno)
+        gotlock = 1;
+      }
       [GSBoloView refresh];
 
       if (counter%2) {
