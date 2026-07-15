@@ -45,7 +45,7 @@
         NSString *myPath = [[NSBundle mainBundle] bundlePath];
         NSString *enclosingPath = [myPath stringByDeletingLastPathComponent];
         NSString *botsPath = [enclosingPath stringByAppendingPathComponent: @"Robots"];
-        NSEnumerator *enumerator = [[[NSFileManager defaultManager] directoryContentsAtPath:botsPath] objectEnumerator];
+        NSEnumerator *enumerator = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:botsPath error:NULL] objectEnumerator];
         NSString *name;
         
         LOG(@"availableRobots: myPath:%@ enclosingPath:%@ botsPath:%@ enumerator:%@", myPath, enclosingPath, botsPath, enumerator);

@@ -371,18 +371,8 @@ NSMutableDictionary *nameDictionary;
 - (BOOL)becomeFirstResponder {
   BOOL okToChange;
   if ((okToChange = [super becomeFirstResponder])) {
-    UInt32 carbonModifiers;
     [super setKeyboardFocusRingNeedsDisplayInRect:[self bounds]];
-    carbonModifiers = GetCurrentKeyModifiers();
-    modifiers =
-      (carbonModifiers & alphaLock ? NSAlphaShiftKeyMask : 0) |
-      (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSShiftKeyMask : 0) |
-      (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSControlKeyMask : 0) |
-      (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSAlternateKeyMask : 0) |
-      (carbonModifiers & cmdKey ? NSCommandKeyMask : 0);
-//    (carbonModifiers &  ? NSNumericPadKeyMask : 0) |
-//    (carbonModifiers &  ? NSHelpKeyMask : 0) |
-//    (carbonModifiers &  ? NSFunctionKeyMask : 0);
+    modifiers = [NSEvent modifierFlags] & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand);
   }
   return okToChange;
 }
@@ -438,7 +428,7 @@ NSMutableDictionary *nameDictionary;
 - (void)flagsChanged:(NSEvent *)theEvent {
   unsigned int oldModifiers;
   oldModifiers = modifiers;
-  modifiers = [theEvent modifierFlags] & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
+  modifiers = [theEvent modifierFlags] & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand | NSEventModifierFlagNumericPad | NSEventModifierFlagHelp | NSEventModifierFlagFunction);
   if (modifiers & (oldModifiers ^ modifiers)) {
     [[self cell] setKeyCode:[theEvent keyCode]];
     [[self window] selectNextKeyView:self];

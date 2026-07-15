@@ -205,6 +205,16 @@ static void getlisttrackerstatus(int status);
 - (void)setupRobotsMenu;
 @end
 
+
+/* modern replacement for the deprecated NSBeginAlertSheet one-button alerts */
+static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *window) {
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = title;
+  alert.informativeText = message;
+  [alert addButtonWithTitle:@"OK"];
+  [alert beginSheetModalForWindow:window completionHandler:nil];
+}
+
 @implementation GSXBoloController
 
 // NIB methods
@@ -526,7 +536,7 @@ static void getlisttrackerstatus(int status);
 
 - (void)setHostUPnPBool:(BOOL)aBool {
   hostUPnPBool = aBool;
-  [hostUPnPSwitch setState:aBool ? NSOnState : NSOffState];
+  [hostUPnPSwitch setState:aBool ? NSControlStateValueOn : NSControlStateValueOff];
   [hostPortField setEnabled:!aBool];
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostUPnPBool];
 }
@@ -539,7 +549,7 @@ static void getlisttrackerstatus(int status);
 
 - (void)setHostPasswordBool:(BOOL)aBool {
   hostPasswordBool = aBool;
-  [hostPasswordSwitch setState:aBool ? NSOnState : NSOffState];
+  [hostPasswordSwitch setState:aBool ? NSControlStateValueOn : NSControlStateValueOff];
   [hostPasswordField setEnabled:aBool];
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostPasswordBool];
 }
@@ -552,7 +562,7 @@ static void getlisttrackerstatus(int status);
 
 - (void)setHostTimeLimitBool:(BOOL)aBool {
   hostTimeLimitBool = aBool;
-  [hostTimeLimitSwitch setState:aBool ? NSOnState : NSOffState];
+  [hostTimeLimitSwitch setState:aBool ? NSControlStateValueOn : NSControlStateValueOff];
   [hostTimeLimitSlider setEnabled:aBool];
   [hostTimeLimitField setEnabled:aBool];
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostTimeLimitBool];
@@ -575,7 +585,7 @@ static void getlisttrackerstatus(int status);
 
 - (void)setHostHiddenMinesBool:(BOOL)aBool {
   hostHiddenMinesBool = aBool;
-  [hostHiddenMinesSwitch setState:aBool ? NSOnState : NSOffState];
+  [hostHiddenMinesSwitch setState:aBool ? NSControlStateValueOn : NSControlStateValueOff];
 
   if (aBool) {
     [hostHiddenMinesTextField setStringValue:@"Mines May Be Hidden"];
@@ -589,7 +599,7 @@ static void getlisttrackerstatus(int status);
 
 - (void)setHostTrackerBool:(BOOL)aBool {
   hostTrackerBool = aBool;
-  [hostTrackerSwitch setState:hostTrackerBool ? NSOnState : NSOffState];
+  [hostTrackerSwitch setState:hostTrackerBool ? NSControlStateValueOn : NSControlStateValueOff];
   [hostTrackerField setEnabled:hostTrackerBool];
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSHostTrackerBool];
 }
@@ -635,7 +645,7 @@ static void getlisttrackerstatus(int status);
 
 - (void)setJoinPasswordBool:(BOOL)aBool {
   joinPasswordBool = aBool;
-  [joinPasswordSwitch setState:aBool ? NSOnState : NSOffState];
+  [joinPasswordSwitch setState:aBool ? NSControlStateValueOn : NSControlStateValueOff];
   [joinPasswordField setEnabled:aBool];
   [[NSUserDefaults standardUserDefaults] setBool:aBool forKey:GSJoinPasswordBool];
 }
@@ -760,26 +770,19 @@ END
 }
 
 - (IBAction)hostChoose:(id)sender {
+  NSOpenPanel *panel = [NSOpenPanel openPanel];
+
+  panel.allowedFileTypes = [NSArray arrayWithObject:@"map"];
+
   if ([hostMapString length] > 0) {
-    [[NSOpenPanel openPanel]
-      beginSheetForDirectory:[hostMapString stringByDeletingLastPathComponent]
-      file:[hostMapString lastPathComponent]
-      types:[NSArray arrayWithObjects:@"map", NSFileTypeForHFSTypeCode('BMAP'), nil]
-      modalForWindow:newGameWindow
-      modalDelegate:self
-      didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-      contextInfo:NULL];
+    panel.directoryURL = [NSURL fileURLWithPath:[hostMapString stringByDeletingLastPathComponent]];
   }
-  else {
-    [[NSOpenPanel openPanel]
-      beginSheetForDirectory:nil
-      file:nil
-      types:[NSArray arrayWithObjects:@"map", NSFileTypeForHFSTypeCode('BMAP'), nil]
-      modalForWindow:newGameWindow
-      modalDelegate:self
-      didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-      contextInfo:NULL];
-  }
+
+  [panel beginSheetModalForWindow:newGameWindow completionHandler:^(NSModalResponse returnCode) {
+    if (returnCode == NSModalResponseOK) {
+      [self setHostMapString:[[[panel URLs] objectAtIndex:0] path]];
+    }
+  }];
 }
 
 - (IBAction)hostUPnPSwitch:(id)sender {
@@ -917,7 +920,7 @@ TRY
 
         [joinProgressWindow orderOut:self];
         [joinProgressIndicator stopAnimation:self];
-        [NSApp endSheet:joinProgressWindow];
+        [newGameWindow endSheet:joinProgressWindow];
 
         [[NSNotificationCenter defaultCenter] removeObserver:self name:TCMPortMapperDidFinishWorkNotification object:portMapper];
 
@@ -929,7 +932,7 @@ TRY
 
         [portMapper start];
 
-        NSBeginAlertSheet(@"UPnP Failed", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"UPnP was unable to map to a port.  Please check your router settings.");
+        GSShowAlertSheet(@"UPnP Failed", @"UPnP was unable to map to a port.  Please check your router settings.", newGameWindow);
 
         if (stopserver()) LOGFAIL(errno)
       }
@@ -956,10 +959,10 @@ END
 
 TRY
   if ([hostMapString length] == 0) {
-    NSBeginAlertSheet(@"No map chosen.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose a map.");
+    GSShowAlertSheet(@"No map chosen.", @"Please choose a map.", newGameWindow);
   }
   else if ((mapData = [NSData dataWithContentsOfFile:hostMapString]) == nil) {
-    NSBeginAlertSheet(@"Error occured when openning map.", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please try another map.");
+    GSShowAlertSheet(@"Error occured when openning map.", @"Please try another map.", newGameWindow);
     [self setHostMapString:[NSString string]];
   }
   else {
@@ -994,7 +997,7 @@ TRY
     [joinProgressIndicator setIndeterminate:YES];
     [joinProgressIndicator setDoubleValue:0.0];
     [joinProgressIndicator startAnimation:self];
-    [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+    [newGameWindow beginSheet:joinProgressWindow completionHandler:nil];
 
     if (setupserver(paused, [mapData bytes], [mapData length], hostUPnPBool ? 0 : hostPortNumber, hostPasswordBool ? [hostPasswordString UTF8String] : NULL, hostTimeLimitBool ? timelimit : 0, hostHiddenMinesBool, 0, hostGameTypeNumber, &domination)) LOGFAIL(errno)
 
@@ -1023,32 +1026,32 @@ CLEANUP
   case ECORFILE:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Unable to Open Map File", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [newGameWindow endSheet:joinProgressWindow];
+    GSShowAlertSheet(@"Unable to Open Map File", @"Please choose another map.", newGameWindow);
     CLEARERRLOG
     break;
 
   case EINCMPAT:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Incomaptile Map Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another map.");
+    [newGameWindow endSheet:joinProgressWindow];
+    GSShowAlertSheet(@"Incomaptile Map Version", @"Please choose another map.", newGameWindow);
     CLEARERRLOG
     break;
 
   case EADDRINUSE:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Port Unavailable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Please choose another port.");
+    [newGameWindow endSheet:joinProgressWindow];
+    GSShowAlertSheet(@"Port Unavailable", @"Please choose another port.", newGameWindow);
     CLEARERRLOG
     break;
 
   default:
     [joinProgressWindow orderOut:self];
     [joinProgressIndicator stopAnimation:self];
-    [NSApp endSheet:joinProgressWindow];
-    NSBeginAlertSheet(@"Unexpected Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Error #%d: %s", ERROR, strerror(ERROR));
+    [newGameWindow endSheet:joinProgressWindow];
+    GSShowAlertSheet(@"Unexpected Error", [NSString stringWithFormat:@"Error #%d: %s", ERROR, strerror(ERROR)], newGameWindow);
     CLEARERRLOG
     break;
   }
@@ -1088,7 +1091,7 @@ TRY
   [joinProgressIndicator setIndeterminate:YES];
   [joinProgressIndicator setDoubleValue:0.0];
   [joinProgressIndicator startAnimation:self];
-  [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+  [newGameWindow beginSheet:joinProgressWindow completionHandler:nil];
   
   // get tracker list from bolo
   if (initlist(&trackerlist)) LOGFAIL(errno)
@@ -1115,7 +1118,7 @@ TRY
   [joinProgressIndicator setIndeterminate:YES];
   [joinProgressIndicator setDoubleValue:0.0];
   [joinProgressIndicator startAnimation:self];
-  [NSApp beginSheet:joinProgressWindow modalForWindow:newGameWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+  [newGameWindow beginSheet:joinProgressWindow completionHandler:nil];
   if (startclient([joinAddressString UTF8String], joinPortNumber, [playerNameString UTF8String], joinPasswordBool ? [joinPasswordString UTF8String] : NULL)) LOGFAIL(errno)
 
 CLEANUP
@@ -1161,7 +1164,7 @@ TRY
   /* close modal window */
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
+  [newGameWindow endSheet:joinProgressWindow];
 
 CLEANUP
   switch (ERROR) {
@@ -1243,7 +1246,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow convertPointFromScreen:nspoint] fromView:nil] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x;
     cgpoint.y = [screen frame].size.height - nspoint.y + 64.0;
     CGWarpMouseCursorPosition(cgpoint);
@@ -1261,7 +1264,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow convertPointFromScreen:nspoint] fromView:nil] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x;
     cgpoint.y = [screen frame].size.height - nspoint.y - 64.0;
     CGWarpMouseCursorPosition(cgpoint);
@@ -1279,7 +1282,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow convertPointFromScreen:nspoint] fromView:nil] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x + 64.0;
     cgpoint.y = [screen frame].size.height - nspoint.y;
     CGWarpMouseCursorPosition(cgpoint);
@@ -1297,7 +1300,7 @@ END
   [boloView scrollRectToVisible:rect];
 
   nspoint = [NSEvent mouseLocation];
-  if ([boloView mouse:[boloView convertPoint:[boloWindow convertScreenToBase:nspoint] fromView:[boloWindow contentView]] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
+  if ([boloView mouse:[boloView convertPoint:[boloWindow convertPointFromScreen:nspoint] fromView:nil] inRect:[boloView visibleRect]] && (screen = [boloWindow screen])) {
     cgpoint.x = nspoint.x - 64.0;
     cgpoint.y = [screen frame].size.height - nspoint.y;
     CGWarpMouseCursorPosition(cgpoint);
@@ -1446,7 +1449,7 @@ END
   [prefRightField setStringValue:[[dict allKeysForObject:GSRightString] objectAtIndex:0]];
   [prefTankViewField setStringValue:[[dict allKeysForObject:GSTankViewString] objectAtIndex:0]];
   [prefPillViewField setStringValue:[[dict allKeysForObject:GSPillViewString] objectAtIndex:0]];
-  [prefAutoSlowdownSwitch setState:[[NSUserDefaults standardUserDefaults] boolForKey:GSAutoSlowdownBool] ? NSOnState : NSOffState];
+  [prefAutoSlowdownSwitch setState:[[NSUserDefaults standardUserDefaults] boolForKey:GSAutoSlowdownBool] ? NSControlStateValueOn : NSControlStateValueOff];
 }
 
 - (IBAction)applyKeyConfig:(id)sender {
@@ -1473,7 +1476,7 @@ END
     )
   {
     [self setKeyConfigDict:dict];
-    [self setAutoSlowdownBool:[prefAutoSlowdownSwitch state] == NSOnState];
+    [self setAutoSlowdownBool:[prefAutoSlowdownSwitch state] == NSControlStateValueOn];
   }
 }
 
@@ -1819,14 +1822,14 @@ END
     }
 	}
 	else if (action == @selector(builderToolMenu:)) {
-		[menuItem setState:[menuItem tag] == builderToolInt ? NSOnState : NSOffState];
+		[menuItem setState:[menuItem tag] == builderToolInt ? NSControlStateValueOn : NSControlStateValueOff];
 		return YES;
 	}
 	else if (action == @selector(gamePauseResumeMenu:)) {
     lockserver();
 
     if (server.setup) {
-      [menuItem setState:server.pause ? NSOnState: NSOffState];
+      [menuItem setState:server.pause ? NSControlStateValueOn: NSControlStateValueOff];
       unlockserver();
       return YES;
     }
@@ -1839,7 +1842,7 @@ END
     lockserver();
 
     if (server.setup) {
-      [menuItem setState:server.allowjoin ? NSOnState: NSOffState];
+      [menuItem setState:server.allowjoin ? NSControlStateValueOn: NSControlStateValueOff];
       unlockserver();
       return YES;
     }
@@ -1999,14 +2002,6 @@ END
   unlockserver();
 }
 
-// NSSheet delegate methods
-
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
-  if (returnCode == NSOKButton) {
-    [self setHostMapString:[[sheet filenames] objectAtIndex:0]];
-  }
-}
-
 // NSToolbar methods
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
@@ -2043,7 +2038,7 @@ END
     return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
   }
   else if (toolbar == boloToolbar) {
-    return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, nil];
+    return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, nil];
   }
   else {
     return [NSArray array];
@@ -2055,7 +2050,7 @@ END
     return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
   }
   else if (toolbar == boloToolbar) {
-    return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, NSToolbarSeparatorItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, nil];
+    return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, nil];
   }
   else {
     return [NSArray array];
@@ -2816,7 +2811,7 @@ END
   [boloView setNeedsDisplay:YES];
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
+  [newGameWindow endSheet:joinProgressWindow];
   [newGameWindow orderOut:self];
   [boloWindow makeKeyAndOrderFront:self];
 
@@ -2839,8 +2834,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Error Resolving Hostname", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, eString);
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Error Resolving Hostname", eString, newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -2866,8 +2861,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Network Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection establishment timed out without establishing a connection.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Network Error", @"Connection establishment timed out without establishing a connection.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -2893,8 +2888,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Connection Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"The attempt to connect was forcefully rejected.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Connection Error", @"The attempt to connect was forcefully rejected.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -2920,8 +2915,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Network Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"The network is not reachable from this host.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Network Error", @"The network is not reachable from this host.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -2947,8 +2942,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Network Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"The remote host is not reachable from this host.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Network Error", @"The remote host is not reachable from this host.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -2974,8 +2969,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Server version doesn't match.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Server version doesn't match.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3001,8 +2996,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Host is not allowing new players in the game.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Host is not allowing new players in the game.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3028,8 +3023,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Password rejected.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Password rejected.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3055,8 +3050,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Server is full.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Server is full.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3082,8 +3077,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Time limit reached on server.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Time limit reached on server.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3109,8 +3104,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Host has banned you from the game.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Host has banned you from the game.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3136,8 +3131,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Protocol error.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Protocol error.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3163,8 +3158,8 @@ END
 TRY
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Server Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection Reset by Peer.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Server Error", @"Connection Reset by Peer.", newGameWindow);
   if (stopclient()) LOGFAIL(errno)
 
   if (server.setup) {
@@ -3210,8 +3205,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Error Resolving Tracker", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, eString);
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Error Resolving Tracker", eString, newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3233,8 +3228,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Timed Out", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Could not connect to the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Timed Out", @"Could not connect to the tracker.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3256,8 +3251,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Connection Refused", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection was refused by the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Connection Refused", @"Connection was refused by the tracker.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3279,8 +3274,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Down", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker is not responding.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Host Down", @"Tracker is not responding.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3302,8 +3297,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Unreachable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Check your network connectivity.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Host Unreachable", @"Check your network connectivity.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3325,8 +3320,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Incompatible Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker version doesn't match.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Incompatible Version", @"Tracker version doesn't match.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3348,8 +3343,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Failed to Verify TCP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Failed to Verify TCP Port Forwarded", @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3371,8 +3366,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Failed to Verify UDP Port Forwarded", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Failed to Verify UDP Port Forwarded", @"Try setting up port forwarding in your router.  If you have port forwarding setup in your router, uncheck UPnP and try again.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3394,8 +3389,8 @@ TRY
   if (stopserver()) LOGFAIL(errno)
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Connection Error", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection Reset by Peer.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Connection Error", @"Connection Reset by Peer.", newGameWindow);
 
 CLEANUP
   switch (ERROR) {
@@ -3416,40 +3411,40 @@ END
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Timed Out", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Could not connect to the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Timed Out", @"Could not connect to the tracker.", newGameWindow);
 }
 
 - (void)getListTrackerConnectionRefused {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Connection Refused", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Connection was refused by the tracker.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Connection Refused", @"Connection was refused by the tracker.", newGameWindow);
 }
 
 - (void)getListTrackerHostDown {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Down", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker is not responding.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Host Down", @"Tracker is not responding.", newGameWindow);
 }
 
 - (void)getListTrackerHostUnreachable {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Tracker Host Unreachable", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Check your network connectivity.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Tracker Host Unreachable", @"Check your network connectivity.", newGameWindow);
 }
 
 - (void)getListTrackerBadVersion {
   stoptracker();
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
-  NSBeginAlertSheet(@"Incompatible Version", @"OK", nil, nil, newGameWindow, self, nil, nil, nil, @"Tracker version doesn't match.");
+  [newGameWindow endSheet:joinProgressWindow];
+  GSShowAlertSheet(@"Incompatible Version", @"Tracker version doesn't match.", newGameWindow);
 }
 
 - (void)getListTrackerSuccess {
@@ -3461,7 +3456,7 @@ END
 
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
-  [NSApp endSheet:joinProgressWindow];
+  [newGameWindow endSheet:joinProgressWindow];
 
   // convert list to NSArray for displaying
   table = [NSMutableArray array];
@@ -3496,7 +3491,7 @@ END
 - (BOOL)_validateRobotMenuItem: (NSMenuItem *)item
 {
     [robotLock lock];
-    [item setState: [item representedObject] == robot ? NSOnState : NSOffState];
+    [item setState: [item representedObject] == robot ? NSControlStateValueOn : NSControlStateValueOff];
     [robotLock unlock];
     return YES;
 }
@@ -4014,7 +4009,7 @@ int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSSt
   object = [dict objectForKey:key];
 
   if (object != nil) {
-    [[NSAlert alertWithMessageText:@"There is a key conflict." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"There is a conflict with %@ and %@.  Change one of them.", object, newObject] beginSheetModalForWindow:win modalDelegate:nil didEndSelector:nil contextInfo:NULL];
+    GSShowAlertSheet(@"There is a key conflict.", [NSString stringWithFormat:@"There is a conflict with %@ and %@.  Change one of them.", object, newObject], win);
     return -1;
   }
   else {

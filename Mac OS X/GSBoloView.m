@@ -11,7 +11,6 @@
 #include "client.h"
 #include "errchk.h"
 
-#include <Carbon/Carbon.h>
 #include <pthread.h>
 #include <math.h>
 
@@ -370,7 +369,7 @@ TRY
   /* draw selector */
   {
     NSPoint aPoint;
-    aPoint = [self convertPoint:[[self window] convertScreenToBase:[NSEvent mouseLocation]] fromView:nil];
+    aPoint = [self convertPoint:[[self window] convertPointFromScreen:[NSEvent mouseLocation]] fromView:nil];
     if ([self mouse:aPoint inRect:[self visibleRect]]) {
       [self drawSprite:SELETRIMAGE at:make2f(floorf(aPoint.x/16.0) + 0.5, floorf(FWIDTH - ((aPoint.y + 0.5)/16.0)) + 0.5) fraction:1.0];
     }
@@ -451,17 +450,7 @@ END
 - (BOOL)becomeFirstResponder {
   BOOL okToChange;
   if ((okToChange = [super becomeFirstResponder])) {
-    UInt32 carbonModifiers;
-    carbonModifiers = GetCurrentKeyModifiers();
-    modifiers =
-      (carbonModifiers & alphaLock ? NSAlphaShiftKeyMask : 0) |
-      (carbonModifiers & shiftKey || carbonModifiers & rightShiftKey ? NSShiftKeyMask : 0) |
-      (carbonModifiers & controlKey || carbonModifiers & rightControlKey ? NSControlKeyMask : 0) |
-      (carbonModifiers & optionKey || carbonModifiers & rightOptionKey ? NSAlternateKeyMask : 0) |
-      (carbonModifiers & cmdKey ? NSCommandKeyMask : 0);
-//    (carbonModifiers &  ? NSNumericPadKeyMask : 0) |
-//    (carbonModifiers &  ? NSHelpKeyMask : 0) |
-//    (carbonModifiers &  ? NSFunctionKeyMask : 0);
+    modifiers = [NSEvent modifierFlags] & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand);
   }
   return okToChange;
 }
@@ -485,7 +474,7 @@ END
 - (void)flagsChanged:(NSEvent *)theEvent {
   unsigned int oldModifiers;
   oldModifiers = modifiers;
-  modifiers = [theEvent modifierFlags] & (NSAlphaShiftKeyMask | NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask | NSNumericPadKeyMask | NSHelpKeyMask | NSFunctionKeyMask);
+  modifiers = [theEvent modifierFlags] & (NSEventModifierFlagCapsLock | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand | NSEventModifierFlagNumericPad | NSEventModifierFlagHelp | NSEventModifierFlagFunction);
   if (modifiers & (oldModifiers ^ modifiers)) {
     [boloController keyEvent:YES forKey:[theEvent keyCode]];
   }
@@ -495,7 +484,7 @@ END
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
-  if ([theEvent type] == NSLeftMouseUp) {
+  if ([theEvent type] == NSEventTypeLeftMouseUp) {
     NSPoint point;
 
     point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -535,7 +524,6 @@ END
 
 - (void)resetCursorRects {
 	[self addCursorRect:[self visibleRect] cursor:cursor];
-  [cursor setOnMouseEntered:YES];
 }
 
 @end
