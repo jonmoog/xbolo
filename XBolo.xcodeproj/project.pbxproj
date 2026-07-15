@@ -8,11 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		35290DD31231E4FD009A579E /* msgreceived.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 35290DD21231E4FD009A579E /* msgreceived.aiff */; };
-		35290DD41231E4FD009A579E /* msgreceived.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 35290DD21231E4FD009A579E /* msgreceived.aiff */; };
 		400A40CD0FDAD9AD00D38BF9 /* tracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 400A40CC0FDAD9AD00D38BF9 /* tracker.h */; };
 		4014422610ACA4F6008487C8 /* resolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 4014422410ACA4F6008487C8 /* resolver.h */; };
 		4014422710ACA4F6008487C8 /* resolver.c in Sources */ = {isa = PBXBuildFile; fileRef = 4014422510ACA4F6008487C8 /* resolver.c */; };
-		4014422810ACA4F6008487C8 /* resolver.c in Sources */ = {isa = PBXBuildFile; fileRef = 4014422510ACA4F6008487C8 /* resolver.c */; };
 		4014422910ACA4F6008487C8 /* resolver.c in Sources */ = {isa = PBXBuildFile; fileRef = 4014422510ACA4F6008487C8 /* resolver.c */; };
 		402097C20FC91E2F0018390E /* fbuild.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B70FC91E2F0018390E /* fbuild.aiff */; };
 		402097C30FC91E2F0018390E /* fbuilderdeath.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 402097B80FC91E2F0018390E /* fbuilderdeath.aiff */; };
@@ -68,15 +66,7 @@
 		404D42FE0FF8585000589EA2 /* WallRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E00FF8585000589EA2 /* WallRadio.png */; };
 		404D42FF0FF8585000589EA2 /* ZoomIn.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E10FF8585000589EA2 /* ZoomIn.png */; };
 		404D43000FF8585000589EA2 /* ZoomOut.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E20FF8585000589EA2 /* ZoomOut.png */; };
-		404D43110FF85B5700589EA2 /* XBoloView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D430F0FF85B5700589EA2 /* XBoloView.m */; };
-		404D43390FF85B6B00589EA2 /* XBoloViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43380FF85B6B00589EA2 /* XBoloViewController.m */; };
-		404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */; };
-		404D43460FF85B9C00589EA2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D43450FF85B9C00589EA2 /* main.m */; };
-		404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D43470FF85BAF00589EA2 /* XBoloViewController.xib */; };
-		404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 404D43490FF85BBB00589EA2 /* XBolo-Info.plist */; };
-		404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 404D434C0FF85BCC00589EA2 /* MainWindow.xib */; };
 		4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */ = {isa = PBXBuildFile; fileRef = 4050678E109533640037C3D3 /* PillStatIntAllied.png */; };
-		40506790109533640037C3D3 /* PillStatIntAllied.png in Resources */ = {isa = PBXBuildFile; fileRef = 4050678E109533640037C3D3 /* PillStatIntAllied.png */; };
 		405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E18E90FC7DB18008CDDF0 /* pillshot.aiff */; };
 		405E191F0FC7DEB5008CDDF0 /* build.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E191E0FC7DEB5008CDDF0 /* build.aiff */; };
 		405E19390FC7E4A6008CDDF0 /* sink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E19370FC7E4A5008CDDF0 /* sink.aiff */; };
@@ -86,13 +76,10 @@
 		405E1A0C0FC81032008CDDF0 /* hitterrain.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A080FC81032008CDDF0 /* hitterrain.aiff */; };
 		405E1A0D0FC81032008CDDF0 /* hittree.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1A090FC81032008CDDF0 /* hittree.aiff */; };
 		405E1BF20FC8E26A008CDDF0 /* superboom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E1BF10FC8E26A008CDDF0 /* superboom.aiff */; };
-		40644448108250E1008F913C /* terrain.c in Sources */ = {isa = PBXBuildFile; fileRef = 40644447108250E1008F913C /* terrain.c */; };
 		40644449108250E1008F913C /* terrain.h in Headers */ = {isa = PBXBuildFile; fileRef = 40644446108250E1008F913C /* terrain.h */; };
 		4064444A108250E1008F913C /* terrain.c in Sources */ = {isa = PBXBuildFile; fileRef = 40644447108250E1008F913C /* terrain.c */; };
-		4064445D108251E1008F913C /* tiles.c in Sources */ = {isa = PBXBuildFile; fileRef = 4064445C108251E1008F913C /* tiles.c */; };
 		4064445E108251E1008F913C /* tiles.h in Headers */ = {isa = PBXBuildFile; fileRef = 4064445B108251E1008F913C /* tiles.h */; };
 		4064445F108251E1008F913C /* tiles.c in Sources */ = {isa = PBXBuildFile; fileRef = 4064445C108251E1008F913C /* tiles.c */; };
-		406444641082520D008F913C /* images.c in Sources */ = {isa = PBXBuildFile; fileRef = 406444631082520D008F913C /* images.c */; };
 		406444651082520D008F913C /* images.h in Headers */ = {isa = PBXBuildFile; fileRef = 406444621082520D008F913C /* images.h */; };
 		406444661082520D008F913C /* images.c in Sources */ = {isa = PBXBuildFile; fileRef = 406444631082520D008F913C /* images.c */; };
 		4064465510826647008F913C /* terrain.c in Sources */ = {isa = PBXBuildFile; fileRef = 40644447108250E1008F913C /* terrain.c */; };
@@ -101,7 +88,6 @@
 		407ECEFB1087C371002B43CB /* buf.h in Headers */ = {isa = PBXBuildFile; fileRef = 407ECEF91087C371002B43CB /* buf.h */; };
 		407ECEFC1087C371002B43CB /* buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 407ECEFA1087C371002B43CB /* buf.c */; };
 		407ECEFD1087C371002B43CB /* buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 407ECEFA1087C371002B43CB /* buf.c */; };
-		407ECEFE1087C371002B43CB /* buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 407ECEFA1087C371002B43CB /* buf.c */; };
 		4081876F1080C92500E4D4CA /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4081876E1080C92500E4D4CA /* main.c */; };
 		408187BB1080E33A00E4D4CA /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
 		4081881E1080EF2800E4D4CA /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A560FA69FC100647706 /* server.c */; };
@@ -112,12 +98,10 @@
 		408188561080EFDE00E4D4CA /* bmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27AAD0FA6A22600647706 /* bmap.c */; };
 		408188581080EFE800E4D4CA /* timing.c in Sources */ = {isa = PBXBuildFile; fileRef = C2BFADE11055937F009A1EE7 /* timing.c */; };
 		4081898F1082475A00E4D4CA /* bmap_server.c in Sources */ = {isa = PBXBuildFile; fileRef = 4081898E1082475A00E4D4CA /* bmap_server.c */; };
-		408189901082475A00E4D4CA /* bmap_server.c in Sources */ = {isa = PBXBuildFile; fileRef = 4081898E1082475A00E4D4CA /* bmap_server.c */; };
 		408189911082475A00E4D4CA /* bmap_server.h in Headers */ = {isa = PBXBuildFile; fileRef = 4081898D1082475A00E4D4CA /* bmap_server.h */; };
 		408189921082475A00E4D4CA /* bmap_server.c in Sources */ = {isa = PBXBuildFile; fileRef = 4081898E1082475A00E4D4CA /* bmap_server.c */; };
 		408189981082495800E4D4CA /* bmap_client.h in Headers */ = {isa = PBXBuildFile; fileRef = 408189951082495800E4D4CA /* bmap_client.h */; };
 		408189991082495800E4D4CA /* bmap_client.c in Sources */ = {isa = PBXBuildFile; fileRef = 408189961082495800E4D4CA /* bmap_client.c */; };
-		4081899A1082495800E4D4CA /* bmap_client.c in Sources */ = {isa = PBXBuildFile; fileRef = 408189961082495800E4D4CA /* bmap_client.c */; };
 		409728630FFE3C68002E0BE9 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = FDCF83C5073DAA7C006B13CC /* list.c */; };
 		409728690FFE3C8F002E0BE9 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = FDF3ECCB0736F4DA0070DF96 /* io.c */; };
 		409728710FFE3CB7002E0BE9 /* errchk.c in Sources */ = {isa = PBXBuildFile; fileRef = FDA94E5E0736F27D00E4BF82 /* errchk.c */; };
@@ -218,8 +202,6 @@
 		402097C10FC91E2F0018390E /* ftree.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = ftree.aiff; path = Sounds/ftree.aiff; sourceTree = "<group>"; };
 		402098360FC926C00018390E /* fshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = fshot.aiff; path = Sounds/fshot.aiff; sourceTree = "<group>"; };
 		403F6B36105ED526009C8088 /* TCMPortMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TCMPortMapper.framework; sourceTree = "<group>"; };
-		404D425D0FF84FEA00589EA2 /* iPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iPhone-Info.plist"; sourceTree = "<group>"; };
 		404D427F0FF8525200589EA2 /* GSBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSBoloView.h; path = "Mac OS X/GSBoloView.h"; sourceTree = "<group>"; };
 		404D42800FF8525200589EA2 /* GSBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSBoloView.m; path = "Mac OS X/GSBoloView.m"; sourceTree = "<group>"; };
 		404D42810FF8525200589EA2 /* GSBuilderStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSBuilderStatusView.h; path = "Mac OS X/GSBuilderStatusView.h"; sourceTree = "<group>"; };
@@ -265,17 +247,6 @@
 		404D42E00FF8585000589EA2 /* WallRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WallRadio.png; path = Images/WallRadio.png; sourceTree = "<group>"; };
 		404D42E10FF8585000589EA2 /* ZoomIn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ZoomIn.png; path = Images/ZoomIn.png; sourceTree = "<group>"; };
 		404D42E20FF8585000589EA2 /* ZoomOut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ZoomOut.png; path = Images/ZoomOut.png; sourceTree = "<group>"; };
-		404D430F0FF85B5700589EA2 /* XBoloView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloView.m; path = iPhone/Classes/XBoloView.m; sourceTree = "<group>"; };
-		404D43100FF85B5700589EA2 /* XBoloView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloView.h; path = iPhone/Classes/XBoloView.h; sourceTree = "<group>"; };
-		404D43370FF85B6B00589EA2 /* XBoloViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloViewController.h; path = iPhone/Classes/XBoloViewController.h; sourceTree = "<group>"; };
-		404D43380FF85B6B00589EA2 /* XBoloViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloViewController.m; path = iPhone/Classes/XBoloViewController.m; sourceTree = "<group>"; };
-		404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBoloAppDelegate.h; path = iPhone/Classes/XBoloAppDelegate.h; sourceTree = "<group>"; };
-		404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XBoloAppDelegate.m; path = iPhone/Classes/XBoloAppDelegate.m; sourceTree = "<group>"; };
-		404D43450FF85B9C00589EA2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iPhone/main.m; sourceTree = "<group>"; };
-		404D43470FF85BAF00589EA2 /* XBoloViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = XBoloViewController.xib; path = iPhone/XBoloViewController.xib; sourceTree = "<group>"; };
-		404D43490FF85BBB00589EA2 /* XBolo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "XBolo-Info.plist"; path = "iPhone/XBolo-Info.plist"; sourceTree = "<group>"; };
-		404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBolo_Prefix.pch; path = iPhone/XBolo_Prefix.pch; sourceTree = "<group>"; };
-		404D434C0FF85BCC00589EA2 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = iPhone/MainWindow.xib; sourceTree = "<group>"; };
 		4050678E109533640037C3D3 /* PillStatIntAllied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntAllied.png; path = Images/PillStatIntAllied.png; sourceTree = "<group>"; };
 		405E18E90FC7DB18008CDDF0 /* pillshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = pillshot.aiff; path = Sounds/pillshot.aiff; sourceTree = "<group>"; };
 		405E191E0FC7DEB5008CDDF0 /* build.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = build.aiff; path = Sounds/build.aiff; sourceTree = "<group>"; };
@@ -344,13 +315,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		404D425B0FF84FEA00589EA2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		407C8B370FDC739B006A71F7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -383,7 +347,6 @@
 			children = (
 				40A593760FBE78FD00F3E650 /* XBolo.app */,
 				407C8B390FDC739B006A71F7 /* XBolo Tracker */,
-				404D425D0FF84FEA00589EA2 /* iPhone.app */,
 				408187591080C81200E4D4CA /* Dedicated Host */,
 			);
 			name = Products;
@@ -394,7 +357,6 @@
 			children = (
 				40E8286A1055A14400B39BB9 /* XBolo Quick Look Plug-in.xcodeproj */,
 				404D42670FF850D400589EA2 /* Mac OS X */,
-				404D42660FF850B700589EA2 /* iPhone */,
 				404D426B0FF8512500589EA2 /* Tracker */,
 				408187641080C83B00E4D4CA /* Dedicated Host */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -402,7 +364,6 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				40A593750FBE78FD00F3E650 /* XBolo-Info.plist */,
-				404D425F0FF84FEA00589EA2 /* iPhone-Info.plist */,
 			);
 			name = XBolo;
 			sourceTree = "<group>";
@@ -475,20 +436,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		404D42660FF850B700589EA2 /* iPhone */ = {
-			isa = PBXGroup;
-			children = (
-				404D43450FF85B9C00589EA2 /* main.m */,
-				404D43420FF85B8600589EA2 /* XBoloAppDelegate.h */,
-				404D43430FF85B8600589EA2 /* XBoloAppDelegate.m */,
-				404D42680FF8510100589EA2 /* Model */,
-				404D42690FF8510800589EA2 /* View */,
-				404D426A0FF8510F00589EA2 /* Controller */,
-				404D430D0FF8593700589EA2 /* Resources */,
-			);
-			name = iPhone;
-			sourceTree = "<group>";
-		};
 		404D42670FF850D400589EA2 /* Mac OS X */ = {
 			isa = PBXGroup;
 			children = (
@@ -500,31 +447,6 @@
 			name = "Mac OS X";
 			sourceTree = "<group>";
 		};
-		404D42680FF8510100589EA2 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
-		404D42690FF8510800589EA2 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				404D43100FF85B5700589EA2 /* XBoloView.h */,
-				404D430F0FF85B5700589EA2 /* XBoloView.m */,
-			);
-			name = View;
-			sourceTree = "<group>";
-		};
-		404D426A0FF8510F00589EA2 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				404D43370FF85B6B00589EA2 /* XBoloViewController.h */,
-				404D43380FF85B6B00589EA2 /* XBoloViewController.m */,
-			);
-			name = Controller;
-			sourceTree = "<group>";
-		};
 		404D426B0FF8512500589EA2 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
@@ -532,17 +454,6 @@
 				407C8B2A0FDC72CA006A71F7 /* tracker.c */,
 			);
 			name = Tracker;
-			sourceTree = "<group>";
-		};
-		404D430D0FF8593700589EA2 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				404D434C0FF85BCC00589EA2 /* MainWindow.xib */,
-				404D434B0FF85BC300589EA2 /* XBolo_Prefix.pch */,
-				404D43490FF85BBB00589EA2 /* XBolo-Info.plist */,
-				404D43470FF85BAF00589EA2 /* XBoloViewController.xib */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		408187641080C83B00E4D4CA /* Dedicated Host */ = {
@@ -707,23 +618,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		404D425C0FF84FEA00589EA2 /* iPhone */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 404D42630FF84FEB00589EA2 /* Build configuration list for PBXNativeTarget "iPhone" */;
-			buildPhases = (
-				404D42590FF84FEA00589EA2 /* Resources */,
-				404D425A0FF84FEA00589EA2 /* Sources */,
-				404D425B0FF84FEA00589EA2 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = iPhone;
-			productName = iPhone;
-			productReference = 404D425D0FF84FEA00589EA2 /* iPhone.app */;
-			productType = "com.apple.product-type.application";
-		};
 		407C8B380FDC739B006A71F7 /* XBolo Tracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 407C8B3B0FDC73BA006A71F7 /* Build configuration list for PBXNativeTarget "XBolo Tracker" */;
@@ -807,7 +701,6 @@
 			projectRoot = "";
 			targets = (
 				40A5931E0FBE78FC00F3E650 /* Mac OS X */,
-				404D425C0FF84FEA00589EA2 /* iPhone */,
 				407C8B380FDC739B006A71F7 /* XBolo Tracker */,
 				408187581080C81200E4D4CA /* Dedicated Host */,
 			);
@@ -825,18 +718,6 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		404D42590FF84FEA00589EA2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				404D43480FF85BAF00589EA2 /* XBoloViewController.xib in Resources */,
-				404D434A0FF85BBB00589EA2 /* XBolo-Info.plist in Resources */,
-				404D434D0FF85BCC00589EA2 /* MainWindow.xib in Resources */,
-				40506790109533640037C3D3 /* PillStatIntAllied.png in Resources */,
-				35290DD41231E4FD009A579E /* msgreceived.aiff in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		40A593300FBE78FC00F3E650 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -909,24 +790,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		404D425A0FF84FEA00589EA2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				404D43110FF85B5700589EA2 /* XBoloView.m in Sources */,
-				404D43390FF85B6B00589EA2 /* XBoloViewController.m in Sources */,
-				404D43440FF85B8600589EA2 /* XBoloAppDelegate.m in Sources */,
-				404D43460FF85B9C00589EA2 /* main.m in Sources */,
-				408189901082475A00E4D4CA /* bmap_server.c in Sources */,
-				4081899A1082495800E4D4CA /* bmap_client.c in Sources */,
-				40644448108250E1008F913C /* terrain.c in Sources */,
-				4064445D108251E1008F913C /* tiles.c in Sources */,
-				406444641082520D008F913C /* images.c in Sources */,
-				407ECEFE1087C371002B43CB /* buf.c in Sources */,
-				4014422810ACA4F6008487C8 /* resolver.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		407C8B360FDC739B006A71F7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1073,75 +936,6 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
-			};
-			name = Default;
-		};
-		404D42600FF84FEA00589EA2 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/UIKit.framework/Headers/UIKit.h";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					UIKit,
-				);
-				PRODUCT_NAME = iPhone;
-				SDKROOT = iphoneos;
-			};
-			name = Development;
-		};
-		404D42610FF84FEA00589EA2 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/UIKit.framework/Headers/UIKit.h";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					UIKit,
-				);
-				PRODUCT_NAME = iPhone;
-				SDKROOT = iphoneos;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		404D42620FF84FEA00589EA2 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/UIKit.framework/Headers/UIKit.h";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "iPhone-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					UIKit,
-				);
-				PRODUCT_NAME = iPhone;
-				SDKROOT = iphoneos;
 			};
 			name = Default;
 		};
@@ -1353,16 +1147,6 @@
 				404367A50F77EFB700B24B31 /* Development */,
 				404367A60F77EFB700B24B31 /* Deployment */,
 				404367A70F77EFB700B24B31 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		404D42630FF84FEB00589EA2 /* Build configuration list for PBXNativeTarget "iPhone" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				404D42600FF84FEA00589EA2 /* Development */,
-				404D42610FF84FEA00589EA2 /* Deployment */,
-				404D42620FF84FEA00589EA2 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

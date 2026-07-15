@@ -352,7 +352,7 @@ CLEANUP
       closesock(&testsock);
     }
 
-    PNONCRIT(ERROR)
+    PNONCRIT("tracker thread error", ERROR)
     printlineinfo();
     CLEARERRLOG
     break;
