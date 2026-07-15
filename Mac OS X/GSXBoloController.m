@@ -236,6 +236,10 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
                                                      queue:[NSOperationQueue mainQueue]
                                                 usingBlock:^(NSNotification *note) {
     [self buildJoinProgressWindow];
+    [self buildStatusPanel];
+    [self buildAllegiancePanel];
+    [self buildMessagesPanel];
+    [self buildMainMenu];
   }];
 
   defaults = [NSUserDefaults standardUserDefaults];

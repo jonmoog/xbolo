@@ -7,6 +7,11 @@
  */
 
 #import "GSXBoloController+CodeUI.h"
+#import "GSStatusView.h"
+#import "GSBuilderStatusView.h"
+#import "GSStatusBar.h"
+
+#include <float.h>
 
 /* non-editable transparent label, nib-style geometry */
 static NSTextField *GSLabel(NSString *text, NSRect frame) {
@@ -62,6 +67,390 @@ static NSButton *GSPushButton(NSString *title, NSRect frame, id target, SEL acti
   joinProgressWindow = window;
   joinProgressStatusTextField = statusField;
   joinProgressIndicator = indicator;
+}
+
+- (void)buildStatusPanel {
+  NSPanel *panel =
+    [[NSPanel alloc] initWithContentRect:NSMakeRect(1304.0, 649.0, 198.0, 274.0)
+                               styleMask:403  /* from the nib: titled|closable|utility|... */
+                                 backing:NSBackingStoreBuffered
+                                   defer:YES];
+  [panel setTitle:@"Status"];
+  [panel setReleasedWhenClosed:NO];
+  [panel setDelegate:(id)self];
+  NSView *content = [panel contentView];
+
+  GSStatusView *v2 = [[GSStatusView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 198.0, 274.0)];
+  playerDeathsTextField = GSLabel(@"", NSMakeRect(144.0, 161.0, 32.0, 14.0));
+  [playerDeathsTextField setFont:[NSFont systemFontOfSize:11.0]];
+  [v2 addSubview:playerDeathsTextField];
+  playerKillsTextField = GSLabel(@"", NSMakeRect(144.0, 176.0, 32.0, 14.0));
+  [playerKillsTextField setFont:[NSFont systemFontOfSize:11.0]];
+  [v2 addSubview:playerKillsTextField];
+  pill4StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 172.0, 12.0, 12.0)];
+  [v2 addSubview:pill4StatusImageView];
+  base8StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 79.0, 12.0, 12.0)];
+  [v2 addSubview:base8StatusImageView];
+  pillEStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 126.0, 12.0, 12.0)];
+  [v2 addSubview:pillEStatusImageView];
+  builderStatusView = [[GSBuilderStatusView alloc] initWithFrame:NSMakeRect(134.0, 214.0, 33.0, 33.0)];
+  [v2 addSubview:builderStatusView];
+  player8StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 219.0, 12.0, 12.0)];
+  [v2 addSubview:player8StatusImageView];
+  pill6StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 149.0, 12.0, 12.0)];
+  [v2 addSubview:pill6StatusImageView];
+  player4StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 242.0, 12.0, 12.0)];
+  [v2 addSubview:player4StatusImageView];
+  playerTreesStatusBar = [[GSStatusBar alloc] initWithFrame:NSMakeRect(167.0, 34.0, 3.0, 80.0)];
+  [v2 addSubview:playerTreesStatusBar];
+  base2StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(52.0, 102.0, 12.0, 12.0)];
+  [v2 addSubview:base2StatusImageView];
+  player6StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 219.0, 12.0, 12.0)];
+  [v2 addSubview:player6StatusImageView];
+  base1StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 102.0, 12.0, 12.0)];
+  [v2 addSubview:base1StatusImageView];
+  base0StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 102.0, 12.0, 12.0)];
+  [v2 addSubview:base0StatusImageView];
+  player0StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 242.0, 12.0, 12.0)];
+  [v2 addSubview:player0StatusImageView];
+  pillBStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 126.0, 12.0, 12.0)];
+  [v2 addSubview:pillBStatusImageView];
+  pillDStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(66.0, 126.0, 12.0, 12.0)];
+  [v2 addSubview:pillDStatusImageView];
+  baseMinesStatusBar = [[GSStatusBar alloc] initWithFrame:NSMakeRect(36.0, 32.0, 70.0, 3.0)];
+  [v2 addSubview:baseMinesStatusBar];
+  playerAStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 196.0, 12.0, 12.0)];
+  [v2 addSubview:playerAStatusImageView];
+  base9StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 79.0, 12.0, 12.0)];
+  [v2 addSubview:base9StatusImageView];
+  playerBStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 196.0, 12.0, 12.0)];
+  [v2 addSubview:playerBStatusImageView];
+  player7StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 219.0, 12.0, 12.0)];
+  [v2 addSubview:player7StatusImageView];
+  playerMinesStatusBar = [[GSStatusBar alloc] initWithFrame:NSMakeRect(143.0, 34.0, 3.0, 80.0)];
+  [v2 addSubview:playerMinesStatusBar];
+  pillAStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 126.0, 12.0, 12.0)];
+  [v2 addSubview:pillAStatusImageView];
+  baseBStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 56.0, 12.0, 12.0)];
+  [v2 addSubview:baseBStatusImageView];
+  baseCStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(52.0, 56.0, 12.0, 12.0)];
+  [v2 addSubview:baseCStatusImageView];
+  playerArmourStatusBar = [[GSStatusBar alloc] initWithFrame:NSMakeRect(155.0, 34.0, 3.0, 80.0)];
+  [v2 addSubview:playerArmourStatusBar];
+  baseFStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 56.0, 12.0, 12.0)];
+  [v2 addSubview:baseFStatusImageView];
+  player9StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 219.0, 12.0, 12.0)];
+  [v2 addSubview:player9StatusImageView];
+  base4StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 102.0, 12.0, 12.0)];
+  [v2 addSubview:base4StatusImageView];
+  pillCStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(52.0, 126.0, 12.0, 12.0)];
+  [v2 addSubview:pillCStatusImageView];
+  pill0StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 172.0, 12.0, 12.0)];
+  [v2 addSubview:pill0StatusImageView];
+  base5StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 102.0, 12.0, 12.0)];
+  [v2 addSubview:base5StatusImageView];
+  base6StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 79.0, 12.0, 12.0)];
+  [v2 addSubview:base6StatusImageView];
+  pillFStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 126.0, 12.0, 12.0)];
+  [v2 addSubview:pillFStatusImageView];
+  player1StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 242.0, 12.0, 12.0)];
+  [v2 addSubview:player1StatusImageView];
+  pill9StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 149.0, 12.0, 12.0)];
+  [v2 addSubview:pill9StatusImageView];
+  baseShellsStatusBar = [[GSStatusBar alloc] initWithFrame:NSMakeRect(36.0, 42.0, 70.0, 3.0)];
+  [v2 addSubview:baseShellsStatusBar];
+  baseEStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 56.0, 12.0, 12.0)];
+  [v2 addSubview:baseEStatusImageView];
+  pill2StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(52.0, 172.0, 12.0, 12.0)];
+  [v2 addSubview:pill2StatusImageView];
+  base3StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(66.0, 102.0, 12.0, 12.0)];
+  [v2 addSubview:base3StatusImageView];
+  pill3StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(66.0, 172.0, 12.0, 12.0)];
+  [v2 addSubview:pill3StatusImageView];
+  pill5StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 172.0, 12.0, 12.0)];
+  [v2 addSubview:pill5StatusImageView];
+  playerShellsStatusBar = [[GSStatusBar alloc] initWithFrame:NSMakeRect(131.0, 34.0, 3.0, 80.0)];
+  [v2 addSubview:playerShellsStatusBar];
+  baseArmourStatusBar = [[GSStatusBar alloc] initWithFrame:NSMakeRect(36.0, 22.0, 70.0, 3.0)];
+  [v2 addSubview:baseArmourStatusBar];
+  player5StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 242.0, 12.0, 12.0)];
+  [v2 addSubview:player5StatusImageView];
+  pill1StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 172.0, 12.0, 12.0)];
+  [v2 addSubview:pill1StatusImageView];
+  playerFStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(94.0, 196.0, 12.0, 12.0)];
+  [v2 addSubview:playerFStatusImageView];
+  playerDStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(66.0, 196.0, 12.0, 12.0)];
+  [v2 addSubview:playerDStatusImageView];
+  playerCStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(52.0, 196.0, 12.0, 12.0)];
+  [v2 addSubview:playerCStatusImageView];
+  playerEStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 196.0, 12.0, 12.0)];
+  [v2 addSubview:playerEStatusImageView];
+  baseDStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(66.0, 56.0, 12.0, 12.0)];
+  [v2 addSubview:baseDStatusImageView];
+  pill8StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(80.0, 149.0, 12.0, 12.0)];
+  [v2 addSubview:pill8StatusImageView];
+  player3StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(66.0, 242.0, 12.0, 12.0)];
+  [v2 addSubview:player3StatusImageView];
+  base7StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 79.0, 12.0, 12.0)];
+  [v2 addSubview:base7StatusImageView];
+  baseAStatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24.0, 56.0, 12.0, 12.0)];
+  [v2 addSubview:baseAStatusImageView];
+  pill7StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(38.0, 149.0, 12.0, 12.0)];
+  [v2 addSubview:pill7StatusImageView];
+  player2StatusImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(52.0, 242.0, 12.0, 12.0)];
+  [v2 addSubview:player2StatusImageView];
+  [content addSubview:v2];
+
+  [panel setFrameAutosaveName:@"GSStatusPanel"];
+
+  statusPanel = panel;
+}
+
+- (void)buildAllegiancePanel {
+  NSPanel *panel =
+    [[NSPanel alloc] initWithContentRect:NSMakeRect(1246.0, 431.0, 256.0, 192.0)
+                               styleMask:411  /* from the nib: titled|closable|utility|... */
+                                 backing:NSBackingStoreBuffered
+                                   defer:YES];
+  [panel setTitle:@"Allegiance"];
+  [panel setReleasedWhenClosed:NO];
+  [panel setDelegate:(id)self];
+  NSView *content = [panel contentView];
+
+  NSScrollView *v2 = [[NSScrollView alloc] initWithFrame:NSMakeRect(0.0, 34.0, 256.0, 158.0)];
+  [v2 setBorderType:2];
+  [v2 setHasVerticalScroller:YES];
+  playerInfoTableView = [[NSTableView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 254.0, 128.0)];
+  NSTableColumn *col3 = [[NSTableColumn alloc] initWithIdentifier:@"Player"];
+  [col3 setTitle:@"Player"];
+  [col3 setWidth:90.0];
+  [playerInfoTableView addTableColumn:col3];
+  [playerInfoTableView setDelegate:self];
+  [playerInfoTableView setDataSource:self];
+  [v2 setDocumentView:playerInfoTableView];
+  [content addSubview:v2];
+  [v2 setAutoresizingMask:18];
+
+  requestAllianceButton = [[NSButton alloc] initWithFrame:NSMakeRect(9.0, 10.0, 96.0, 16.0)];
+  [requestAllianceButton setTitle:@"Request Alliance"];
+  [requestAllianceButton setBezelStyle:1];
+  [requestAllianceButton setControlSize:NSControlSizeMini];
+  [requestAllianceButton setFont:[NSFont systemFontOfSize:9.0]];
+  [requestAllianceButton setTarget:self];
+  [requestAllianceButton setAction:@selector(requestAlliance:)];
+  [content addSubview:requestAllianceButton];
+  [requestAllianceButton setAutoresizingMask:36];
+
+  leaveAllianceButton = [[NSButton alloc] initWithFrame:NSMakeRect(111.0, 10.0, 86.0, 16.0)];
+  [leaveAllianceButton setTitle:@"Leave Alliance"];
+  [leaveAllianceButton setBezelStyle:1];
+  [leaveAllianceButton setControlSize:NSControlSizeMini];
+  [leaveAllianceButton setFont:[NSFont systemFontOfSize:9.0]];
+  [leaveAllianceButton setTarget:self];
+  [leaveAllianceButton setAction:@selector(leaveAlliance:)];
+  [content addSubview:leaveAllianceButton];
+  [leaveAllianceButton setAutoresizingMask:36];
+
+  [panel setFrameAutosaveName:@"GSAllegiancePanel"];
+
+  allegiancePanel = panel;
+}
+
+- (void)buildMessagesPanel {
+  NSPanel *panel =
+    [[NSPanel alloc] initWithContentRect:NSMakeRect(1246.0, 149.0, 256.0, 256.0)
+                               styleMask:283  /* from the nib: titled|closable|utility|... */
+                                 backing:NSBackingStoreBuffered
+                                   defer:YES];
+  [panel setTitle:@"Messages"];
+  [panel setReleasedWhenClosed:NO];
+  [panel setDelegate:(id)self];
+  NSView *content = [panel contentView];
+
+  messageTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(10.0, 9.0, 169.0, 63.0)];
+  [messageTextField setEditable:YES];
+  [messageTextField setBezeled:YES];
+  [messageTextField setFont:[NSFont systemFontOfSize:9.0]];
+  [messageTextField setTarget:self];
+  [messageTextField setAction:@selector(sendMessage:)];
+  [content addSubview:messageTextField];
+  [messageTextField setAutoresizingMask:34];
+
+  NSScrollView *v2 = [[NSScrollView alloc] initWithFrame:NSMakeRect(0.0, 80.0, 256.0, 176.0)];
+  [v2 setBorderType:2];
+  [v2 setHasVerticalScroller:YES];
+  messagesTextView = [[NSTextView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 254.0, 174.0)];
+  [messagesTextView setEditable:NO];
+  [messagesTextView setRichText:YES];
+  [messagesTextView setVerticallyResizable:YES];
+  [messagesTextView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+  [[messagesTextView textContainer] setWidthTracksTextView:YES];
+  [messagesTextView setMinSize:NSMakeSize(0.0, 174.0)];
+  [messagesTextView setMaxSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+  [v2 setDocumentView:messagesTextView];
+  [content addSubview:v2];
+  [v2 setAutoresizingMask:18];
+
+  NSButtonCell *proto = [[NSButtonCell alloc] init];
+  [proto setButtonType:NSButtonTypeRadio];
+  [proto setControlSize:NSControlSizeMini];
+  [proto setFont:[NSFont systemFontOfSize:9.0]];
+  messageTargetMatrix = [[NSMatrix alloc] initWithFrame:NSMakeRect(184.0, 33.0, 62.0, 40.0) mode:0 prototype:proto numberOfRows:3 numberOfColumns:1];
+  [messageTargetMatrix setCellSize:NSMakeSize(62.0, 12.0)];
+  [[messageTargetMatrix cellAtRow:0 column:0] setTitle:@"Everyone"];
+  [[messageTargetMatrix cellAtRow:0 column:0] setTag:0];
+  [[messageTargetMatrix cellAtRow:1 column:0] setTitle:@"Allies"];
+  [[messageTargetMatrix cellAtRow:1 column:0] setTag:1];
+  [[messageTargetMatrix cellAtRow:2 column:0] setTitle:@"Nearby"];
+  [[messageTargetMatrix cellAtRow:2 column:0] setTag:2];
+  [messageTargetMatrix selectCellAtRow:0 column:0];
+  [messageTargetMatrix setTarget:self];
+  [messageTargetMatrix setAction:@selector(messageTarget:)];
+  [content addSubview:messageTargetMatrix];
+  [messageTargetMatrix setAutoresizingMask:33];
+
+  NSButton *v3 = [[NSButton alloc] initWithFrame:NSMakeRect(186.0, 10.0, 60.0, 16.0)];
+  [v3 setTitle:@"Send"];
+  [v3 setBezelStyle:1];
+  [v3 setControlSize:NSControlSizeMini];
+  [v3 setFont:[NSFont systemFontOfSize:9.0]];
+  [v3 setTarget:self];
+  [v3 setAction:@selector(sendMessage:)];
+  [v3 setKeyEquivalent:@"\r"];
+  [content addSubview:v3];
+  [v3 setAutoresizingMask:33];
+
+  [panel setInitialFirstResponder:messageTextField];
+  [panel setFrameAutosaveName:@"GSMessagesPanel"];
+
+  messagesPanel = panel;
+}
+
+/* small helper: item with target/action/key/modifiers */
+static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key, NSUInteger mods, NSInteger tag) {
+  NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title action:action keyEquivalent:key ? key : @""];
+  item.target = target;
+  if (mods) {
+    item.keyEquivalentModifierMask = mods;
+  }
+  item.tag = tag;
+  return item;
+}
+
+- (void)buildMainMenu {
+  NSMenu *mainMenu = [[NSMenu alloc] initWithTitle:@"MainMenu"];
+
+  /* application menu */
+  NSMenu *appMenu = [[NSMenu alloc] initWithTitle:@"XBolo"];
+  [appMenu addItem:GSItem(@"About XBolo", @selector(orderFrontStandardAboutPanel:), NSApp, nil, 0, 0)];
+  [appMenu addItem:GSItem(@"Settings…", @selector(showPrefs:), self, @",", NSEventModifierFlagCommand, 0)];
+  [appMenu addItem:[NSMenuItem separatorItem]];
+  NSMenuItem *servicesItem = [appMenu addItemWithTitle:@"Services" action:NULL keyEquivalent:@""];
+  NSMenu *servicesMenu = [[NSMenu alloc] initWithTitle:@"Services"];
+  servicesItem.submenu = servicesMenu;
+  [NSApp setServicesMenu:servicesMenu];
+  [appMenu addItem:[NSMenuItem separatorItem]];
+  [appMenu addItem:GSItem(@"Hide XBolo", @selector(hide:), NSApp, @"h", NSEventModifierFlagCommand, 0)];
+  [appMenu addItem:GSItem(@"Hide Others", @selector(hideOtherApplications:), NSApp, nil, 0, 0)];
+  [appMenu addItem:GSItem(@"Show All", @selector(unhideAllApplications:), NSApp, nil, 0, 0)];
+  [appMenu addItem:[NSMenuItem separatorItem]];
+  [appMenu addItem:GSItem(@"Quit XBolo", @selector(terminate:), NSApp, @"q", NSEventModifierFlagCommand, 0)];
+  [mainMenu addItemWithTitle:@"XBolo" action:NULL keyEquivalent:@""].submenu = appMenu;
+
+  /* file menu */
+  NSMenu *fileMenu = [[NSMenu alloc] initWithTitle:@"File"];
+  [fileMenu addItem:GSItem(@"New Game…", @selector(newGame:), self, @"n", NSEventModifierFlagCommand, 0)];
+  [fileMenu addItem:[NSMenuItem separatorItem]];
+  [fileMenu addItem:GSItem(@"Close Window", @selector(performClose:), nil, @"w", NSEventModifierFlagCommand, 0)];
+  [fileMenu addItem:GSItem(@"Close All", @selector(closeAll:), NSApp, @"w", NSEventModifierFlagCommand | NSEventModifierFlagOption, 0)];
+  [fileMenu addItem:GSItem(@"Close Game", @selector(closeGame:), self, @"W", NSEventModifierFlagCommand, 0)];
+  [fileMenu addItem:[NSMenuItem separatorItem]];
+  [fileMenu addItem:GSItem(@"Page Setup…", @selector(runPageLayout:), nil, @"P", NSEventModifierFlagCommand, 0)];
+  [fileMenu addItem:GSItem(@"Print…", @selector(print:), nil, @"p", NSEventModifierFlagCommand, 0)];
+  [mainMenu addItemWithTitle:@"File" action:NULL keyEquivalent:@""].submenu = fileMenu;
+
+  /* edit menu (AppKit injects Writing Tools, AutoFill, Dictation, Emoji) */
+  NSMenu *editMenu = [[NSMenu alloc] initWithTitle:@"Edit"];
+  [editMenu addItem:GSItem(@"Undo", @selector(undo:), nil, @"z", NSEventModifierFlagCommand, 0)];
+  [editMenu addItem:GSItem(@"Redo", @selector(redo:), nil, @"Z", NSEventModifierFlagCommand, 0)];
+  [editMenu addItem:[NSMenuItem separatorItem]];
+  [editMenu addItem:GSItem(@"Cut", @selector(cut:), nil, @"x", NSEventModifierFlagCommand, 0)];
+  [editMenu addItem:GSItem(@"Copy", @selector(copy:), nil, @"c", NSEventModifierFlagCommand, 0)];
+  [editMenu addItem:GSItem(@"Paste", @selector(paste:), nil, @"v", NSEventModifierFlagCommand, 0)];
+  [editMenu addItem:GSItem(@"Clear", @selector(clear:), nil, nil, 0, 0)];
+  [editMenu addItem:GSItem(@"Select All", @selector(selectAll:), nil, @"a", NSEventModifierFlagCommand, 0)];
+  [editMenu addItem:[NSMenuItem separatorItem]];
+  NSMenu *spellingMenu = [[NSMenu alloc] initWithTitle:@"Spelling"];
+  [spellingMenu addItem:GSItem(@"Spelling...", @selector(showGuessPanel:), nil, @":", NSEventModifierFlagCommand, 0)];
+  [spellingMenu addItem:GSItem(@"Check Spelling", @selector(checkSpelling:), nil, @";", NSEventModifierFlagCommand, 0)];
+  [spellingMenu addItem:GSItem(@"Check Spelling As You Type", @selector(toggleContinuousSpellChecking:), nil, nil, 0, 0)];
+  [editMenu addItemWithTitle:@"Spelling" action:NULL keyEquivalent:@""].submenu = spellingMenu;
+  [mainMenu addItemWithTitle:@"Edit" action:NULL keyEquivalent:@""].submenu = editMenu;
+
+  /* builder menu */
+  NSMenu *builderMenu = [[NSMenu alloc] initWithTitle:@"Builder"];
+  NSArray *tools = @[@"Tree", @"Road", @"Wall", @"Pill", @"Mine"];
+  for (NSUInteger i = 0; i < tools.count; i++) {
+    [builderMenu addItem:GSItem(tools[i], @selector(builderToolMenu:), self,
+                                [NSString stringWithFormat:@"%lu", (unsigned long)(i + 1)],
+                                NSEventModifierFlagCommand, (NSInteger)i)];
+  }
+  [mainMenu addItemWithTitle:@"Builder" action:NULL keyEquivalent:@""].submenu = builderMenu;
+
+  /* game menu */
+  NSMenu *gameMenu = [[NSMenu alloc] initWithTitle:@"Game"];
+  gamePauseResumeMenuItem = GSItem(@"Pause", @selector(gamePauseResumeMenu:), self, @".", NSEventModifierFlagCommand, 0);
+  [gameMenu addItem:gamePauseResumeMenuItem];
+  [gameMenu addItem:GSItem(@"Allow Join", @selector(toggleJoin:), self, @"d", NSEventModifierFlagCommand, 0)];
+  [gameMenu addItem:GSItem(@"Mute", @selector(toggleMute:), self, @"M", NSEventModifierFlagCommand, 0)];
+  [gameMenu addItem:[NSMenuItem separatorItem]];
+
+  NSMenu *kickMenu = [[NSMenu alloc] initWithTitle:@"Kick Player"];
+  NSMenu *banMenu = [[NSMenu alloc] initWithTitle:@"Ban Player"];
+  for (NSInteger i = 0; i < 16; i++) {
+    NSString *title = [NSString stringWithFormat:@"Player %ld", (long)(i + 1)];
+    [kickMenu addItem:GSItem(title, @selector(kickPlayer:), self, nil, 0, i)];
+    [banMenu addItem:GSItem(title, @selector(banPlayer:), self, nil, 0, i)];
+  }
+  NSMenuItem *kickItem = GSItem(@"Kick Player", NULL, nil, nil, 0, -1);
+  kickItem.submenu = kickMenu;
+  [gameMenu addItem:kickItem];
+  NSMenuItem *banItem = GSItem(@"Ban Player", NULL, nil, nil, 0, -1);
+  banItem.submenu = banMenu;
+  [gameMenu addItem:banItem];
+  NSMenuItem *unbanItem = GSItem(@"Unban Player", NULL, nil, nil, 0, -1);
+  NSMenu *unbanMenu = [[NSMenu alloc] initWithTitle:@"Unban Player"];
+  unbanMenu.delegate = (id)self;  /* populated in menuNeedsUpdate: */
+  unbanItem.submenu = unbanMenu;
+  [gameMenu addItem:unbanItem];
+  [mainMenu addItemWithTitle:@"Game" action:NULL keyEquivalent:@""].submenu = gameMenu;
+
+  /* view menu */
+  NSMenu *viewMenu = [[NSMenu alloc] initWithTitle:@"View"];
+  [viewMenu addItem:GSItem(@"Show/Hide Toolbar", @selector(toggleToolbarShown:), nil, nil, 0, 0)];
+  [viewMenu addItem:GSItem(@"Customize Toolbar…", @selector(runToolbarCustomizationPalette:), nil, nil, 0, 0)];
+  [mainMenu addItemWithTitle:@"View" action:NULL keyEquivalent:@""].submenu = viewMenu;
+
+  /* window menu */
+  NSMenu *windowMenu = [[NSMenu alloc] initWithTitle:@"Window"];
+  [windowMenu addItem:GSItem(@"Minimize", @selector(performMiniaturize:), nil, @"m", NSEventModifierFlagCommand, 0)];
+  [windowMenu addItem:GSItem(@"Zoom", @selector(performZoom:), nil, nil, 0, 0)];
+  [windowMenu addItem:[NSMenuItem separatorItem]];
+  [windowMenu addItem:GSItem(@"Status", @selector(statusPanel:), self, @"s", NSEventModifierFlagCommand, 0)];
+  [windowMenu addItem:GSItem(@"Allegiance", @selector(allegiancePanel:), self, @"l", NSEventModifierFlagCommand, 0)];
+  [windowMenu addItem:GSItem(@"Messages", @selector(messagesPanel:), self, nil, 0, 0)];
+  [windowMenu addItem:[NSMenuItem separatorItem]];
+  [windowMenu addItem:GSItem(@"Bring All to Front", @selector(arrangeInFront:), nil, nil, 0, 0)];
+  [mainMenu addItemWithTitle:@"Window" action:NULL keyEquivalent:@""].submenu = windowMenu;
+  [NSApp setWindowsMenu:windowMenu];
+
+  /* help menu */
+  NSMenu *helpMenu = [[NSMenu alloc] initWithTitle:@"Help"];
+  [helpMenu addItem:GSItem(@"XBolo Help", @selector(showHelp:), nil, @"?", NSEventModifierFlagCommand, 0)];
+  [mainMenu addItemWithTitle:@"Help" action:NULL keyEquivalent:@""].submenu = helpMenu;
+  [NSApp setHelpMenu:helpMenu];
+
+  [NSApp setMainMenu:mainMenu];
 }
 
 @end

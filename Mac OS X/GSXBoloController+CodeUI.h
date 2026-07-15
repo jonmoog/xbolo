@@ -13,5 +13,9 @@
 @interface GSXBoloController (CodeUI)
 
 - (void)buildJoinProgressWindow;
+- (void)buildStatusPanel;
+- (void)buildAllegiancePanel;
+- (void)buildMessagesPanel;
+- (void)buildMainMenu;
 
 @end
