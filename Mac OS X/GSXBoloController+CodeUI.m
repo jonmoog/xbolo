@@ -10,6 +10,7 @@
 #import "GSStatusView.h"
 #import "GSBuilderStatusView.h"
 #import "GSStatusBar.h"
+#import "GSKeyCodeField.h"
 
 #include <float.h>
 
@@ -451,6 +452,200 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [NSApp setHelpMenu:helpMenu];
 
   [NSApp setMainMenu:mainMenu];
+}
+
+
+- (void)buildPreferencesWindow {
+  NSWindow *window =
+    [[NSWindow alloc] initWithContentRect:NSMakeRect(506, 397, 443, 361)
+                                styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable)
+                                  backing:NSBackingStoreBuffered
+                                    defer:YES];
+  [window setTitle:@"XBolo Preferences"];
+  [window setReleasedWhenClosed:NO];
+  NSView *content = [window contentView];
+
+  prefTab = [[NSTabView alloc] initWithFrame:NSMakeRect(0, 0, 443, 329)];
+  [prefTab setTabViewType:6];
+  NSTabViewItem *item1 = [[NSTabViewItem alloc] initWithIdentifier:@"GSToolbarPlayerInfoItemIdentifier"];
+  [item1 setLabel:@"Player Info"];
+  NSView *pane2 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 443, 329)];
+  NSBox *box3 = [[NSBox alloc] initWithFrame:NSMakeRect(17, 154, 409, 169)];
+  [box3 setTitle:@"Attributes"];
+  [box3 setContentViewMargins:NSMakeSize(0.0, 0.0)];
+  NSTextField *t4 = GSLabel(@"Player Name:", NSMakeRect(42, 112, 86, 17));
+  [t4 setAlignment:2];
+  [[box3 contentView] addSubview:t4];
+
+  prefPlayerNameField = [[NSTextField alloc] initWithFrame:NSMakeRect(133, 110, 180, 22)];
+  [prefPlayerNameField setEditable:YES];
+  [prefPlayerNameField setBezeled:YES];
+  [prefPlayerNameField setStringValue:@"Newbie"];
+  [prefPlayerNameField setTarget:self];
+  [prefPlayerNameField setAction:@selector(prefPlayerName:)];
+  [[box3 contentView] addSubview:prefPlayerNameField];
+
+  [pane2 addSubview:box3];
+
+  [item1 setView:pane2];
+  [prefTab addTabViewItem:item1];
+
+  NSTabViewItem *item5 = [[NSTabViewItem alloc] initWithIdentifier:@"GSToolbarKeyConfigItemIdentifier"];
+  [item5 setLabel:@"Key Config"];
+  NSView *pane6 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 443, 329)];
+  NSBox *box7 = [[NSBox alloc] initWithFrame:NSMakeRect(17, 16, 222, 307)];
+  [box7 setTitle:@"Tank"];
+  [box7 setContentViewMargins:NSMakeSize(0.0, 0.0)];
+  NSTextField *t8 = GSLabel(@"Accelerate:", NSMakeRect(43, 256, 74, 17));
+  [t8 setAlignment:2];
+  [[box7 contentView] addSubview:t8];
+
+  NSTextField *t9 = GSLabel(@"Brake:", NSMakeRect(74, 226, 43, 17));
+  [t9 setAlignment:2];
+  [[box7 contentView] addSubview:t9];
+
+  NSTextField *t10 = GSLabel(@"Turn Left:", NSMakeRect(51, 196, 66, 17));
+  [t10 setAlignment:2];
+  [[box7 contentView] addSubview:t10];
+
+  NSTextField *t11 = GSLabel(@"Turn Right:", NSMakeRect(42, 166, 75, 17));
+  [t11 setAlignment:2];
+  [[box7 contentView] addSubview:t11];
+
+  NSTextField *t12 = GSLabel(@"Lay Mine:", NSMakeRect(53, 136, 64, 17));
+  [t12 setAlignment:2];
+  [[box7 contentView] addSubview:t12];
+
+  NSTextField *t13 = GSLabel(@"Shoot:", NSMakeRect(72, 106, 45, 17));
+  [t13 setAlignment:2];
+  [[box7 contentView] addSubview:t13];
+
+  NSTextField *t14 = GSLabel(@"Increase Aim:", NSMakeRect(27, 76, 90, 17));
+  [t14 setAlignment:2];
+  [[box7 contentView] addSubview:t14];
+
+  NSTextField *t15 = GSLabel(@"Decrease Aim:", NSMakeRect(22, 46, 95, 17));
+  [t15 setAlignment:2];
+  [[box7 contentView] addSubview:t15];
+
+  prefAutoSlowdownSwitch = [[NSButton alloc] initWithFrame:NSMakeRect(120, 17, 22, 18)];
+  [prefAutoSlowdownSwitch setButtonType:NSButtonTypeSwitch];
+  [prefAutoSlowdownSwitch setTitle:@""];
+  [prefAutoSlowdownSwitch setBezelStyle:2];
+  [prefAutoSlowdownSwitch setState:NSControlStateValueOn];
+  [[box7 contentView] addSubview:prefAutoSlowdownSwitch];
+
+  NSTextField *t16 = GSLabel(@"Auto Slowdown:", NSMakeRect(11, 18, 106, 17));
+  [t16 setAlignment:2];
+  [[box7 contentView] addSubview:t16];
+
+  prefAccelerateField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 253, 78, 22)];
+  [[box7 contentView] addSubview:prefAccelerateField];
+
+  prefBrakeField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 223, 78, 22)];
+  [[box7 contentView] addSubview:prefBrakeField];
+
+  prefTurnLeftField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 193, 78, 22)];
+  [[box7 contentView] addSubview:prefTurnLeftField];
+
+  prefTurnRightField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 163, 78, 22)];
+  [[box7 contentView] addSubview:prefTurnRightField];
+
+  prefLayMineField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 133, 78, 22)];
+  [[box7 contentView] addSubview:prefLayMineField];
+
+  prefShootField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 103, 78, 22)];
+  [[box7 contentView] addSubview:prefShootField];
+
+  prefIncreaseAimField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 73, 78, 22)];
+  [[box7 contentView] addSubview:prefIncreaseAimField];
+
+  prefDecreaseAimField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(122, 43, 78, 22)];
+  [[box7 contentView] addSubview:prefDecreaseAimField];
+
+  [pane6 addSubview:box7];
+
+  NSBox *box17 = [[NSBox alloc] initWithFrame:NSMakeRect(241, 106, 185, 217)];
+  [box17 setTitle:@"View"];
+  [box17 setContentViewMargins:NSMakeSize(0.0, 0.0)];
+  NSTextField *t18 = GSLabel(@"Right:", NSMakeRect(42, 76, 42, 17));
+  [t18 setAlignment:2];
+  [[box17 contentView] addSubview:t18];
+
+  NSTextField *t19 = GSLabel(@"Left:", NSMakeRect(52, 106, 32, 17));
+  [t19 setAlignment:2];
+  [[box17 contentView] addSubview:t19];
+
+  NSTextField *t20 = GSLabel(@"Up:", NSMakeRect(58, 166, 26, 17));
+  [t20 setAlignment:2];
+  [[box17 contentView] addSubview:t20];
+
+  NSTextField *t21 = GSLabel(@"Down:", NSMakeRect(40, 136, 44, 17));
+  [t21 setAlignment:2];
+  [[box17 contentView] addSubview:t21];
+
+  NSTextField *t22 = GSLabel(@"Tank View:", NSMakeRect(11, 46, 73, 17));
+  [t22 setAlignment:2];
+  [[box17 contentView] addSubview:t22];
+
+  NSTextField *t23 = GSLabel(@"Pill View:", NSMakeRect(23, 16, 61, 17));
+  [t23 setAlignment:2];
+  [[box17 contentView] addSubview:t23];
+
+  prefUpField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(89, 163, 78, 22)];
+  [[box17 contentView] addSubview:prefUpField];
+
+  prefDownField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(89, 133, 78, 22)];
+  [[box17 contentView] addSubview:prefDownField];
+
+  prefLeftField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(89, 103, 78, 22)];
+  [[box17 contentView] addSubview:prefLeftField];
+
+  prefRightField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(89, 73, 78, 22)];
+  [[box17 contentView] addSubview:prefRightField];
+
+  prefTankViewField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(89, 43, 78, 22)];
+  [[box17 contentView] addSubview:prefTankViewField];
+
+  prefPillViewField = [[GSKeyCodeField alloc] initWithFrame:NSMakeRect(89, 13, 78, 22)];
+  [[box17 contentView] addSubview:prefPillViewField];
+
+  [pane6 addSubview:box17];
+
+  NSButton *b24 = [[NSButton alloc] initWithFrame:NSMakeRect(345, 12, 84, 32)];
+  [b24 setTitle:@"Apply"];
+  [b24 setBezelStyle:1];
+  [b24 setTarget:self];
+  [b24 setAction:@selector(applyKeyConfig:)];
+  [pane6 addSubview:b24];
+
+  NSButton *b25 = [[NSButton alloc] initWithFrame:NSMakeRect(259, 12, 88, 32)];
+  [b25 setTitle:@"Revert"];
+  [b25 setBezelStyle:1];
+  [b25 setTarget:self];
+  [b25 setAction:@selector(revertKeyConfig:)];
+  [pane6 addSubview:b25];
+
+  [item5 setView:pane6];
+  [prefTab addTabViewItem:item5];
+
+  [content addSubview:prefTab];
+
+  /* The nib chained the key fields into an explicit key-view loop, but
+     AppKit drops nextKeyView links on views in unselected (detached) tab
+     panes, so we rely on the automatic geometric loop instead; in this
+     layout it produces the same top-down order. */
+  [window setInitialFirstResponder:prefTab];
+
+  /* attach the toolbar (built in awakeFromNib) before restoring the saved
+     frame so the restored content height accounts for it */
+  [window setToolbar:prefToolbar];
+  [prefTab selectTabViewItemWithIdentifier:[prefToolbar selectedItemIdentifier]];
+
+  [window setFrameAutosaveName:@"GSPreferencesWindow"];
+  [window setContentSize:NSMakeSize(443.0, 361.0)];
+
+  preferencesWindow = window;
 }
 
 @end

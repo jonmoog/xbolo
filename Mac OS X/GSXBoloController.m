@@ -240,6 +240,7 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
     [self buildAllegiancePanel];
     [self buildMessagesPanel];
     [self buildMainMenu];
+    [self buildPreferencesWindow];
   }];
 
   defaults = [NSUserDefaults standardUserDefaults];

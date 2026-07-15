@@ -17,5 +17,6 @@
 - (void)buildAllegiancePanel;
 - (void)buildMessagesPanel;
 - (void)buildMainMenu;
+- (void)buildPreferencesWindow;
 
 @end
