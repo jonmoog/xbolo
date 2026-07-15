@@ -21,11 +21,58 @@ static NSImage *sprites = nil;
 static NSCursor *cursor = nil;
 static int dirtytiles(struct ListNode *list, Recti rect);
 
+/*
+ * Pre-sliced CGImage caches for the 16x16 cells of the Tiles and Sprites
+ * sheets.  NSImage drawInRect:fromRect: pays heavy per-call validation
+ * overhead; with thousands of tile draws per frame it starves the main
+ * thread.  CGContextDrawImage of a cached CGImage is far cheaper.
+ */
+#define SHEETCELLS (256)
+static CGImageRef tileCache[SHEETCELLS];
+static CGImageRef spriteCache[SHEETCELLS];
+
+/* when set, drawSprites/drawLabel invalidate and record dirty rects instead
+   of drawing (see invalidateGameState) */
+static BOOL invalidatePass = NO;
+
+/* sliceSheet slices a 256x256 sheet image into 16x16 CGImage cells indexed
+   like the original code: cell i is at NSImage coords ((i%16)*16, (i/16)*16)
+   with a bottom-left origin.  CGImage y runs top-down, so flip. */
+static void sliceSheet(NSImage *sheet, CGImageRef cache[SHEETCELLS]) {
+  CGImageRef sheetImage;
+  size_t height;
+  int i;
+
+  sheetImage = [sheet CGImageForProposedRect:NULL context:NULL hints:NULL];
+  assert(sheetImage != NULL);
+  height = CGImageGetHeight(sheetImage);
+
+  for (i = 0; i < SHEETCELLS; i++) {
+    CGRect cell = CGRectMake((i%16)*16, height - (i/16)*16 - 16, 16.0, 16.0);
+    cache[i] = CGImageCreateWithImageInRect(sheetImage, cell);
+    assert(cache[i] != NULL);
+  }
+}
+
+/* draws a cached cell without antialiasing at the given alpha */
+static void drawCell(CGImageRef image, NSRect dstRect, CGFloat alpha) {
+  CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
+  CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
+  if (alpha < 1.0) {
+    CGContextSaveGState(ctx);
+    CGContextSetAlpha(ctx, alpha);
+    CGContextDrawImage(ctx, NSRectToCGRect(dstRect), image);
+    CGContextRestoreGState(ctx);
+  }
+  else {
+    CGContextDrawImage(ctx, NSRectToCGRect(dstRect), image);
+  }
+}
+
 @interface GSBoloView (Private)
 - (void)drawTileAtPoint:(Pointi)point;
 - (void)drawTilesInRect:(NSRect)rect;
-- (void)eraseSprites;
-- (void)refreshTiles;
+- (void)invalidateGameState;
 - (void)drawSprites;
 - (void)drawSprite:(int)tile at:(Vec2f)point fraction:(float)fraction;
 - (void)drawLabel:(char *)label at:(Vec2f)point withAttributes:(NSDictionary *)attr;
@@ -41,6 +88,9 @@ static int dirtytiles(struct ListNode *list, Recti rect);
     assert((tiles = [[NSImage imageNamed:@"Tiles"] retain]) != nil);
     assert((sprites = [[NSImage imageNamed:@"Sprites"] retain]) != nil);
     assert((cursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"Cursor"] hotSpot:NSMakePoint(8.0, 8.0)]) != nil);
+
+    sliceSheet(tiles, tileCache);
+    sliceSheet(sprites, spriteCache);
   }
 }
 
@@ -48,29 +98,14 @@ static int dirtytiles(struct ListNode *list, Recti rect);
   NSEnumerator *enumerator;
   GSBoloView *view;
 
-  /* disable flush window on a bolo view windows */
+  /*
+   * Direct drawing via lockFocus no longer reaches the screen on layer-backed
+   * macOS.  Instead, invalidate what changed (last frame's sprite areas,
+   * changed tiles, this frame's sprite areas) and let drawRect: repaint.
+   */
   enumerator = [boloViews objectEnumerator];
   while ((view = [enumerator nextObject]) != nil) {
-    [[view window] disableFlushWindow];
-  }
-
-  /* draw */
-  enumerator = [boloViews objectEnumerator];
-  while ((view = [enumerator nextObject]) != nil) {  
-    if ([view lockFocusIfCanDraw]) {
-      [view eraseSprites];
-      [view refreshTiles];
-      [view drawSprites];
-      [view unlockFocus];
-      [[view window] flushWindow];
-    }
-  }
-
-  /* enable flush window and flush if needed */
-  enumerator = [boloViews objectEnumerator];
-  while ((view = [enumerator nextObject]) != nil) {
-    [[view window] enableFlushWindow];
-    [[view window] flushWindowIfNeeded];
+    [view invalidateGameState];
   }
 
   clearchangedtiles();
@@ -134,11 +169,10 @@ END
 
 - (void)drawTileAtPoint:(Pointi)point {
   int image;
-  NSRect dstRect, srcRect;
+  NSRect dstRect;
 
   image = client.images[point.y][point.x];
   dstRect = NSMakeRect(16.0*point.x, 16.0*(255 - point.y), 16.0, 16.0);
-  srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
 
   /* draw tile */
   if (image == -1) {
@@ -148,14 +182,11 @@ END
   }
   else {
     /* draw image */
-    [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
+    drawCell(tileCache[image], dstRect, 1.0);
 
     /* draw mine */
     if (isMinedTile(client.seentiles, point.x, point.y)) {
-      NSRect mineImageRect;
-
-      mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-      [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
+      drawCell(tileCache[MINE00IMAGE], dstRect, 1.0);
     }
 
     /* draw fog */
@@ -170,7 +201,6 @@ END
   int min_i, max_i, min_j, max_j;
   int min_x, max_x, min_y, max_y;
   int y, x;
-  NSRect dstRect, srcRect;
 
   min_i = ((int)floorf(NSMinX(rect)))/16;
   max_i = ((int)ceilf(NSMaxX(rect)))/16;
@@ -187,50 +217,19 @@ END
   /* draw the tiles in the rect */
   for (y = min_y; y <= max_y; y++) {
     for (x = min_x; x <= max_x; x++) {
-      int image;
-
-      image = client.images[y][x];
-      dstRect = NSMakeRect(16.0*x, 16.0*(255 - y), 16.0, 16.0);
-      srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
-
-      /* draw tile */
-      if (image == -1) {
-        /* draw black */
-        [[NSColor blackColor] set];
-        [NSBezierPath fillRect:dstRect];
-      }
-      else {
-        /* draw image */
-        [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
-
-        /* draw mine */
-        if (isMinedTile(client.seentiles, x, y)) {
-          NSRect mineImageRect;
-
-          mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-          [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
-        }
-
-        /* draw fog */
-        if (client.fog[y][x] <= 0) {
-          [[[NSColor blackColor] colorWithAlphaComponent:0.5] set];
-          [NSBezierPath fillRect:dstRect];
-        }
-      }
+      [self drawTileAtPoint:makepoint(x, y)];
     }
   }
 }
 
-- (void)eraseSprites {
+- (void)invalidateGameState {
   struct ListNode *node;
-  int min_x, max_x, min_y, max_y;
-  int y, x;
-  Recti *rect;
 
-//  [NSGraphicsContext saveGraphicsState];
-//  [[NSGraphicsContext currentContext] setShouldAntialias:NO];
-
+  /* invalidate the tiles under last frame's sprites, then forget them */
   for (node = nextlist(&rectlist); node != NULL; node = nextlist(node)) {
+    Recti *rect;
+    int min_x, max_x, min_y, max_y;
+
     rect = (Recti *)ptrlist(node);
 
     min_x = minxrect(*rect);
@@ -239,62 +238,25 @@ END
     min_y = minyrect(*rect);
     max_y = maxyrect(*rect);
 
-    for (y = min_y; y <= max_y; y++) {
-      for (x = min_x; x <= max_x; x++) {
-        [self drawTileAtPoint:makepoint(x, y)];
-      }
-    }
+    [self setNeedsDisplayInRect:NSMakeRect(16.0*min_x, 16.0*(255 - max_y), 16.0*(max_x - min_x + 1), 16.0*(max_y - min_y + 1))];
   }
-
-//  [NSGraphicsContext restoreGraphicsState];
 
   clearlist(&rectlist, free);
-}
 
-- (void)refreshTiles {
-  struct ListNode *node;
-
-//  [NSGraphicsContext saveGraphicsState];
-//  [[NSGraphicsContext currentContext] setShouldAntialias:NO];
-
+  /* invalidate changed tiles */
   for (node = nextlist(&client.changedtiles); node != NULL; node = nextlist(node)) {
     Pointi *p;
-    int image;
-    NSRect dstRect;
-    NSRect srcRect;
 
     p = (Pointi *)ptrlist(node);
-    image = client.images[p->y][p->x];
-    dstRect = NSMakeRect(16.0*p->x, 16.0*(255 - p->y), 16.0, 16.0);
-    srcRect = NSMakeRect((image%16)*16, (image/16)*16, 16.0, 16.0);
-
-    /* draw tile */
-    if (client.images[p->y][p->x] == -1) {
-      /* draw black */
-      [[NSColor blackColor] set];
-      [NSBezierPath fillRect:dstRect];
-    }
-    else {
-      /* draw image */
-      [tiles drawInRect:dstRect fromRect:srcRect operation:NSCompositeCopy fraction:1.0];
-
-      /* draw mine */
-      if (isMinedTile(client.seentiles, p->x, p->y)) {
-        NSRect mineImageRect;
-
-        mineImageRect = NSMakeRect((MINE00IMAGE%16)*16, (MINE00IMAGE/16)*16, 16.0, 16.0);
-        [tiles drawInRect:dstRect fromRect:mineImageRect operation:NSCompositeSourceOver fraction:1.0];
-      }
-
-      /* draw fog */
-      if (client.fog[p->y][p->x] == 0) {
-        [[[NSColor blackColor] colorWithAlphaComponent:0.5] set];
-        [NSBezierPath fillRect:dstRect];
-      }
-    }
+    [self setNeedsDisplayInRect:NSMakeRect(16.0*p->x, 16.0*(255 - p->y), 16.0, 16.0)];
   }
 
-//  [NSGraphicsContext restoreGraphicsState];
+  /* invalidate this frame's sprite areas and record them for the next
+     frame's erase; drawSprites invalidates instead of drawing while
+     invalidatePass is set */
+  invalidatePass = YES;
+  [self drawSprites];
+  invalidatePass = NO;
 }
 
 - (void)drawSprites {
@@ -453,14 +415,18 @@ END
 }
 
 - (void)drawSprite:(int)tile at:(Vec2f)point fraction:(float)fraction {
-  NSRect srcRect;
   NSRect dstRect;
 
   if (fraction > 0.00001) {
-    srcRect = NSMakeRect((tile%16)*16, (tile/16)*16, 16.0, 16.0);
     dstRect = NSMakeRect(floorf(point.x*16.0 - 8.0), floorf((FWIDTH - point.y)*16.0 - 8.0), 16.0, 16.0);
-    [sprites drawInRect:dstRect fromRect:srcRect operation:NSCompositeSourceOver fraction:fraction];
-    [self dirtyTiles:dstRect];
+
+    if (invalidatePass) {
+      [self setNeedsDisplayInRect:dstRect];
+      [self dirtyTiles:dstRect];
+    }
+    else {
+      drawCell(spriteCache[tile], dstRect, fraction);
+    }
   }
 }
 
@@ -472,8 +438,14 @@ END
   rect.size = [string sizeWithAttributes:attr];
   rect.origin.x = point.x*16.0 - rect.size.width*0.5;
   rect.origin.y = FWIDTH*16.0 - point.y*16.0 + 8.0;
-  [string drawInRect:rect withAttributes:attr];
-  [self dirtyTiles:rect];
+
+  if (invalidatePass) {
+    [self setNeedsDisplayInRect:rect];
+    [self dirtyTiles:rect];
+  }
+  else {
+    [string drawInRect:rect withAttributes:attr];
+  }
 }
 
 - (BOOL)becomeFirstResponder {
