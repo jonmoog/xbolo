@@ -90,4 +90,14 @@ ssize_t recvblockfrom(int s, void *buf, size_t *len, int flags, struct sockaddr 
 
 int closesock(int *sock);
 
+
+#include <string.h>
+
+/* reads a float stored in a packed network struct without an unaligned cast */
+static inline float unpackfloat(const void *p) {
+  float f;
+  memcpy(&f, p, sizeof(f));
+  return f;
+}
+
 #endif  /* __IO__ */

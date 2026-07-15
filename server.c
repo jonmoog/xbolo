@@ -452,13 +452,6 @@ END
 }
 
 
-/* reads a float stored in a packed network struct without an unaligned cast */
-static float unpackfloat(const void *p) {
-  float f;
-  memcpy(&f, p, sizeof(f));
-  return f;
-}
-
 int lockserver() {
   int err;
 

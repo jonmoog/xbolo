@@ -132,6 +132,9 @@
 		40A593660FBE78FC00F3E650 /* rect.c in Sources */ = {isa = PBXBuildFile; fileRef = FD969DCE07441F9C009568EF /* rect.c */; };
 		40A5936A0FBE78FC00F3E650 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A560FA69FC100647706 /* server.c */; };
 		40A5936B0FBE78FC00F3E650 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27A5E0FA6A01A00647706 /* client.c */; };
+		BB00000000000000000000B1 /* client_recv.c in Sources */ = {isa = PBXBuildFile; fileRef = BB00000000000000000000A1 /* client_recv.c */; };
+		BB00000000000000000010B1 /* client_send.c in Sources */ = {isa = PBXBuildFile; fileRef = BB00000000000000000010A1 /* client_send.c */; };
+		BB00000000000000000020B1 /* client_logic.c in Sources */ = {isa = PBXBuildFile; fileRef = BB00000000000000000020A1 /* client_logic.c */; };
 		40A5936C0FBE78FC00F3E650 /* bmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C27AAD0FA6A22600647706 /* bmap.c */; };
 		40E828731055A14B00B39BB9 /* XBolo Quick Look Plug-in.qlgenerator in Copy Plugins */ = {isa = PBXBuildFile; fileRef = 40E828721055A14400B39BB9 /* XBolo Quick Look Plug-in.qlgenerator */; };
 		40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ED84301114B09B00B7AF32 /* Foundation.framework */; };
@@ -279,6 +282,10 @@
 		40C27A560FA69FC100647706 /* server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server.c; sourceTree = "<group>"; };
 		40C27A5D0FA6A01A00647706 /* client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client.h; sourceTree = "<group>"; };
 		40C27A5E0FA6A01A00647706 /* client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client.c; sourceTree = "<group>"; };
+		BB00000000000000000000A1 /* client_recv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_recv.c; sourceTree = "<group>"; };
+		BB00000000000000000010A1 /* client_send.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_send.c; sourceTree = "<group>"; };
+		BB00000000000000000020A1 /* client_logic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_logic.c; sourceTree = "<group>"; };
+		BB00000000000000000030A1 /* client_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_internal.h; sourceTree = "<group>"; };
 		40C27AAC0FA6A22600647706 /* bmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmap.h; sourceTree = "<group>"; };
 		40C27AAD0FA6A22600647706 /* bmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bmap.c; sourceTree = "<group>"; };
 		40E8286A1055A14400B39BB9 /* XBolo Quick Look Plug-in.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "XBolo Quick Look Plug-in.xcodeproj"; path = "XBolo Quick Look Plug-in/XBolo Quick Look Plug-in.xcodeproj"; sourceTree = "<group>"; };
@@ -382,6 +389,10 @@
 				40C27A560FA69FC100647706 /* server.c */,
 				40C27A5D0FA6A01A00647706 /* client.h */,
 				40C27A5E0FA6A01A00647706 /* client.c */,
+				BB00000000000000000000A1 /* client_recv.c */,
+				BB00000000000000000010A1 /* client_send.c */,
+				BB00000000000000000020A1 /* client_logic.c */,
+				BB00000000000000000030A1 /* client_internal.h */,
 				40C27AAC0FA6A22600647706 /* bmap.h */,
 				40C27AAD0FA6A22600647706 /* bmap.c */,
 				408189951082495800E4D4CA /* bmap_client.h */,
@@ -826,6 +837,9 @@
 				408189921082475A00E4D4CA /* bmap_server.c in Sources */,
 				40A593620FBE78FC00F3E650 /* bolo.c in Sources */,
 				40A5936B0FBE78FC00F3E650 /* client.c in Sources */,
+				BB00000000000000000000B1 /* client_recv.c in Sources */,
+				BB00000000000000000010B1 /* client_send.c in Sources */,
+				BB00000000000000000020B1 /* client_logic.c in Sources */,
 				40A593610FBE78FC00F3E650 /* errchk.c in Sources */,
 				404D428A0FF8525200589EA2 /* GSBoloView.m in Sources */,
 				404D428C0FF8525200589EA2 /* GSBuilderStatusView.m in Sources */,
