@@ -61,7 +61,7 @@
                 LOG(@"availableRobots: bundle:%@", bundle);
                 if([bundle load])
                 {
-                    [robots addObject: [[[self alloc] initWithBundle: bundle] autorelease]];
+                    [robots addObject: [[self alloc] initWithBundle: bundle]];
                     LOG(@"availableRobots: load succeeded");
                 }
             }
@@ -74,7 +74,7 @@
 {
     if((self = [self init]))
     {
-        _bundle = [bundle retain];
+        _bundle = bundle;
         _condLock = [[NSConditionLock alloc] initWithCondition: NO_NEW_DATA];
         _messages = [[NSMutableArray alloc] init];
     }
@@ -84,9 +84,6 @@
 - (void)dealloc
 {
     [self unload];
-    [_bundle release];
-    
-    [super dealloc];
 }
 
 - (NSString *)name
@@ -120,7 +117,6 @@
     [_condLock lockWhenCondition: THREAD_EXITED];
     [_condLock unlock];
     
-    [_robot release];
     _robot = nil;
 }
 
@@ -272,8 +268,7 @@
     }
     else
     {
-        [_gamestateData release];
-        _gamestateData = [data retain];
+        _gamestateData = data;
         [_condLock unlockWithCondition: NEW_DATA];
     }
 }
@@ -287,28 +282,26 @@
 {
     while(1)
     {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        
+      @autoreleasepool {
         [_condLock lockWhenCondition: NEW_DATA];
         if(_halt)
         {
             [_condLock unlockWithCondition: THREAD_EXITED];
             return;
         }
-        
-        NSMutableData *gsdata = [_gamestateData retain];
+
+        NSMutableData *gsdata = _gamestateData;
         NSArray *messages = [_messages copy];
         [_messages removeAllObjects];
         ((struct GSRobotGameState *)[gsdata mutableBytes])->messages = messages;
         [_condLock unlockWithCondition: NO_NEW_DATA];
-        
+
+        /* ownership transfers to the robot plugin, which balances it by
+           calling the free function (CFRelease) when done */
         NSArray *objectsToDestroy = [[NSArray alloc] initWithObjects: gsdata, messages, nil];
-        
-        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)[gsdata bytes] freeFunction: (void *)CFRelease freeContext: objectsToDestroy];
-        
-        [gsdata release];
-        [messages release];
-        
+
+        struct GSRobotCommandState commandState = [_robot stepXBoloRobotWithGameState: (void *)[gsdata bytes] freeFunction: (void *)CFRelease freeContext: (__bridge_retained void *)objectsToDestroy];
+
         int keys = 0;
         if(commandState.accelerate) keys |= ACCELMASK;
         if(commandState.decelerate) keys |= BRAKEMASK;
@@ -348,8 +341,7 @@
                 requestalliance(players);
             unlockclient();
         }
-        
-        [pool release];
+      }
     }
 }
 

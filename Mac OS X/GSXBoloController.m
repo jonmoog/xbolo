@@ -356,19 +356,16 @@ static void getlisttrackerstatus(int status);
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"bubbles" ofType:@"aiff"] byReference:NO];
   bubblessounds = [[NSMutableArray alloc] init];
   [bubblessounds addObject:sound];
-  [bubblessounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"build" ofType:@"aiff"] byReference:NO];
   buildsounds = [[NSMutableArray alloc] init];
   [buildsounds addObject:sound];
   [buildsounds addObject:[sound copy]];
-  [buildsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"builderdeath" ofType:@"aiff"] byReference:NO];
   builderdeathsounds = [[NSMutableArray alloc] init];
   [builderdeathsounds addObject:sound];
   [builderdeathsounds addObject:[sound copy]];
-  [builderdeathsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"explosion" ofType:@"aiff"] byReference:NO];
   explosionsounds = [[NSMutableArray alloc] init];
@@ -378,19 +375,16 @@ static void getlisttrackerstatus(int status);
   [explosionsounds addObject:[sound copy]];
   [explosionsounds addObject:[sound copy]];
   [explosionsounds addObject:[sound copy]];
-  [explosionsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fbuild" ofType:@"aiff"] byReference:NO];
   farbuildsounds = [[NSMutableArray alloc] init];
   [farbuildsounds addObject:sound];
   [farbuildsounds addObject:[sound copy]];
-  [farbuildsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fbuilderdeath" ofType:@"aiff"] byReference:NO];
   farbuilderdeathsounds = [[NSMutableArray alloc] init];
   [farbuilderdeathsounds addObject:sound];
   [farbuilderdeathsounds addObject:[sound copy]];
-  [farbuilderdeathsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fexplosion" ofType:@"aiff"] byReference:NO];
   farexplosionsounds = [[NSMutableArray alloc] init];
@@ -400,81 +394,68 @@ static void getlisttrackerstatus(int status);
   [farexplosionsounds addObject:[sound copy]];
   [farexplosionsounds addObject:[sound copy]];
   [farexplosionsounds addObject:[sound copy]];
-  [farexplosionsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhittank" ofType:@"aiff"] byReference:NO];
   farhittanksounds = [[NSMutableArray alloc] init];
   [farhittanksounds addObject:sound];
   [farhittanksounds addObject:[sound copy]];
-  [farhittanksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhitterrain" ofType:@"aiff"] byReference:NO];
   farhitterrainsounds = [[NSMutableArray alloc] init];
   [farhitterrainsounds addObject:sound];
   [farhitterrainsounds addObject:[sound copy]];
-  [farhitterrainsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fhittree" ofType:@"aiff"] byReference:NO];
   farhittreesounds = [[NSMutableArray alloc] init];
   [farhittreesounds addObject:sound];
   [farhittreesounds addObject:[sound copy]];
-  [farhittreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fshot" ofType:@"aiff"] byReference:NO];
   farshotsounds = [[NSMutableArray alloc] init];
   [farshotsounds addObject:sound];
   [farshotsounds addObject:[sound copy]];
-  [farshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fsink" ofType:@"aiff"] byReference:NO];
   farsinksounds = [[NSMutableArray alloc] init];
   [farsinksounds addObject:sound];
   [farsinksounds addObject:[sound copy]];
-  [farsinksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"fsuperboom" ofType:@"aiff"] byReference:NO];
   farsuperboomsounds = [[NSMutableArray alloc] init];
   [farsuperboomsounds addObject:sound];
   [farsuperboomsounds addObject:[sound copy]];
-  [farsuperboomsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ftree" ofType:@"aiff"] byReference:NO];
   fartreesounds = [[NSMutableArray alloc] init];
   [fartreesounds addObject:sound];
   [fartreesounds addObject:[sound copy]];
-  [fartreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hittank" ofType:@"aiff"] byReference:NO];
   hittanksounds = [[NSMutableArray alloc] init];
   [hittanksounds addObject:sound];
   [hittanksounds addObject:[sound copy]];
-  [hittanksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hitterrain" ofType:@"aiff"] byReference:NO];
   hitterrainsounds = [[NSMutableArray alloc] init];
   [hitterrainsounds addObject:sound];
   [hitterrainsounds addObject:[sound copy]];
   [hitterrainsounds addObject:[sound copy]];
-  [hitterrainsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hittree" ofType:@"aiff"] byReference:NO];
   hittreesounds = [[NSMutableArray alloc] init];
   [hittreesounds addObject:sound];
   [hittreesounds addObject:[sound copy]];
-  [hittreesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"mine" ofType:@"aiff"] byReference:NO];
   minesounds = [[NSMutableArray alloc] init];
   [minesounds addObject:sound];
   [minesounds addObject:[sound copy]];
-  [minesounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"msgreceived" ofType:@"aiff"] byReference:NO];
   msgreceivedsounds = [[NSMutableArray alloc] init];
   [msgreceivedsounds addObject:sound];
   [msgreceivedsounds addObject:[sound copy]];
   [msgreceivedsounds addObject:[sound copy]];
-  [msgreceivedsounds makeObjectsPerformSelector:@selector(release)];
 	
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pillshot" ofType:@"aiff"] byReference:NO];
   pillshotsounds = [[NSMutableArray alloc] init];
@@ -484,17 +465,14 @@ static void getlisttrackerstatus(int status);
   [pillshotsounds addObject:[sound copy]];
   [pillshotsounds addObject:[sound copy]];
   [pillshotsounds addObject:[sound copy]];
-  [pillshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"sink" ofType:@"aiff"] byReference:NO];
   sinksounds = [[NSMutableArray alloc] init];
   [sinksounds addObject:sound];
-  [sinksounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"superboom" ofType:@"aiff"] byReference:NO];
   superboomsounds = [[NSMutableArray alloc] init];
   [superboomsounds addObject:sound];
-  [superboomsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tankshot" ofType:@"aiff"] byReference:NO];
   tankshotsounds = [[NSMutableArray alloc] init];
@@ -503,19 +481,16 @@ static void getlisttrackerstatus(int status);
   [tankshotsounds addObject:[sound copy]];
   [tankshotsounds addObject:[sound copy]];
   [tankshotsounds addObject:[sound copy]];
-  [tankshotsounds makeObjectsPerformSelector:@selector(release)];
 
   sound = [[NSSound alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tree" ofType:@"aiff"] byReference:NO];
   treesounds = [[NSMutableArray alloc] init];
   [treesounds addObject:sound];
   [treesounds addObject:[sound copy]];
   [treesounds addObject:[sound copy]];
-  [treesounds makeObjectsPerformSelector:@selector(release)];
 
   speechSynthesizers = [[NSMutableArray alloc] init];
   [speechSynthesizers addObject:[[NSSpeechSynthesizer alloc] init]];
   [speechSynthesizers addObject:[[NSSpeechSynthesizer alloc] init]];
-  [speechSynthesizers makeObjectsPerformSelector:@selector(release)];
 
   zoomLevel = DEFAULT_ZOOM;
 
@@ -544,7 +519,6 @@ static void getlisttrackerstatus(int status);
 // accessor methods
 
 - (void)setHostMapString:(NSString *)aString {
-  [hostMapString release];
   hostMapString = [aString copy];
   [hostMapField setStringValue:[[NSFileManager defaultManager] displayNameAtPath:aString]];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostMapString];
@@ -571,7 +545,6 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setHostPasswordString:(NSString *)aString {
-  [hostPasswordString release];
   hostPasswordString = [aString copy];
   [hostPasswordField setStringValue:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSHostPasswordString];
@@ -594,7 +567,6 @@ static void getlisttrackerstatus(int status);
   [scanner scanInt:&hours];
   [scanner scanInt:&minutes];
   [scanner scanInt:&seconds];
-  [hostTimeLimitString release];
   hostTimeLimitString = [aString copy];
   [hostTimeLimitSlider setIntValue:hours*3600 + minutes*60 + seconds];
   [hostTimeLimitField setStringValue:aString];
@@ -643,7 +615,6 @@ static void getlisttrackerstatus(int status);
   [scanner scanInt:&hours];
   [scanner scanInt:&minutes];
   [scanner scanInt:&seconds];
-  [hostDominationBaseControlString release];
   hostDominationBaseControlString = [aString copy];
   [hostDominationBaseControlSlider setIntValue:hours*3600 + minutes*60 + seconds];
   [hostDominationBaseControlField setStringValue:aString];
@@ -651,7 +622,6 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setJoinAddressString:(NSString *)newJoinAddressString {
-  [joinAddressString release];
   joinAddressString = [newJoinAddressString copy];
   [joinAddressField setStringValue:newJoinAddressString];
   [[NSUserDefaults standardUserDefaults] setObject:newJoinAddressString forKey:GSJoinAddressString];
@@ -671,21 +641,18 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setJoinPasswordString:(NSString *)aString {
-  [joinPasswordString release];
   joinPasswordString = [aString copy];
   [joinPasswordField setStringValue:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSJoinPasswordString];
 }
 
 - (void)setJoinTrackerArray:(NSArray *)aArray {
-  [joinTrackerArray release];
   joinTrackerArray = [aArray mutableCopy];
   [joinTrackerArray sortUsingDescriptors:[joinTrackerTableView sortDescriptors]];
   [joinTrackerTableView reloadData];
 }
 
 - (void)setTrackerString:(NSString *)aString {
-  [trackerString release];
   trackerString = [aString copy];
   [hostTrackerField setStringValue:aString];
   [joinTrackerField setStringValue:aString];
@@ -699,14 +666,12 @@ static void getlisttrackerstatus(int status);
 }
 
 - (void)setPlayerNameString:(NSString *)aString {
-  [playerNameString release];
   playerNameString = [aString copy];
   [prefPlayerNameField setStringValue:aString];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPlayerNameString];
 }
 
 - (void)setKeyConfigDict:(NSDictionary *)aDict {
-  [keyConfigDict release];
   keyConfigDict = [aDict copy];
   [[NSUserDefaults standardUserDefaults] setObject:aDict forKey:GSKeyConfigDict];
 }
@@ -819,7 +784,7 @@ END
 
 - (IBAction)hostUPnPSwitch:(id)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = [(NSButton *)sender state] == NSControlStateValueOn;
   [self setHostUPnPBool:aBool];
   if (!aBool) {
     [hostPortField selectText:self];
@@ -832,7 +797,7 @@ END
 
 - (IBAction)hostPasswordSwitch:(id)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = [(NSButton *)sender state] == NSControlStateValueOn;
   [self setHostPasswordBool:aBool];
   if (aBool) {
     [hostPasswordField selectText:self];
@@ -845,7 +810,7 @@ END
 
 - (IBAction)hostTimeLimitSwitch:(id)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = [(NSButton *)sender state] == NSControlStateValueOn;
   [self setHostTimeLimitBool:aBool];
   if (aBool) {
     [hostTimeLimitField selectText:self];
@@ -876,13 +841,13 @@ END
 
 - (IBAction)hostHiddenMinesSwitch:(id)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = [(NSButton *)sender state] == NSControlStateValueOn;
   [self setHostHiddenMinesBool:aBool];
 }
 
 - (IBAction)hostTrackerSwitch:(id)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = [(NSButton *)sender state] == NSControlStateValueOn;
   [self setHostTrackerBool:aBool];
   if (aBool) {
     [hostTrackerField selectText:self];
@@ -1100,7 +1065,7 @@ END
 
 - (IBAction)joinPasswordSwitch:(id)sender {
   BOOL aBool;
-  aBool = [sender state] == NSOnState;
+  aBool = [(NSButton *)sender state] == NSControlStateValueOn;
   [self setJoinPasswordBool:aBool];
 
   if (aBool) {
@@ -1814,7 +1779,7 @@ END
 
 // validate menu items method
 
-- (BOOL)validateMenuItem:(id)menuItem {
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
   SEL action;
   action = [menuItem action];
 	if (action == @selector(newGame:)) {
@@ -2026,7 +1991,6 @@ END
       [menuItem setTarget:self];
       [menuItem setTag:i];
       [menu addItem:menuItem];
-      [menuItem release];
       i++;
       node = nextlist(node);
     }
@@ -2234,7 +2198,6 @@ TRY
     if (playerRecord == nil) {
       playerRecord = [[NSMutableDictionary alloc] init];
       [playerInfoArray addObject:playerRecord];
-      [playerRecord release];
     }
 
     [playerRecord setObject:indexString forKey:@"Index"];
@@ -2250,7 +2213,6 @@ TRY
     }
 
     [playerRecord setObject:name forKey:@"Player"];
-    [name release];
 
     if (client.player == player) {
       [imageView setImage:[NSImage imageNamed:@"PlayerStatFriendly"]];
@@ -2750,7 +2712,6 @@ END
 //    }
 //  }
 	
-  [newline release];
 }
 
 
@@ -3554,8 +3515,7 @@ END
         else
         {
             [robot unload];
-            [robot release];
-            robot = [newRobot retain];
+            robot = newRobot;
         }
     }
     [robotLock unlock];
@@ -3573,7 +3533,6 @@ END
         NSMenu *menu = [[NSMenu alloc] initWithTitle: @"Robots"];
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle: @"Manual Control" action: @selector(choseRobotMenuItem:) keyEquivalent: @""];
         [menu addItem: item];
-        [item release];
         
         [menu addItem: [NSMenuItem separatorItem]];
         
@@ -3586,14 +3545,11 @@ END
             [menu addItem: item];
             if(autoName && [[r name] hasPrefix: autoName])
                 autoMenu = item;
-            [item release];
-        }
+            }
         
         NSMenuItem *robotItem = [[NSMenuItem alloc] initWithTitle: @"Robots" action: NULL keyEquivalent: @""];
         [robotItem setSubmenu: menu];
         [[NSApp mainMenu] addItem: robotItem];
-        [robotItem release];
-        [menu release];
     }
     
     if(autoMenu)
@@ -3602,11 +3558,11 @@ END
 
 - (void)clientLoopUpdate
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
     [robotLock lock];
     [robot step];
     [robotLock unlock];
-    [pool release];
+  }
 }
 
 - (void)sendMessageToRobot: (NSString *)string
@@ -3621,42 +3577,36 @@ END
 @end
 
 void setplayerstatus(int player) {
-  NSAutoreleasePool *pool;
   assert(player >= 0 && player < MAXPLAYERS);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setPlayerStatus:) withObject:[NSString stringWithFormat:@"%d", player] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setPlayerStatus:) withObject:[NSString stringWithFormat:@"%d", player] waitUntilDone:NO];
+  }
 }
 
 void setpillstatus(int pill) {
-  NSAutoreleasePool *pool;
   assert(pill >= 0 && pill < MAXPILLS);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setPillStatus:) withObject:[NSString stringWithFormat:@"%d", pill] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setPillStatus:) withObject:[NSString stringWithFormat:@"%d", pill] waitUntilDone:NO];
+  }
 }
 
 void setbasestatus(int base) {
-  NSAutoreleasePool *pool;
   assert(base >= 0 && base < MAXBASES);
-  pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setBaseStatus:) withObject:[NSString stringWithFormat:@"%d", base] waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setBaseStatus:) withObject:[NSString stringWithFormat:@"%d", base] waitUntilDone:NO];
+  }
 }
 
 void settankstatus() {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  [controller performSelectorOnMainThread:@selector(setTankStatusBars) withObject:nil waitUntilDone:NO];
-  [pool release];
+  @autoreleasepool {
+    [controller performSelectorOnMainThread:@selector(setTankStatusBars) withObject:nil waitUntilDone:NO];
+  }
 }
 
 void playsound(int snd) {
-  if (!muteBool) {
+  if (!muteBool) @autoreleasepool {
     int i;
-    NSAutoreleasePool *pool;
     NSArray *array;
-
-    pool = [[NSAutoreleasePool alloc] init];
 
     switch (snd) {
     case kBubblesSound:
@@ -3768,18 +3718,15 @@ void playsound(int snd) {
       }
     }
 
-    [pool release];
   }
 }
 
 void printmessage(int type, const char *text) {
-  NSAutoreleasePool *pool;
-  NSDictionary *attr;
-  NSAttributedString *attrstring;
-
   assert(type == MSGEVERYONE || type == MSGALLIES || type == MSGNEARBY || type == MSGGAME);
 
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+  NSDictionary *attr;
+  NSAttributedString *attrstring;
 
   switch (type) {
   case MSGEVERYONE:
@@ -3812,14 +3759,11 @@ void printmessage(int type, const char *text) {
 	[controller sendMessageToRobot: string];
   }
   
-  [attrstring release];
-  [attr release];
-  [pool release];
+  }
 }
 
 void joinprogress(int statuscode, float progress) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
 
   switch (statuscode) {
   /* status udpates */
@@ -3914,12 +3858,11 @@ void joinprogress(int statuscode, float progress) {
     break;
   }
 
-  [pool release];
+  }
 }
 
 void registercallback(int status) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
 
   switch (status) {
   case kRegisterRESOLVING:
@@ -3995,12 +3938,11 @@ void registercallback(int status) {
     break;
   }
 
-  [pool release];
+  }
 }
 
 void getlisttrackerstatus(int status) {
-  NSAutoreleasePool *pool;
-  pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
 
   switch (status) {
   case kGetListTrackerRESOLVING:
@@ -4062,7 +4004,7 @@ void getlisttrackerstatus(int status) {
     break;
   }
 
-  [pool release];
+  }
 }
 
 int setKey(NSMutableDictionary *dict, NSWindow *win, GSKeyCodeField *field, NSString *newObject) {

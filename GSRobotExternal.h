@@ -132,7 +132,11 @@ struct GSRobotGameState
     int builderscount;
     struct Builder *builders;
     
+#if __has_feature(objc_arc)
+    __unsafe_unretained NSArray *messages; // array of NSString, may be nil if no messages; kept alive by the free context
+#else
     NSArray *messages; // array of NSString, may be nil if no messages
+#endif
 };
 #if INTERNAL_GSROBOT_INCLUDE
 #undef Shell

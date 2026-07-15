@@ -12,7 +12,7 @@ NSString * const TCMPortMapperDidFinishWorkNotification = @"TCMPortMapperDidFini
 @implementation TCMPortMapping
 
 + (id)portMappingWithLocalPort:(int)aPrivatePort desiredExternalPort:(int)aPublicPort transportProtocol:(int)aTransportProtocol userInfo:(id)aUserInfo {
-  TCMPortMapping *mapping = [[[self alloc] init] autorelease];
+  TCMPortMapping *mapping = [[self alloc] init];
   mapping->_localPort = aPrivatePort;
   mapping->_externalPort = aPublicPort;
   mapping->_transportProtocol = aTransportProtocol;
@@ -52,11 +52,6 @@ NSString * const TCMPortMapperDidFinishWorkNotification = @"TCMPortMapperDidFini
     _portMappings = [[NSMutableSet alloc] init];
   }
   return self;
-}
-
-- (void)dealloc {
-  [_portMappings release];
-  [super dealloc];
 }
 
 - (void)setUserID:(NSString *)aUserID {
