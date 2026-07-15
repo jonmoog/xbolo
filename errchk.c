@@ -98,6 +98,12 @@ void pushlineinfo(const char *file, const char *function, size_t line) {
   pthread_mutex_unlock(&mutex);
 }
 
+int errlogfail(int err, const char *file, const char *function, size_t line) {
+  errno = err;
+  pushlineinfo(file, function, line);
+  return -1;
+}
+
 void printlineinfo() {
   struct TErrNode *node;
   size_t i;

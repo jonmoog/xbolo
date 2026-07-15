@@ -35,6 +35,24 @@
 #define EBANNEDPLAYER   (ELAST + 13)  /* Player banned. */
 #define ESERVERERROR    (ELAST + 14)  /* Server error. */
 
+/*
+ * Conventional error handling (preferred for new and converted code)
+ * -------------------------------------------------------------------
+ * ERRLOG(err) sets errno, records the failure location in the error
+ * trace (like LOGFAIL), and evaluates to -1, so call sites read:
+ *
+ *   if (write(...) == -1) return ERRLOG(errno);
+ *
+ * or, when cleanup is needed, use an explicit goto:
+ *
+ *   if (write(...) == -1) { ret = ERRLOG(errno); goto fail; }
+ *
+ * The TRY/CLEANUP macros below are the legacy equivalent; convert
+ * functions module by module rather than mixing styles in one function.
+ */
+int errlogfail(int err, const char *file, const char *function, size_t line);
+#define ERRLOG(err) errlogfail((err), __FILE__, __FUNCTION__, __LINE__)
+
 /* beginning of a TRY block */
 #define TRY {
 
