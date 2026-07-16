@@ -41,6 +41,19 @@ static NSButton *GSPushButton(NSString *title, NSRect frame, id target, SEL acti
   return button;
 }
 
+
+/* nib-era frames were sized for 2009 font metrics; modern fonts render
+   wider.  Refit the control to its content, growing leftward so its right
+   edge stays aligned against the adjacent field column. */
+static void GSFitKeepingRightEdge(NSControl *control) {
+  NSRect old = [control frame];
+  [control sizeToFit];
+  NSRect fitted = [control frame];
+  fitted.origin.x = NSMaxX(old) - NSWidth(fitted);
+  fitted.origin.y = old.origin.y + (NSHeight(old) - NSHeight(fitted)) / 2.0;
+  [control setFrame:fitted];
+}
+
 @implementation GSXBoloController (CodeUI)
 
 - (void)buildJoinProgressWindow {
@@ -655,6 +668,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
 
   NSTextField *t3 = GSLabel(@"Port:", NSMakeRect(197, 362, 34, 17));
   [t3 setAlignment:2];
+  GSFitKeepingRightEdge(t3);
   [pane2 addSubview:t3];
 
   hostGameTypeMenu = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(234, 211, 214, 26) pullsDown:NO];
@@ -672,6 +686,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
 
   NSTextField *t5 = GSLabel(@"Map:", NSMakeRect(196, 392, 35, 17));
   [t5 setAlignment:2];
+  GSFitKeepingRightEdge(t5);
   [pane2 addSubview:t5];
 
   hostMapField = [[NSTextField alloc] initWithFrame:NSMakeRect(237, 390, 240, 22)];
@@ -763,6 +778,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
 
   NSTextField *t20 = GSLabel(@"Game Type:", NSMakeRect(152, 217, 79, 17));
   [t20 setAlignment:2];
+  GSFitKeepingRightEdge(t20);
   [pane2 addSubview:t20];
 
   hostPasswordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect(237, 330, 240, 22)];
@@ -776,6 +792,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [hostPasswordSwitch setButtonType:NSButtonTypeSwitch];
   [hostPasswordSwitch setTitle:@"Password:"];
   [hostPasswordSwitch setBezelStyle:2];
+  GSFitKeepingRightEdge(hostPasswordSwitch);
   [hostPasswordSwitch setTarget:self];
   [hostPasswordSwitch setAction:@selector(hostPasswordSwitch:)];
   [pane2 addSubview:hostPasswordSwitch];
@@ -784,6 +801,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [hostTimeLimitSwitch setButtonType:NSButtonTypeSwitch];
   [hostTimeLimitSwitch setTitle:@"Time Limit:"];
   [hostTimeLimitSwitch setBezelStyle:2];
+  GSFitKeepingRightEdge(hostTimeLimitSwitch);
   [hostTimeLimitSwitch setTarget:self];
   [hostTimeLimitSwitch setAction:@selector(hostTimeLimitSwitch:)];
   [pane2 addSubview:hostTimeLimitSwitch];
@@ -816,6 +834,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [hostTrackerSwitch setButtonType:NSButtonTypeSwitch];
   [hostTrackerSwitch setTitle:@"Tracker:"];
   [hostTrackerSwitch setBezelStyle:2];
+  GSFitKeepingRightEdge(hostTrackerSwitch);
   [hostTrackerSwitch setTarget:self];
   [hostTrackerSwitch setAction:@selector(hostTrackerSwitch:)];
   [pane2 addSubview:hostTrackerSwitch];
@@ -833,6 +852,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [hostHiddenMinesSwitch setButtonType:NSButtonTypeSwitch];
   [hostHiddenMinesSwitch setTitle:@"Hidden Mines:"];
   [hostHiddenMinesSwitch setBezelStyle:2];
+  GSFitKeepingRightEdge(hostHiddenMinesSwitch);
   [hostHiddenMinesSwitch setTarget:self];
   [hostHiddenMinesSwitch setAction:@selector(hostHiddenMinesSwitch:)];
   [pane2 addSubview:hostHiddenMinesSwitch];
@@ -845,6 +865,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [hostUPnPSwitch setButtonType:NSButtonTypeSwitch];
   [hostUPnPSwitch setTitle:@"UPnP"];
   [hostUPnPSwitch setBezelStyle:2];
+  GSFitKeepingRightEdge(hostUPnPSwitch);
   [hostUPnPSwitch setTarget:self];
   [hostUPnPSwitch setAction:@selector(hostUPnPSwitch:)];
   [pane2 addSubview:hostUPnPSwitch];
@@ -857,6 +878,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   NSView *pane23 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 594, 418)];
   NSTextField *t24 = GSLabel(@"Address:", NSMakeRect(157, 392, 60, 17));
   [t24 setAlignment:2];
+  GSFitKeepingRightEdge(t24);
   [pane23 addSubview:t24];
 
   joinAddressField = [[NSTextField alloc] initWithFrame:NSMakeRect(222, 390, 240, 22)];
@@ -877,6 +899,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
 
   NSTextField *t26 = GSLabel(@"Port:", NSMakeRect(183, 362, 34, 17));
   [t26 setAlignment:2];
+  GSFitKeepingRightEdge(t26);
   [pane23 addSubview:t26];
 
   joinPortField = [[NSTextField alloc] initWithFrame:NSMakeRect(222, 360, 240, 22)];
@@ -891,6 +914,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [joinPasswordSwitch setButtonType:NSButtonTypeSwitch];
   [joinPasswordSwitch setTitle:@"Password:"];
   [joinPasswordSwitch setBezelStyle:2];
+  GSFitKeepingRightEdge(joinPasswordSwitch);
   [joinPasswordSwitch setTarget:self];
   [joinPasswordSwitch setAction:@selector(joinPasswordSwitch:)];
   [pane23 addSubview:joinPasswordSwitch];
