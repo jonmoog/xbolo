@@ -238,29 +238,6 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   defaults = [NSUserDefaults standardUserDefaults];
   [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"DefaultPreferences" ofType:@"plist"]]];
 
-  // init toolbar items
-  toolbarPlayerInfoItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
-  [toolbarPlayerInfoItem setLabel:NSLocalizedString(@"Player Info", nil)];
-  [toolbarPlayerInfoItem setImage:[NSImage imageWithSystemSymbolName:@"person.crop.circle" accessibilityDescription:@"Player Info"]];
-  [toolbarPlayerInfoItem setTarget:self];
-  [toolbarPlayerInfoItem setAction:@selector(prefPane:)];
-
-  toolbarKeyConfigItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSToolbarKeyConfigItemIdentifier];
-  [toolbarKeyConfigItem setLabel:NSLocalizedString(@"Key Config", nil)];
-  [toolbarKeyConfigItem setImage:[NSImage imageWithSystemSymbolName:@"keyboard" accessibilityDescription:@"Key Config"]];
-  [toolbarKeyConfigItem setTarget:self];
-  [toolbarKeyConfigItem setAction:@selector(prefPane:)];
-  [toolbarKeyConfigItem setEnabled:YES];
-
-  // init the preferences toolbar
-  prefToolbar = [[NSToolbar alloc] initWithIdentifier:GSPreferencesToolbar];
-  [prefToolbar setDelegate:self];
-  [prefToolbar setSelectedItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
-  [preferencesWindow setToolbar:prefToolbar];
-  [preferencesWindow setToolbarStyle:NSWindowToolbarStylePreference];
-  [prefTab selectTabViewItemWithIdentifier:[prefToolbar selectedItemIdentifier]];
-  [preferencesWindow setContentSize:NSMakeSize(443.0, 373.0)];
-
   // init bolo toolbar items
   builderToolItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSBoloToolItemIdentifier];
   [builderToolItem setLabel:NSLocalizedString(@"Builder Tool", nil)];
@@ -674,11 +651,15 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
 }
 
 - (void)setPrefPaneIdentifierString:(NSString *)aString {
-  [prefToolbar setSelectedItemIdentifier:aString];
   [prefTab selectTabViewItemWithIdentifier:aString];
-  [preferencesWindow setTitle:[aString isEqualToString:GSToolbarKeyConfigItemIdentifier] ?
-    NSLocalizedString(@"Key Config", nil) : NSLocalizedString(@"Player Info", nil)];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPrefPaneIdentifierString];
+}
+
+/* persists the selected preferences tab */
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem {
+  if (tabView == prefTab) {
+    [[NSUserDefaults standardUserDefaults] setObject:[tabViewItem identifier] forKey:GSPrefPaneIdentifierString];
+  }
 }
 
 - (void)setPlayerNameString:(NSString *)aString {

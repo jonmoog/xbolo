@@ -480,7 +480,6 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   NSView *content = [window contentView];
 
   prefTab = [[NSTabView alloc] initWithFrame:NSMakeRect(0, 44, 443, 329)];
-  [prefTab setTabViewType:6];
   NSTabViewItem *item1 = [[NSTabViewItem alloc] initWithIdentifier:@"GSToolbarPlayerInfoItemIdentifier"];
   [item1 setLabel:@"Player Info"];
   NSView *pane2 = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 443, 329)];
@@ -627,10 +626,23 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [item5 setView:pane6];
   [prefTab addTabViewItem:item5];
 
+  /* the visible tab strip and bezel consume part of the tab view; grow it
+     so each pane keeps its designed 443x329 content area, then size the
+     window around it */
+  [prefTab setFrame:NSMakeRect(0.0, 0.0, 443.0, 329.0)];
+  NSRect tabContent = [prefTab contentRect];
+  CGFloat tabW = 443.0 + (443.0 - NSWidth(tabContent));
+  CGFloat tabH = 329.0 + (329.0 - NSHeight(tabContent));
+  CGFloat winW = tabW + 26.0;   /* 13pt side margins, like the New Game window */
+  CGFloat winH = tabH + 44.0 + 6.0;
+
+  [window setContentSize:NSMakeSize(winW, winH)];
+  [prefTab setFrame:NSMakeRect(13.0, 44.0, tabW, tabH)];
+  [prefTab setDelegate:self];
   [content addSubview:prefTab];
 
-  [content addSubview:GSPushButton(@"Cancel", NSMakeRect(247.0, 8.0, 86.0, 32.0), self, @selector(prefCancel:), @"\033")];
-  [content addSubview:GSPushButton(@"OK", NSMakeRect(345.0, 8.0, 86.0, 32.0), self, @selector(prefOK:), @"\r")];
+  [content addSubview:GSPushButton(@"Cancel", NSMakeRect(winW - 12.0 - 86.0 - 12.0 - 86.0, 8.0, 86.0, 32.0), self, @selector(prefCancel:), @"\033")];
+  [content addSubview:GSPushButton(@"OK", NSMakeRect(winW - 12.0 - 86.0, 8.0, 86.0, 32.0), self, @selector(prefOK:), @"\r")];
 
   /* The nib chained the key fields into an explicit key-view loop, but
      AppKit drops nextKeyView links on views in unselected (detached) tab

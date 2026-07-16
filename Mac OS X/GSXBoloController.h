@@ -12,7 +12,7 @@
 
 @class GSKeyCodeField, GSBoloView, GSRobot, GSStatusBar, GSBuilderStatusView;
 
-@interface GSXBoloController : NSObject <NSApplicationDelegate, NSWindowDelegate, NSToolbarDelegate, NSTableViewDelegate, NSTableViewDataSource, NSMenuDelegate> {
+@interface GSXBoloController : NSObject <NSApplicationDelegate, NSWindowDelegate, NSToolbarDelegate, NSTableViewDelegate, NSTableViewDataSource, NSMenuDelegate, NSTabViewDelegate> {
   IBOutlet NSWindow *newGameWindow;
   IBOutlet NSWindow *boloWindow;
   IBOutlet NSWindow *joinProgressWindow;
