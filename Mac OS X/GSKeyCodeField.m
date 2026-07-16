@@ -250,9 +250,8 @@ NSMutableDictionary *nameDictionary;
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
   NSString *string;
-  NSRect insetRect;
-
-  insetRect = NSInsetRect(cellFrame, 5.0, 3.0);
+  NSRect bezelRect;
+  NSBezierPath *bezel;
 
   if (keyCode == (unsigned short)-1) {
     string = [NSString string];
@@ -264,38 +263,45 @@ NSMutableDictionary *nameDictionary;
     }
   }
 
-  NSDrawWhiteBezel(cellFrame, cellFrame);
+  /* modern rounded field, semantic colors so light and dark mode both work;
+     the recorded key is shown centered, in the accent color while the field
+     has focus (recording) */
+  bezelRect = NSInsetRect(cellFrame, 0.5, 0.5);
+  bezel = [NSBezierPath bezierPathWithRoundedRect:bezelRect xRadius:5.0 yRadius:5.0];
+  [[NSColor textBackgroundColor] set];
+  [bezel fill];
+  [[NSColor separatorColor] set];
+  [bezel stroke];
 
-  if ([self showsFirstResponder]) {
-    if ([string length] == 0) {
-      [[NSColor selectedTextBackgroundColor] set];
-      NSRectFill(insetRect);
-    }
-    else {
-      NSDictionary *attributes;
-      NSSize textSize;
-      NSRect textRect, drawRect;
-      attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[self controlSize]]], NSFontAttributeName, [NSColor selectedTextBackgroundColor], NSBackgroundColorAttributeName, [NSColor selectedTextColor], NSForegroundColorAttributeName, nil];
-      textSize = [string sizeWithAttributes:attributes];
-      textRect = NSMakeRect(NSMinX(insetRect), NSMaxY(insetRect) - textSize.height + 5.0, textSize.width, textSize.height);
-      drawRect = NSIntersectionRect(NSUnionRect(insetRect, textRect), insetRect);
-      [string drawInRect:drawRect withAttributes:attributes];
-    }
-
-    [NSGraphicsContext saveGraphicsState];
-    NSSetFocusRingStyle(NSFocusRingOnly);
-    [[NSBezierPath bezierPathWithRect:NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height)] fill];
-    [NSGraphicsContext restoreGraphicsState];
-  }
-  else {
+  if ([string length] > 0) {
+    NSMutableParagraphStyle *style;
     NSDictionary *attributes;
     NSSize textSize;
-    NSRect textRect, drawRect;
-    attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[self controlSize]]], NSFontAttributeName, [NSColor textBackgroundColor], NSBackgroundColorAttributeName, [NSColor selectedTextColor], NSForegroundColorAttributeName, nil];
+    NSRect textRect;
+
+    style = [[NSMutableParagraphStyle alloc] init];
+    [style setAlignment:NSTextAlignmentCenter];
+    [style setLineBreakMode:NSLineBreakByTruncatingTail];
+
+    attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[self controlSize]]], NSFontAttributeName,
+      [self showsFirstResponder] ? [NSColor controlAccentColor] : [NSColor labelColor], NSForegroundColorAttributeName,
+      style, NSParagraphStyleAttributeName,
+      nil];
+
     textSize = [string sizeWithAttributes:attributes];
-    textRect = NSMakeRect(NSMinX(insetRect), NSMaxY(insetRect) - textSize.height + 5.0, textSize.width, textSize.height);
-    drawRect = NSIntersectionRect(NSUnionRect(insetRect, textRect), insetRect);
-    [string drawInRect:drawRect withAttributes:attributes];
+    textRect = NSMakeRect(NSMinX(cellFrame) + 4.0,
+                          NSMidY(cellFrame) - textSize.height/2.0,
+                          NSWidth(cellFrame) - 8.0,
+                          textSize.height);
+    [string drawInRect:textRect withAttributes:attributes];
+  }
+
+  if ([self showsFirstResponder]) {
+    [NSGraphicsContext saveGraphicsState];
+    NSSetFocusRingStyle(NSFocusRingOnly);
+    [[NSBezierPath bezierPathWithRoundedRect:bezelRect xRadius:5.0 yRadius:5.0] fill];
+    [NSGraphicsContext restoreGraphicsState];
   }
 }
 
