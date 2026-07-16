@@ -114,6 +114,10 @@ static void drawCell(CGImageRef image, NSRect dstRect, CGFloat alpha) {
   [boloViews removeObject:view];
 }
 
+- (void)setBoloController:(GSXBoloController *)controller {
+  boloController = controller;
+}
+
 - (id)initWithFrame:(NSRect)frameRect {
 TRY
 	if ((self = [super initWithFrame:frameRect]) != nil) {

@@ -1014,6 +1014,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [scroll setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
 
   boloView = [[GSBoloView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 4096.0, 4096.0)];
+  [boloView setBoloController:self];
   [scroll setDocumentView:boloView];
 
   [[window contentView] addSubview:scroll];
