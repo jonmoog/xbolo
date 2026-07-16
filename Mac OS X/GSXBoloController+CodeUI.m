@@ -677,17 +677,16 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [hostGameTypeMenu setAction:@selector(hostGameType:)];
   [pane2 addSubview:hostGameTypeMenu];
 
-  NSButton *b4 = [[NSButton alloc] initWithFrame:NSMakeRect(110, 382, 87, 32)];
-  [b4 setTitle:@"Choose"];
+  /* a single self-describing button, per the HIG, instead of the old
+     "Choose" button with a separate "Map:" label; its right edge sits on
+     the label column so it reads with the field beside it */
+  NSButton *b4 = [[NSButton alloc] initWithFrame:NSMakeRect(110, 385, 121, 32)];
+  [b4 setTitle:@"Choose Map…"];
   [b4 setBezelStyle:1];
   [b4 setTarget:self];
   [b4 setAction:@selector(hostChoose:)];
+  GSFitKeepingRightEdge(b4);
   [pane2 addSubview:b4];
-
-  NSTextField *t5 = GSLabel(@"Map:", NSMakeRect(196, 392, 35, 17));
-  [t5 setAlignment:2];
-  GSFitKeepingRightEdge(t5);
-  [pane2 addSubview:t5];
 
   hostMapField = [[NSTextField alloc] initWithFrame:NSMakeRect(237, 390, 240, 22)];
   [hostMapField setEditable:NO];
