@@ -3252,7 +3252,17 @@ END
 
 - (void)trackerDNSError:(NSString *)eString {
 TRY
-  if (stopserver()) LOGFAIL(errno)
+  /* this fires from two flows: hosting (tracker registration, a server is
+     running) and the join screen's server-list refresh (no server).  Tear
+     down whichever is active; calling stopserver() without a server
+     asserts. */
+  if (server.setup) {
+    if (stopserver()) LOGFAIL(errno)
+  }
+  else {
+    stoptracker();
+  }
+
   [joinProgressWindow orderOut:self];
   [joinProgressIndicator stopAnimation:self];
   [newGameWindow endSheet:joinProgressWindow];
