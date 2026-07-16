@@ -274,25 +274,43 @@ NSMutableDictionary *nameDictionary;
   [bezel stroke];
 
   if ([string length] > 0) {
+    /* the recorded key is shown as a keycap chip, like the shortcut
+       recorders in System Settings; the chip picks up the accent color
+       while the field has focus (recording) */
     NSMutableParagraphStyle *style;
     NSDictionary *attributes;
     NSSize textSize;
-    NSRect textRect;
+    NSRect chipRect, textRect;
+    NSBezierPath *chip;
+    BOOL recording;
+    CGFloat chipWidth, chipHeight;
+
+    recording = [self showsFirstResponder];
 
     style = [[NSMutableParagraphStyle alloc] init];
     [style setAlignment:NSTextAlignmentCenter];
     [style setLineBreakMode:NSLineBreakByTruncatingTail];
 
     attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[self controlSize]]], NSFontAttributeName,
-      [self showsFirstResponder] ? [NSColor controlAccentColor] : [NSColor labelColor], NSForegroundColorAttributeName,
+      [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:[self controlSize]] - 1.0], NSFontAttributeName,
+      recording ? [NSColor alternateSelectedControlTextColor] : [NSColor labelColor], NSForegroundColorAttributeName,
       style, NSParagraphStyleAttributeName,
       nil];
 
     textSize = [string sizeWithAttributes:attributes];
-    textRect = NSMakeRect(NSMinX(cellFrame) + 4.0,
-                          NSMidY(cellFrame) - textSize.height/2.0,
-                          NSWidth(cellFrame) - 8.0,
+    chipWidth = MIN(textSize.width + 14.0, NSWidth(cellFrame) - 6.0);
+    chipHeight = MIN(textSize.height + 3.0, NSHeight(cellFrame) - 4.0);
+    chipRect = NSMakeRect(NSMidX(cellFrame) - chipWidth/2.0,
+                          NSMidY(cellFrame) - chipHeight/2.0,
+                          chipWidth, chipHeight);
+
+    chip = [NSBezierPath bezierPathWithRoundedRect:chipRect xRadius:4.0 yRadius:4.0];
+    [recording ? [NSColor controlAccentColor] : [NSColor quaternaryLabelColor] set];
+    [chip fill];
+
+    textRect = NSMakeRect(NSMinX(chipRect) + 3.0,
+                          NSMidY(chipRect) - textSize.height/2.0,
+                          NSWidth(chipRect) - 6.0,
                           textSize.height);
     [string drawInRect:textRect withAttributes:attributes];
   }
