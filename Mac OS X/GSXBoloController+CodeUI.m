@@ -629,7 +629,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
 
   [content addSubview:prefTab];
 
-  [content addSubview:GSPushButton(@"Cancel", NSMakeRect(255.0, 8.0, 86.0, 32.0), self, @selector(prefCancel:), @"\033")];
+  [content addSubview:GSPushButton(@"Cancel", NSMakeRect(247.0, 8.0, 86.0, 32.0), self, @selector(prefCancel:), @"\033")];
   [content addSubview:GSPushButton(@"OK", NSMakeRect(345.0, 8.0, 86.0, 32.0), self, @selector(prefOK:), @"\r")];
 
   /* The nib chained the key fields into an explicit key-view loop, but
@@ -821,7 +821,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [hostTimeLimitField setAction:@selector(hostTimeLimit:)];
   [pane2 addSubview:hostTimeLimitField];
 
-  NSButton *b21 = [[NSButton alloc] initWithFrame:NSMakeRect(400, 12, 90, 32)];
+  NSButton *b21 = [[NSButton alloc] initWithFrame:NSMakeRect(388, 12, 90, 32)];
   [b21 setTitle:@"Cancel"];
   [b21 setBezelStyle:1];
   [b21 setKeyEquivalent:@"\033"];
@@ -925,7 +925,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [joinPasswordField setAction:@selector(joinPassword:)];
   [pane23 addSubview:joinPasswordField];
 
-  NSButton *b27 = [[NSButton alloc] initWithFrame:NSMakeRect(400, 12, 90, 32)];
+  NSButton *b27 = [[NSButton alloc] initWithFrame:NSMakeRect(388, 12, 90, 32)];
   [b27 setTitle:@"Cancel"];
   [b27 setBezelStyle:1];
   [b27 setKeyEquivalent:@"\033"];
