@@ -1023,4 +1023,36 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   boloWindow = window;
 }
 
+
+- (void)buildBuilderToolView {
+  /* the builder tool selector shown in the game window toolbar; the nib
+     kept this as a top-level view outside any window */
+  NSButtonCell *proto = [[NSButtonCell alloc] init];
+  [proto setButtonType:NSButtonTypeOnOff];
+  [proto setBezelStyle:NSBezelStyleShadowlessSquare];
+  [proto setBordered:YES];
+  [proto setImagePosition:NSImageOnly];
+
+  builderToolMatrix = [[NSMatrix alloc] initWithFrame:NSMakeRect(0.0, 0.0, 180.0, 36.0)
+                                                 mode:NSRadioModeMatrix
+                                            prototype:proto
+                                         numberOfRows:1
+                                      numberOfColumns:5];
+  [builderToolMatrix setCellSize:NSMakeSize(36.0, 36.0)];
+
+  NSArray *images = @[@"TreeRadio", @"RoadRadio", @"WallRadio", @"PillRadio", @"MineRadio"];
+  for (NSUInteger i = 0; i < images.count; i++) {
+    NSButtonCell *cell = [builderToolMatrix cellAtRow:0 column:(NSInteger)i];
+    [cell setImage:[NSImage imageNamed:images[(NSUInteger)i]]];
+    [cell setTitle:@""];
+    [cell setTag:(NSInteger)i];
+  }
+
+  [builderToolMatrix setTarget:self];
+  [builderToolMatrix setAction:@selector(builderTool:)];
+  [builderToolMatrix selectCellWithTag:0];
+
+  builderToolView = builderToolMatrix;
+}
+
 @end

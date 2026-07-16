@@ -20,5 +20,6 @@
 - (void)buildPreferencesWindow;
 - (void)buildNewGameWindow;
 - (void)buildBoloWindow;
+- (void)buildBuilderToolView;
 
 @end

@@ -237,6 +237,7 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   [self buildPreferencesWindow];
   [self buildNewGameWindow];
   [self buildBoloWindow];
+  [self buildBuilderToolView];
 
   defaults = [NSUserDefaults standardUserDefaults];
   [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"DefaultPreferences" ofType:@"plist"]]];
