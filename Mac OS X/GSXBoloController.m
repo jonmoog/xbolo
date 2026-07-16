@@ -2575,6 +2575,27 @@ END
   [playerTreesStatusBar setValue:((float)client.trees)/MAXTREES];
 }
 
+/* shows, updates, or hides the centered pause notice over the game view */
+- (void)updatePauseOverlay:(int)pause {
+  if (pause == 0 || !client_running) {
+    [pauseOverlayLabel setHidden:YES];
+    return;
+  }
+
+  NSString *text = (pause == -1) ? @"Paused" : [NSString stringWithFormat:@"Resume in %d", pause];
+
+  if (![text isEqualToString:[pauseOverlayLabel stringValue]] || [pauseOverlayLabel isHidden]) {
+    [pauseOverlayLabel setStringValue:text];
+    [pauseOverlayLabel sizeToFit];
+    [pauseOverlayLabel setHidden:NO];
+  }
+
+  NSRect bounds = [[pauseOverlayLabel superview] bounds];
+  NSSize size = [pauseOverlayLabel frame].size;
+  [pauseOverlayLabel setFrameOrigin:NSMakePoint(NSMidX(bounds) - size.width/2.0,
+                                                NSMidY(bounds) - size.height/2.0)];
+}
+
 - (void)refresh:(NSTimer *)aTimer {
   int i;
   int base = -1;
@@ -2588,6 +2609,8 @@ TRY
 
     if (lockclient()) LOGFAIL(errno)
     gotlock = 1;
+
+    [self updatePauseOverlay:client.pause];
 
     if (client.player != -1) {
       /* make sure tank is visible if just spawned */
@@ -2687,6 +2710,9 @@ TRY
 
     if (unlockclient()) LOGFAIL(errno)
     gotlock = 0;
+  }
+  else {
+    [pauseOverlayLabel setHidden:YES];
   }
 
 CLEANUP

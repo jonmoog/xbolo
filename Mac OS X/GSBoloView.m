@@ -384,20 +384,6 @@ TRY
     [self drawSprite:CROSSHIMAGE at:add2f(client.players[client.player].tank, mul2f(dir2vec(client.players[client.player].dir), client.range)) fraction:1.0];
   }
 
-  if (client.pause) {
-    NSRect rect;
-    rect = [self visibleRect];
-
-    if (client.pause == -1) {
-      [self drawLabel:"Paused" at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:90], NSFontAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]];
-    }
-    else {
-      if (asprintf(&string, "Resume in %d", client.pause) == -1) LOGFAIL(errno)
-      [self drawLabel:string at:make2f((rect.origin.x + rect.size.width*0.5)/16.0, (256.0*16.0 - (rect.origin.y + rect.size.height*0.5))/16.0) withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:90], NSFontAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]];
-      free(string);
-      string = NULL;
-    }
-  }
 
 CLEANUP
   switch (ERROR) {

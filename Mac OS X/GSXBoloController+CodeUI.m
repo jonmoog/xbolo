@@ -1005,6 +1005,27 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [scroll setDocumentView:boloView];
 
   [[window contentView] addSubview:scroll];
+
+  /* the pause notice floats above the scroll view, pinned to the window
+     center, so panning the map never moves it */
+  pauseOverlayLabel = [[NSTextField alloc] initWithFrame:NSZeroRect];
+  [pauseOverlayLabel setEditable:NO];
+  [pauseOverlayLabel setSelectable:NO];
+  [pauseOverlayLabel setBordered:NO];
+  [pauseOverlayLabel setBezeled:NO];
+  [pauseOverlayLabel setDrawsBackground:NO];
+  [pauseOverlayLabel setFont:[NSFont systemFontOfSize:72.0 weight:NSFontWeightBold]];
+  [pauseOverlayLabel setTextColor:[NSColor whiteColor]];
+  [pauseOverlayLabel setHidden:YES];
+
+  NSShadow *shadow = [[NSShadow alloc] init];
+  [shadow setShadowColor:[[NSColor blackColor] colorWithAlphaComponent:0.8]];
+  [shadow setShadowBlurRadius:4.0];
+  [shadow setShadowOffset:NSMakeSize(0.0, -2.0)];
+  [pauseOverlayLabel setShadow:shadow];
+
+  [[window contentView] addSubview:pauseOverlayLabel];
+
   [window setFrameAutosaveName:@"GSXBoloWindow"];
 
   boloWindow = window;

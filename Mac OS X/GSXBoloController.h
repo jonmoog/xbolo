@@ -217,6 +217,9 @@
   NSToolbarItem *zoomInItem;
   NSToolbarItem *zoomOutItem;
 
+  // pause overlay shown over the game view
+  NSTextField *pauseOverlayLabel;
+
   // zoom
   int zoomLevel;
 
