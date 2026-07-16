@@ -43,7 +43,6 @@
 		404D42E50FF8585000589EA2 /* BaseStatHostile.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C70FF8585000589EA2 /* BaseStatHostile.png */; };
 		404D42E60FF8585000589EA2 /* BaseStatNeutral.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C80FF8585000589EA2 /* BaseStatNeutral.png */; };
 		404D42E70FF8585000589EA2 /* Cursor.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42C90FF8585000589EA2 /* Cursor.png */; };
-		404D42E80FF8585000589EA2 /* KeyConfig.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CA0FF8585000589EA2 /* KeyConfig.png */; };
 		404D42E90FF8585000589EA2 /* MineRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CB0FF8585000589EA2 /* MineRadio.png */; };
 		404D42EA0FF8585000589EA2 /* PillCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CC0FF8585000589EA2 /* PillCenter.png */; };
 		404D42EB0FF8585000589EA2 /* PillRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42CD0FF8585000589EA2 /* PillRadio.png */; };
@@ -53,7 +52,6 @@
 		404D42EF0FF8585000589EA2 /* PillStatIntFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D10FF8585000589EA2 /* PillStatIntFriendly.png */; };
 		404D42F00FF8585000589EA2 /* PillStatIntHostile.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D20FF8585000589EA2 /* PillStatIntHostile.png */; };
 		404D42F10FF8585000589EA2 /* PillStatNeutral.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D30FF8585000589EA2 /* PillStatNeutral.png */; };
-		404D42F20FF8585000589EA2 /* PlayerInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D40FF8585000589EA2 /* PlayerInfo.png */; };
 		404D42F30FF8585000589EA2 /* PlayerStatAlliedFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D50FF8585000589EA2 /* PlayerStatAlliedFriendly.png */; };
 		404D42F40FF8585000589EA2 /* PlayerStatFriendly.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D60FF8585000589EA2 /* PlayerStatFriendly.png */; };
 		404D42F50FF8585000589EA2 /* PlayerStatHostile.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42D70FF8585000589EA2 /* PlayerStatHostile.png */; };
@@ -66,8 +64,6 @@
 		404D42FC0FF8585000589EA2 /* Tiles.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DE0FF8585000589EA2 /* Tiles.png */; };
 		404D42FD0FF8585000589EA2 /* TreeRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42DF0FF8585000589EA2 /* TreeRadio.png */; };
 		404D42FE0FF8585000589EA2 /* WallRadio.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E00FF8585000589EA2 /* WallRadio.png */; };
-		404D42FF0FF8585000589EA2 /* ZoomIn.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E10FF8585000589EA2 /* ZoomIn.png */; };
-		404D43000FF8585000589EA2 /* ZoomOut.png in Resources */ = {isa = PBXBuildFile; fileRef = 404D42E20FF8585000589EA2 /* ZoomOut.png */; };
 		4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */ = {isa = PBXBuildFile; fileRef = 4050678E109533640037C3D3 /* PillStatIntAllied.png */; };
 		405E18EA0FC7DB18008CDDF0 /* pillshot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E18E90FC7DB18008CDDF0 /* pillshot.aiff */; };
 		405E191F0FC7DEB5008CDDF0 /* build.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 405E191E0FC7DEB5008CDDF0 /* build.aiff */; };
@@ -234,7 +230,6 @@
 		404D42C70FF8585000589EA2 /* BaseStatHostile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BaseStatHostile.png; path = Images/BaseStatHostile.png; sourceTree = "<group>"; };
 		404D42C80FF8585000589EA2 /* BaseStatNeutral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BaseStatNeutral.png; path = Images/BaseStatNeutral.png; sourceTree = "<group>"; };
 		404D42C90FF8585000589EA2 /* Cursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Cursor.png; path = Images/Cursor.png; sourceTree = "<group>"; };
-		404D42CA0FF8585000589EA2 /* KeyConfig.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = KeyConfig.png; path = Images/KeyConfig.png; sourceTree = "<group>"; };
 		404D42CB0FF8585000589EA2 /* MineRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MineRadio.png; path = Images/MineRadio.png; sourceTree = "<group>"; };
 		404D42CC0FF8585000589EA2 /* PillCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillCenter.png; path = Images/PillCenter.png; sourceTree = "<group>"; };
 		404D42CD0FF8585000589EA2 /* PillRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillRadio.png; path = Images/PillRadio.png; sourceTree = "<group>"; };
@@ -244,7 +239,6 @@
 		404D42D10FF8585000589EA2 /* PillStatIntFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntFriendly.png; path = Images/PillStatIntFriendly.png; sourceTree = "<group>"; };
 		404D42D20FF8585000589EA2 /* PillStatIntHostile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntHostile.png; path = Images/PillStatIntHostile.png; sourceTree = "<group>"; };
 		404D42D30FF8585000589EA2 /* PillStatNeutral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatNeutral.png; path = Images/PillStatNeutral.png; sourceTree = "<group>"; };
-		404D42D40FF8585000589EA2 /* PlayerInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerInfo.png; path = Images/PlayerInfo.png; sourceTree = "<group>"; };
 		404D42D50FF8585000589EA2 /* PlayerStatAlliedFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerStatAlliedFriendly.png; path = Images/PlayerStatAlliedFriendly.png; sourceTree = "<group>"; };
 		404D42D60FF8585000589EA2 /* PlayerStatFriendly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerStatFriendly.png; path = Images/PlayerStatFriendly.png; sourceTree = "<group>"; };
 		404D42D70FF8585000589EA2 /* PlayerStatHostile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayerStatHostile.png; path = Images/PlayerStatHostile.png; sourceTree = "<group>"; };
@@ -257,8 +251,6 @@
 		404D42DE0FF8585000589EA2 /* Tiles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Tiles.png; path = Images/Tiles.png; sourceTree = "<group>"; };
 		404D42DF0FF8585000589EA2 /* TreeRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TreeRadio.png; path = Images/TreeRadio.png; sourceTree = "<group>"; };
 		404D42E00FF8585000589EA2 /* WallRadio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WallRadio.png; path = Images/WallRadio.png; sourceTree = "<group>"; };
-		404D42E10FF8585000589EA2 /* ZoomIn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ZoomIn.png; path = Images/ZoomIn.png; sourceTree = "<group>"; };
-		404D42E20FF8585000589EA2 /* ZoomOut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ZoomOut.png; path = Images/ZoomOut.png; sourceTree = "<group>"; };
 		4050678E109533640037C3D3 /* PillStatIntAllied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PillStatIntAllied.png; path = Images/PillStatIntAllied.png; sourceTree = "<group>"; };
 		405E18E90FC7DB18008CDDF0 /* pillshot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = pillshot.aiff; path = Sounds/pillshot.aiff; sourceTree = "<group>"; };
 		405E191E0FC7DEB5008CDDF0 /* build.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = build.aiff; path = Sounds/build.aiff; sourceTree = "<group>"; };
@@ -544,7 +536,6 @@
 				404D42C70FF8585000589EA2 /* BaseStatHostile.png */,
 				404D42C80FF8585000589EA2 /* BaseStatNeutral.png */,
 				404D42C90FF8585000589EA2 /* Cursor.png */,
-				404D42CA0FF8585000589EA2 /* KeyConfig.png */,
 				404D42CB0FF8585000589EA2 /* MineRadio.png */,
 				404D42CC0FF8585000589EA2 /* PillCenter.png */,
 				404D42CD0FF8585000589EA2 /* PillRadio.png */,
@@ -555,7 +546,6 @@
 				4050678E109533640037C3D3 /* PillStatIntAllied.png */,
 				404D42D20FF8585000589EA2 /* PillStatIntHostile.png */,
 				404D42D30FF8585000589EA2 /* PillStatNeutral.png */,
-				404D42D40FF8585000589EA2 /* PlayerInfo.png */,
 				404D42D50FF8585000589EA2 /* PlayerStatAlliedFriendly.png */,
 				404D42D60FF8585000589EA2 /* PlayerStatFriendly.png */,
 				404D42D70FF8585000589EA2 /* PlayerStatHostile.png */,
@@ -568,8 +558,6 @@
 				404D42DE0FF8585000589EA2 /* Tiles.png */,
 				404D42DF0FF8585000589EA2 /* TreeRadio.png */,
 				404D42E00FF8585000589EA2 /* WallRadio.png */,
-				404D42E10FF8585000589EA2 /* ZoomIn.png */,
-				404D42E20FF8585000589EA2 /* ZoomOut.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -781,7 +769,6 @@
 				404D42E50FF8585000589EA2 /* BaseStatHostile.png in Resources */,
 				404D42E60FF8585000589EA2 /* BaseStatNeutral.png in Resources */,
 				404D42E70FF8585000589EA2 /* Cursor.png in Resources */,
-				404D42E80FF8585000589EA2 /* KeyConfig.png in Resources */,
 				404D42E90FF8585000589EA2 /* MineRadio.png in Resources */,
 				404D42EA0FF8585000589EA2 /* PillCenter.png in Resources */,
 				404D42EB0FF8585000589EA2 /* PillRadio.png in Resources */,
@@ -791,7 +778,6 @@
 				404D42EF0FF8585000589EA2 /* PillStatIntFriendly.png in Resources */,
 				404D42F00FF8585000589EA2 /* PillStatIntHostile.png in Resources */,
 				404D42F10FF8585000589EA2 /* PillStatNeutral.png in Resources */,
-				404D42F20FF8585000589EA2 /* PlayerInfo.png in Resources */,
 				404D42F30FF8585000589EA2 /* PlayerStatAlliedFriendly.png in Resources */,
 				404D42F40FF8585000589EA2 /* PlayerStatFriendly.png in Resources */,
 				404D42F50FF8585000589EA2 /* PlayerStatHostile.png in Resources */,
@@ -804,8 +790,6 @@
 				404D42FC0FF8585000589EA2 /* Tiles.png in Resources */,
 				404D42FD0FF8585000589EA2 /* TreeRadio.png in Resources */,
 				404D42FE0FF8585000589EA2 /* WallRadio.png in Resources */,
-				404D42FF0FF8585000589EA2 /* ZoomIn.png in Resources */,
-				404D43000FF8585000589EA2 /* ZoomOut.png in Resources */,
 				4050678F109533640037C3D3 /* PillStatIntAllied.png in Resources */,
 				407333AF10F10E5100A018A1 /* XBoloMap.icns in Resources */,
 				35290DD31231E4FD009A579E /* msgreceived.aiff in Resources */,

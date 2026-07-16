@@ -458,7 +458,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
 
 - (void)buildPreferencesWindow {
   NSWindow *window =
-    [[NSWindow alloc] initWithContentRect:NSMakeRect(506, 397, 443, 361)
+    [[NSWindow alloc] initWithContentRect:NSMakeRect(506, 397, 443, 373)
                                 styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable)
                                   backing:NSBackingStoreBuffered
                                     defer:YES];
@@ -466,7 +466,7 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [window setReleasedWhenClosed:NO];
   NSView *content = [window contentView];
 
-  prefTab = [[NSTabView alloc] initWithFrame:NSMakeRect(0, 0, 443, 329)];
+  prefTab = [[NSTabView alloc] initWithFrame:NSMakeRect(0, 44, 443, 329)];
   [prefTab setTabViewType:6];
   NSTabViewItem *item1 = [[NSTabViewItem alloc] initWithIdentifier:@"GSToolbarPlayerInfoItemIdentifier"];
   [item1 setLabel:@"Player Info"];
@@ -482,8 +482,6 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
   [prefPlayerNameField setEditable:YES];
   [prefPlayerNameField setBezeled:YES];
   [prefPlayerNameField setStringValue:@"Newbie"];
-  [prefPlayerNameField setTarget:self];
-  [prefPlayerNameField setAction:@selector(prefPlayerName:)];
   [[box3 contentView] addSubview:prefPlayerNameField];
 
   [pane2 addSubview:box3];
@@ -613,24 +611,13 @@ static NSMenuItem *GSItem(NSString *title, SEL action, id target, NSString *key,
 
   [pane6 addSubview:box17];
 
-  NSButton *b24 = [[NSButton alloc] initWithFrame:NSMakeRect(345, 12, 84, 32)];
-  [b24 setTitle:@"Apply"];
-  [b24 setBezelStyle:1];
-  [b24 setTarget:self];
-  [b24 setAction:@selector(applyKeyConfig:)];
-  [pane6 addSubview:b24];
-
-  NSButton *b25 = [[NSButton alloc] initWithFrame:NSMakeRect(259, 12, 88, 32)];
-  [b25 setTitle:@"Revert"];
-  [b25 setBezelStyle:1];
-  [b25 setTarget:self];
-  [b25 setAction:@selector(revertKeyConfig:)];
-  [pane6 addSubview:b25];
-
   [item5 setView:pane6];
   [prefTab addTabViewItem:item5];
 
   [content addSubview:prefTab];
+
+  [content addSubview:GSPushButton(@"Cancel", NSMakeRect(255.0, 8.0, 86.0, 32.0), self, @selector(prefCancel:), @"\033")];
+  [content addSubview:GSPushButton(@"OK", NSMakeRect(345.0, 8.0, 86.0, 32.0), self, @selector(prefOK:), @"\r")];
 
   /* The nib chained the key fields into an explicit key-view loop, but
      AppKit drops nextKeyView links on views in unselected (detached) tab

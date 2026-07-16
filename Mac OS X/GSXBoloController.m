@@ -62,13 +62,9 @@ static NSString * const GSMuteBool                   = @"GSMuteBool";
 // bolo toolbar prefs
 static NSString * const GSBuilderToolInteger         = @"GSBuilderToolInteger";
 
-static NSString * const GSPlayerInfoImage            = @"PlayerInfo";
-static NSString * const GSKeyConfigImage             = @"KeyConfig";
 
 static NSString * const GSTankCenterImage            = @"TankCenter";
 static NSString * const GSPillCenterImage            = @"PillCenter";
-static NSString * const GSZoomInImage                = @"ZoomIn";
-static NSString * const GSZoomOutImage               = @"ZoomOut";
 
 // toolbar item identifiers
 static NSString * const GSPreferencesToolbar               = @"GSPreferencesToolbar";
@@ -245,13 +241,13 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   // init toolbar items
   toolbarPlayerInfoItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
   [toolbarPlayerInfoItem setLabel:NSLocalizedString(@"Player Info", nil)];
-  [toolbarPlayerInfoItem setImage:[NSImage imageNamed:GSPlayerInfoImage]];
+  [toolbarPlayerInfoItem setImage:[NSImage imageWithSystemSymbolName:@"person.crop.circle" accessibilityDescription:@"Player Info"]];
   [toolbarPlayerInfoItem setTarget:self];
   [toolbarPlayerInfoItem setAction:@selector(prefPane:)];
 
   toolbarKeyConfigItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSToolbarKeyConfigItemIdentifier];
   [toolbarKeyConfigItem setLabel:NSLocalizedString(@"Key Config", nil)];
-  [toolbarKeyConfigItem setImage:[NSImage imageNamed:GSKeyConfigImage]];
+  [toolbarKeyConfigItem setImage:[NSImage imageWithSystemSymbolName:@"keyboard" accessibilityDescription:@"Key Config"]];
   [toolbarKeyConfigItem setTarget:self];
   [toolbarKeyConfigItem setAction:@selector(prefPane:)];
   [toolbarKeyConfigItem setEnabled:YES];
@@ -261,8 +257,9 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   [prefToolbar setDelegate:self];
   [prefToolbar setSelectedItemIdentifier:GSToolbarPlayerInfoItemIdentifier];
   [preferencesWindow setToolbar:prefToolbar];
+  [preferencesWindow setToolbarStyle:NSWindowToolbarStylePreference];
   [prefTab selectTabViewItemWithIdentifier:[prefToolbar selectedItemIdentifier]];
-  [preferencesWindow setContentSize:NSMakeSize(443.0, 361.0)];
+  [preferencesWindow setContentSize:NSMakeSize(443.0, 373.0)];
 
   // init bolo toolbar items
   builderToolItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSBoloToolItemIdentifier];
@@ -284,13 +281,13 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
 
   zoomInItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSZoomInItemIdentifier];
   [zoomInItem setLabel:NSLocalizedString(@"Zoom In", nil)];
-  [zoomInItem setImage:[NSImage imageNamed:GSZoomInImage]];
+  [zoomInItem setImage:[NSImage imageWithSystemSymbolName:@"plus.magnifyingglass" accessibilityDescription:@"Zoom In"]];
   [zoomInItem setTarget:self];
   [zoomInItem setAction:@selector(zoomIn:)];
 
   zoomOutItem = [[NSToolbarItem alloc] initWithItemIdentifier:GSZoomOutItemIdentifier];
   [zoomOutItem setLabel:NSLocalizedString(@"Zoom Out", nil)];
-  [zoomOutItem setImage:[NSImage imageNamed:GSZoomOutImage]];
+  [zoomOutItem setImage:[NSImage imageWithSystemSymbolName:@"minus.magnifyingglass" accessibilityDescription:@"Zoom Out"]];
   [zoomOutItem setTarget:self];
   [zoomOutItem setAction:@selector(zoomOut:)];
 
@@ -679,6 +676,8 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
 - (void)setPrefPaneIdentifierString:(NSString *)aString {
   [prefToolbar setSelectedItemIdentifier:aString];
   [prefTab selectTabViewItemWithIdentifier:aString];
+  [preferencesWindow setTitle:[aString isEqualToString:GSToolbarKeyConfigItemIdentifier] ?
+    NSLocalizedString(@"Key Config", nil) : NSLocalizedString(@"Player Info", nil)];
   [[NSUserDefaults standardUserDefaults] setObject:aString forKey:GSPrefPaneIdentifierString];
 }
 
@@ -1428,7 +1427,21 @@ END
 }
 
 - (IBAction)showPrefs:(id)sender {
+  /* the window edits a copy of the saved state; OK applies it, Cancel (or
+     the close button) discards it, so re-sync the controls on every open */
+  [self revertKeyConfig:self];
+  [self setPlayerNameString:playerNameString];
   [preferencesWindow makeKeyAndOrderFront:self];
+}
+
+- (IBAction)prefOK:(id)sender {
+  if ([self applyPreferences]) {
+    [preferencesWindow orderOut:self];
+  }
+}
+
+- (IBAction)prefCancel:(id)sender {
+  [preferencesWindow orderOut:self];
 }
 
 - (IBAction)prefPane:(id)sender {
@@ -1459,7 +1472,7 @@ END
   [prefAutoSlowdownSwitch setState:[[NSUserDefaults standardUserDefaults] boolForKey:GSAutoSlowdownBool] ? NSControlStateValueOn : NSControlStateValueOff];
 }
 
-- (IBAction)applyKeyConfig:(id)sender {
+- (BOOL)applyPreferences {
   NSMutableDictionary *dict;
   dict = [NSMutableDictionary dictionary];
   if
@@ -1484,7 +1497,11 @@ END
   {
     [self setKeyConfigDict:dict];
     [self setAutoSlowdownBool:[prefAutoSlowdownSwitch state] == NSControlStateValueOn];
+    [self setPlayerNameString:[prefPlayerNameField stringValue]];
+    return YES;
   }
+
+  return NO;  /* key conflict; alert already shown */
 }
 
 // map interface actions

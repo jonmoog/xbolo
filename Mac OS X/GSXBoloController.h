@@ -12,7 +12,7 @@
 
 @class GSKeyCodeField, GSBoloView, GSRobot, GSStatusBar, GSBuilderStatusView;
 
-@interface GSXBoloController : NSObject /*<NSToolbarDelegate>*/ {
+@interface GSXBoloController : NSObject <NSApplicationDelegate, NSWindowDelegate, NSToolbarDelegate, NSTableViewDelegate, NSTableViewDataSource, NSMenuDelegate> {
   IBOutlet NSWindow *newGameWindow;
   IBOutlet NSWindow *boloWindow;
   IBOutlet NSWindow *joinProgressWindow;
@@ -254,10 +254,12 @@
 
 // pref pane actions
 - (IBAction)showPrefs:(id)sender;
+- (IBAction)prefOK:(id)sender;
+- (IBAction)prefCancel:(id)sender;
+- (BOOL)applyPreferences;
 - (IBAction)prefPane:(id)sender;
 - (IBAction)prefPlayerName:(id)sender;
 - (IBAction)revertKeyConfig:(id)sender;
-- (IBAction)applyKeyConfig:(id)sender;
 
 // toolbar actions
 - (IBAction)builderTool:(id)sender;
