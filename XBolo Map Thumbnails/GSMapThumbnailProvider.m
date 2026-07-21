@@ -266,10 +266,12 @@ static BOOL drawMap(CGContextRef ctx, CGFloat size, NSData *data) {
 
   CGFloat side = MIN(request.maximumSize.width, request.maximumSize.height);
 
+  CGFloat scale = request.scale;
+
   handler([QLThumbnailReply replyWithContextSize:CGSizeMake(side, side)
                                     drawingBlock:^BOOL(CGContextRef context) {
-    /* the context is prescaled for the display; draw in point space */
-    return drawMap(context, side, data);
+    /* the context is in pixels (contextSize x scale); draw at pixel size */
+    return drawMap(context, side * scale, data);
   }], nil);
 }
 
