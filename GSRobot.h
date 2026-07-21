@@ -16,7 +16,7 @@
     id <GSRobot> _robot;
     
     NSConditionLock *_condLock;
-    NSData *_gamestateData;
+    NSMutableData *_gamestateData;
     NSMutableArray *_messages;
     BOOL _halt;
 }

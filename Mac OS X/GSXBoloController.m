@@ -67,7 +67,6 @@ static NSString * const GSTankCenterImage            = @"TankCenter";
 static NSString * const GSPillCenterImage            = @"PillCenter";
 
 // toolbar item identifiers
-static NSString * const GSPreferencesToolbar               = @"GSPreferencesToolbar";
 static NSString * const GSToolbarPlayerInfoItemIdentifier  = @"GSToolbarPlayerInfoItemIdentifier";
 static NSString * const GSToolbarKeyConfigItemIdentifier   = @"GSToolbarKeyConfigItemIdentifier";
 
@@ -302,22 +301,22 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   if([defaults boolForKey:@"GSHostPortNumberRandom"])
     [self setHostPortNumber:(random() % 40000) + 2000];
   else
-    [self setHostPortNumber:[defaults integerForKey:GSHostPortNumber]];
+    [self setHostPortNumber:(int)[defaults integerForKey:GSHostPortNumber]];
   [self setHostPasswordBool:[defaults boolForKey:GSHostPasswordBool]];
   [self setHostPasswordString:[defaults stringForKey:GSHostPasswordString]];
   [self setHostTimeLimitBool:[defaults boolForKey:GSHostTimeLimitBool]];
   [self setHostTimeLimitString:[defaults stringForKey:GSHostTimeLimitString]];
   [self setHostHiddenMinesBool:[defaults boolForKey:GSHostHiddenMinesBool]];
   [self setHostTrackerBool:[defaults boolForKey:GSHostTrackerBool]];
-  [self setHostGameTypeNumber:[defaults integerForKey:GSHostGameTypeNumber]];
+  [self setHostGameTypeNumber:(int)[defaults integerForKey:GSHostGameTypeNumber]];
 
   // init host domination pane
-  [self setHostDominationTypeNumber:[defaults integerForKey:GSHostDominationTypeNumber]];
+  [self setHostDominationTypeNumber:(int)[defaults integerForKey:GSHostDominationTypeNumber]];
   [self setHostDominationBaseControlString:[defaults stringForKey:GSHostDominationBaseControlString]];
 
   // init the join pane
   [self setJoinAddressString:[defaults stringForKey:GSJoinAddressString]];
-  [self setJoinPortNumber:[defaults integerForKey:GSJoinPortNumber]];
+  [self setJoinPortNumber:(int)[defaults integerForKey:GSJoinPortNumber]];
   [self setJoinPasswordBool:[defaults boolForKey:GSJoinPasswordBool]];
   [self setJoinPasswordString:[defaults stringForKey:GSJoinPasswordString]];
 
@@ -336,13 +335,13 @@ static void GSShowAlertSheet(NSString *title, NSString *message, NSWindow *windo
   [self setShowMessagesBool:[defaults boolForKey:GSShowMessagesBool]];
 
   // init bolo window
-  [self setBuilderToolInteger:[defaults integerForKey:GSBuilderToolInteger]];
+  [self setBuilderToolInteger:(int)[defaults integerForKey:GSBuilderToolInteger]];
 
   // init allegiance panel
   playerInfoArray = [[NSMutableArray alloc] init];
 
   // init messages panel
-  [self setMessageTargetInteger:[defaults integerForKey:GSMessageTarget]];
+  [self setMessageTargetInteger:(int)[defaults integerForKey:GSMessageTarget]];
 
   // init the key config
   [self setKeyConfigDict:[defaults dictionaryForKey:GSKeyConfigDict]];
@@ -845,11 +844,11 @@ END
 }
 
 - (IBAction)hostGameType:(id)sender {
-  [self setHostGameTypeNumber:[sender indexOfSelectedItem]];
+  [self setHostGameTypeNumber:(int)[sender indexOfSelectedItem]];
 }
 
 - (IBAction)hostDominationType:(id)sender {
-  [self setHostDominationTypeNumber:[[hostDominationTypeMatrix selectedCell] tag]];
+  [self setHostDominationTypeNumber:(int)[[hostDominationTypeMatrix selectedCell] tag]];
 }
 
 - (IBAction)hostDominationBaseControl:(id)sender {
@@ -1211,15 +1210,15 @@ END
 }
 
 - (IBAction)kickPlayer:(id)sender {
-  kickplayer([sender tag]);
+  kickplayer((int)[sender tag]);
 }
 
 - (IBAction)banPlayer:(id)sender {
-  banplayer([sender tag]);
+  banplayer((int)[sender tag]);
 }
 
 - (IBAction)unbanPlayer:(id)sender {
-  unbanplayer([sender tag]);
+  unbanplayer((int)[sender tag]);
 }
 
 - (IBAction)scrollUp:(id)sender {
@@ -1304,7 +1303,7 @@ TRY
   players = 0;
   set = [playerInfoTableView selectedRowIndexes];
 
-  for (i = 0; (i = [set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
+  for (i = 0; (i = (int)[set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
     players |= 1 << [[[playerInfoArray objectAtIndex:i] objectForKey:@"Index"] intValue];
   }
 
@@ -1346,7 +1345,7 @@ TRY
   players = 0;
   set = [playerInfoTableView selectedRowIndexes];
 
-  for (i = 0; (i = [set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
+  for (i = 0; (i = (int)[set indexGreaterThanOrEqualToIndex:i]) != NSNotFound; i++) {
     players |= 1 << [[[playerInfoArray objectAtIndex:i] objectForKey:@"Index"] intValue];
   }
 
@@ -1403,7 +1402,7 @@ END
   id cell;
 
   if ((cell = [sender selectedCell]) != nil) {
-    [self setMessageTargetInteger:[cell tag]];
+    [self setMessageTargetInteger:(int)[cell tag]];
   }
 }
 
@@ -1423,14 +1422,6 @@ END
 
 - (IBAction)prefCancel:(id)sender {
   [preferencesWindow orderOut:self];
-}
-
-- (IBAction)prefPane:(id)sender {
-  [self setPrefPaneIdentifierString:[sender itemIdentifier]];
-}
-
-- (IBAction)prefPlayerName:(id)sender {
-  [self setPlayerNameString:[sender stringValue]];
 }
 
 - (IBAction)revertKeyConfig:(id)sender {
@@ -1525,12 +1516,12 @@ END
   id cell;
 
   if ((cell = [sender selectedCell]) != nil) {
-    [self setBuilderToolInteger:[cell tag]];
+    [self setBuilderToolInteger:(int)[cell tag]];
   }
 }
 
 - (IBAction)builderToolMenu:(id)sender {
-	[self setBuilderToolInteger:[sender tag]];
+	[self setBuilderToolInteger:(int)[sender tag]];
 }
 
 - (IBAction)tankCenter:(id)sender {
@@ -1866,7 +1857,7 @@ END
     if (server.setup) {
       int player, ret;
 
-      player = [menuItem tag];
+      player = (int)[menuItem tag];
 
       if (server.players[player].cntlsock != -1) {
         [menuItem setTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:[NSString stringWithCString:server.players[player].name encoding:NSUTF8StringEncoding]], [NSString stringWithString:[NSString stringWithCString:inet_ntoa(server.players[player].addr.sin_addr) encoding:NSASCIIStringEncoding]]]];
@@ -1895,7 +1886,7 @@ END
     if (server.setup) {
       int player, ret;
 
-      player = [menuItem tag];
+      player = (int)[menuItem tag];
 
       if (server.players[player].cntlsock != -1) {
         [menuItem setTitle:[NSString stringWithFormat:@"%@@%@", [NSString stringWithString:[NSString stringWithCString:server.players[player].name encoding:NSUTF8StringEncoding]], [NSString stringWithString:[NSString stringWithCString:inet_ntoa(server.players[player].addr.sin_addr) encoding:NSASCIIStringEncoding]]]];
@@ -1978,7 +1969,7 @@ END
 - (void)menuNeedsUpdate:(NSMenu *)menu {
   int i;
 
-  for (i = [menu numberOfItems] - 1; i >= 0; i--) {
+  for (i = (int)[menu numberOfItems] - 1; i >= 0; i--) {
     [menu removeItemAtIndex:i];
   }
 
@@ -2010,15 +2001,7 @@ END
 // NSToolbar methods
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
-  if (toolbar == prefToolbar) {
-    if ([itemIdentifier isEqual:GSToolbarPlayerInfoItemIdentifier]) {
-      return toolbarPlayerInfoItem;
-    }
-    else if ([itemIdentifier isEqual:GSToolbarKeyConfigItemIdentifier]) {
-      return toolbarKeyConfigItem;
-    }
-  }
-  else if (toolbar == boloToolbar) {
+  if (toolbar == boloToolbar) {
     if ([itemIdentifier isEqual:GSBoloToolItemIdentifier]) {
       return builderToolItem;
     }
@@ -2039,10 +2022,7 @@ END
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
-  if (toolbar == prefToolbar) {
-    return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
-  }
-  else if (toolbar == boloToolbar) {
+  if (toolbar == boloToolbar) {
     return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, nil];
   }
   else {
@@ -2051,10 +2031,7 @@ END
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-  if (toolbar == prefToolbar) {
-    return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
-  }
-  else if (toolbar == boloToolbar) {
+  if (toolbar == boloToolbar) {
     return [NSArray arrayWithObjects:GSBoloToolItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, GSTankCenterItemIdentifier, GSPillCenterItemIdentifier, GSZoomInItemIdentifier, GSZoomOutItemIdentifier, nil];
   }
   else {
@@ -2063,15 +2040,7 @@ END
 }
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
-  if (toolbar == prefToolbar) {
-    return [NSArray arrayWithObjects:GSToolbarPlayerInfoItemIdentifier, GSToolbarKeyConfigItemIdentifier, nil];
-  }
-  else if (toolbar == boloToolbar) {
-    return [NSArray array];
-  }
-  else {
-    return [NSArray array];
-  }
+  return [NSArray array];
 }
 
 // NSWindow delegate methods
@@ -2724,19 +2693,6 @@ END
   [messagesTextView didChangeText];
   [messagesTextView scrollPoint:NSMakePoint(0.0f, NSHeight([messagesTextView frame]) - NSHeight([messagesTextView visibleRect]))];
 
-//  int i;
-//  if (!muteBool) {
-//    for (i = 0; i < [speechSynthesizers count]; i++) {
-//      NSSpeechSynthesizer *speechSynthesizer;
-//
-//      speechSynthesizer = [speechSynthesizers objectAtIndex:i];
-//
-//      if (![speechSynthesizer isSpeaking]) {
-//        [speechSynthesizer startSpeakingString:[aString string]];
-//        break;
-//      }
-//    }
-//  }
 	
 }
 
@@ -2761,7 +2717,7 @@ END
     }
   }
   else if (table == joinTrackerTableView) {
-    i = [[table selectedRowIndexes] firstIndex];
+    i = (int)[[table selectedRowIndexes] firstIndex];
 
     if (i != NSNotFound) {
       row = [joinTrackerArray objectAtIndex:i];
@@ -2774,19 +2730,19 @@ END
 
 // NSTableView dataSource methods
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView {
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView {
   if (aTableView == playerInfoTableView) {
-    return [playerInfoArray count];
+    return (NSInteger)[playerInfoArray count];
   }
   else if (aTableView == joinTrackerTableView) {
-    return [joinTrackerArray count];
+    return (NSInteger)[joinTrackerArray count];
   }
   else {
     return 0;
   }
 }
 
-- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex {
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   if (aTableView == playerInfoTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
     return [[playerInfoArray objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
@@ -2800,7 +2756,7 @@ END
   }
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex {
+- (void)tableView:(NSTableView *)aTableView setObjectValue:anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   if (aTableView == playerInfoTableView) {
     NSParameterAssert(rowIndex >= 0 && rowIndex < [playerInfoArray count]);
     [[playerInfoArray objectAtIndex:rowIndex] setObject:anObject forKey:[aTableColumn identifier]];
@@ -2812,7 +2768,7 @@ END
     int index;
     NSDictionary *selection;
 
-    index = [[aTableView selectedRowIndexes] firstIndex];
+    index = (int)[[aTableView selectedRowIndexes] firstIndex];
 
     if (index != NSNotFound) {
       selection = [joinTrackerArray objectAtIndex:index];

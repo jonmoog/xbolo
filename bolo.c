@@ -63,7 +63,17 @@ TRY
   gotlock = 0;
 
 CLEANUP
-ERRHANDLER(ret, -1)
+  switch (ERROR) {
+  case 0:
+    RETURN(ret)
+
+  default:
+    if (gotlock) {
+      unlockclient();
+    }
+
+    RETERR(-1)
+  }
 END
 }
   

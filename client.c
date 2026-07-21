@@ -928,7 +928,7 @@ TRY
       struct timeval timeout;
 
       timeout.tv_sec = 0;
-      timeout.tv_usec = (nexttick - currenttime)/1000;
+      timeout.tv_usec = (suseconds_t)((nexttick - currenttime)/1000);
 
       if ((nfds = selectclient(&readfds, &writefds, &timeout)) == -1) LOGFAIL(errno)
 

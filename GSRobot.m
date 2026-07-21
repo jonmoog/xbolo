@@ -188,7 +188,7 @@
     gameState.tankscount = writei;
     
     // FIXME: should make this be variable
-    const int maxShellPositions = 256;
+    enum { maxShellPositions = 256 };
     struct ExternalShell shells[maxShellPositions];
     for(readi = 0, writei = 0; readi < MAXPLAYERS; readi++)
     {

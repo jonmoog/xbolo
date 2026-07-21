@@ -933,6 +933,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.xbolo";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -946,6 +948,8 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.xbolo";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -959,6 +963,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.xbolo";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -1048,7 +1054,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					/Xcode2.5/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks,
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -1092,6 +1097,8 @@
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
 				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.xbolo";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -1110,7 +1117,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					/Xcode2.5/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks,
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -1121,6 +1127,8 @@
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
 				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.xbolo";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -1142,7 +1150,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					/Xcode2.5/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks,
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -1153,6 +1160,8 @@
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
 				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gengasw.xbolo";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;

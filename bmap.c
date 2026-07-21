@@ -32,7 +32,7 @@ int readrun(size_t *y, size_t *x, struct BMAP_Run *run, void *data, int terrain[
 TRY
   while (*y < WIDTH) {  /* find the beginning of a run */
     while (*x < WIDTH) {
-      if (terraintotile(terrain[*y][*x]) != defaulttile(*x, *y)) {
+      if (terraintotile(terrain[*y][*x]) != defaulttile((int)*x, (int)*y)) {
         nibs = 0;
         run->y = *y;
         run->startx = *x;
@@ -50,7 +50,7 @@ TRY
 
             while (
               (*x + len < WIDTH) && (len < 8) &&
-              (terraintotile(terrain[*y][*x + len]) != defaulttile(*x + len, *y)) &&
+              (terraintotile(terrain[*y][*x + len]) != defaulttile((int)(*x + len), (int)*y)) &&
               (terraintotile(terrain[*y][*x + len]) != terraintotile(terrain[*y][*x + len + 1]))
             ) {
               len++;
@@ -64,7 +64,7 @@ TRY
           }
 
           *x += len;
-        } while (terraintotile(terrain[*y][*x]) != defaulttile(*x, *y));
+        } while (terraintotile(terrain[*y][*x]) != defaulttile((int)*x, (int)*y));
 
         run->endx = *x;
         run->datalen = sizeof(struct BMAP_Run) + (nibs + 1)/2;
@@ -99,7 +99,7 @@ CLEANUP
 END
 }
 
-int writerun(struct BMAP_Run run, const void *buf, int terrain[WIDTH][WIDTH]) {
+int writerun(struct BMAP_Run run, const void *buf, int terrain[][WIDTH]) {
   int i;
   int x;
   int offset;

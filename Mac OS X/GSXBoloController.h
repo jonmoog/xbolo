@@ -180,9 +180,6 @@
   NSString *trackerString;
 
   // pref objects
-  NSToolbar *prefToolbar;
-  NSToolbarItem *toolbarPlayerInfoItem;
-  NSToolbarItem *toolbarKeyConfigItem;
   NSString *playerNameString;
   NSDictionary *keyConfigDict;
   BOOL autoSlowdownBool;
@@ -260,8 +257,6 @@
 - (IBAction)prefOK:(id)sender;
 - (IBAction)prefCancel:(id)sender;
 - (BOOL)applyPreferences;
-- (IBAction)prefPane:(id)sender;
-- (IBAction)prefPlayerName:(id)sender;
 - (IBAction)revertKeyConfig:(id)sender;
 
 // toolbar actions

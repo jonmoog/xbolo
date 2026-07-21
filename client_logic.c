@@ -2908,7 +2908,6 @@ END
 
 
 int keyevent(int mask, int set) {
-  Pointi tanksqr;
   int gotlock = 0;
 
 TRY
@@ -2922,7 +2921,6 @@ TRY
     client.players[client.player].inputflags &= ~mask;
   }
 
-  tanksqr = makepoint(w2t(client.players[client.player].tank.x), w2t(client.players[client.player].tank.y));
 
   if (!client.players[client.player].dead) {
     int i;
