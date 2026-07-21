@@ -70,9 +70,6 @@ UI changes.
 - `XBolo Quick Look Plug-in/` builds a `.qlgenerator`, a plug-in format that
   no longer loads on modern macOS; it needs porting to a Quick Look app
   extension to be useful again.
-- UPnP port mapping is a stub (`Mac OS X/TCMPortMapperStub.m`); it reports
-  failure so hosting behind NAT requires manual port forwarding.  Restoring
-  it means building the open-source TCMPortMapper from source for arm64.
 
 ## Community
 

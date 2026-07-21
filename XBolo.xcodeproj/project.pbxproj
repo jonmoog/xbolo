@@ -32,7 +32,8 @@
 		404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42860FF8525200589EA2 /* GSStatusBar.m */; };
 		404D42910FF8525200589EA2 /* GSStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42870FF8525200589EA2 /* GSStatusView.h */; };
 		404D42920FF8525200589EA2 /* GSStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D42880FF8525200589EA2 /* GSStatusView.m */; };
-		AA00000000000000000000B2 /* TCMPortMapperStub.m in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000A2 /* TCMPortMapperStub.m */; };
+		EE000000000000000000000B1 /* TCMPortMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE000000000000000000000A1 /* TCMPortMapper.framework */; };
+		EE000000000000000000000B2 /* TCMPortMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = EE000000000000000000000A1 /* TCMPortMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		DD000000000000000000000B1 /* GSUIDump.m in Sources */ = {isa = PBXBuildFile; fileRef = DD000000000000000000000A1 /* GSUIDump.m */; };
 		DD000000000000000000002B1 /* GSXBoloController+CodeUI.m in Sources */ = {isa = PBXBuildFile; fileRef = DD000000000000000000002A1 /* GSXBoloController+CodeUI.m */; };
 		404D429B0FF8528F00589EA2 /* GSXBoloController.h in Headers */ = {isa = PBXBuildFile; fileRef = 404D42990FF8528F00589EA2 /* GSXBoloController.h */; };
@@ -173,6 +174,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				EE000000000000000000000B2 /* TCMPortMapper.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -217,8 +219,7 @@
 		404D42860FF8525200589EA2 /* GSStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSStatusBar.m; path = "Mac OS X/GSStatusBar.m"; sourceTree = "<group>"; };
 		404D42870FF8525200589EA2 /* GSStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSStatusView.h; path = "Mac OS X/GSStatusView.h"; sourceTree = "<group>"; };
 		404D42880FF8525200589EA2 /* GSStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSStatusView.m; path = "Mac OS X/GSStatusView.m"; sourceTree = "<group>"; };
-		AA00000000000000000000A1 /* TCMPortMapperStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCMPortMapperStub.h; path = "Mac OS X/TCMPortMapperStub.h"; sourceTree = "<group>"; };
-		AA00000000000000000000A2 /* TCMPortMapperStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCMPortMapperStub.m; path = "Mac OS X/TCMPortMapperStub.m"; sourceTree = "<group>"; };
+		EE000000000000000000000A1 /* TCMPortMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TCMPortMapper.framework; sourceTree = "<group>"; };
 		DD000000000000000000000A1 /* GSUIDump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSUIDump.m; path = "Mac OS X/GSUIDump.m"; sourceTree = "<group>"; };
 		DD000000000000000000001A1 /* GSXBoloController+CodeUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GSXBoloController+CodeUI.h"; path = "Mac OS X/GSXBoloController+CodeUI.h"; sourceTree = "<group>"; };
 		DD000000000000000000002A1 /* GSXBoloController+CodeUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GSXBoloController+CodeUI.m"; path = "Mac OS X/GSXBoloController+CodeUI.m"; sourceTree = "<group>"; };
@@ -345,6 +346,7 @@
 			files = (
 				40ED84311114B09B00B7AF32 /* Foundation.framework in Frameworks */,
 				40ED84371114B0BB00B7AF32 /* Cocoa.framework in Frameworks */,
+				EE000000000000000000000B1 /* TCMPortMapper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,8 +512,7 @@
 				404D42860FF8525200589EA2 /* GSStatusBar.m */,
 				404D42870FF8525200589EA2 /* GSStatusView.h */,
 				404D42880FF8525200589EA2 /* GSStatusView.m */,
-				AA00000000000000000000A1 /* TCMPortMapperStub.h */,
-				AA00000000000000000000A2 /* TCMPortMapperStub.m */,
+				EE000000000000000000000A1 /* TCMPortMapper.framework */,
 				DD000000000000000000000A1 /* GSUIDump.m */,
 				DD000000000000000000001A1 /* GSXBoloController+CodeUI.h */,
 				DD000000000000000000002A1 /* GSXBoloController+CodeUI.m */,
@@ -852,7 +853,6 @@
 				C2765E8C105602D70007E05A /* GSRobot.m in Sources */,
 				404D42900FF8525200589EA2 /* GSStatusBar.m in Sources */,
 				404D42920FF8525200589EA2 /* GSStatusView.m in Sources */,
-				AA00000000000000000000B2 /* TCMPortMapperStub.m in Sources */,
 				DD000000000000000000000B1 /* GSUIDump.m in Sources */,
 				DD000000000000000000002B1 /* GSXBoloController+CodeUI.m in Sources */,
 				404D429C0FF8528F00589EA2 /* GSXBoloController.m in Sources */,
@@ -928,6 +928,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
@@ -939,6 +941,8 @@
 			buildSettings = {
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
@@ -950,6 +954,8 @@
 			buildSettings = {
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
@@ -1081,6 +1087,8 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
@@ -1108,6 +1116,8 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;
@@ -1138,6 +1148,8 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = XBolo;
 				SDKROOT = macosx;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES;

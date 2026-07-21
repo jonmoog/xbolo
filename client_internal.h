@@ -96,7 +96,7 @@ float builderspeed(int x, int y, int player);
 float buildertargetspeed(int x, int y);
 int decreasevis(Recti r);
 int increasevis(Recti r);
-int refresh(int x, int y);
+int refreshsquare(int x, int y);
 int enter(Pointi new, Pointi old);
 int spawn();
 int tankmovelogic(int player);

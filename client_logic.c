@@ -897,27 +897,27 @@ TRY
   if (mag2f(sub2f(make2f(x + 0.5, y + 0.5), client.players[client.player].tank)) <= 2.0) {
     switch (client.terrain[y][x]) {
     case kMinedSwampTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refreshsquare(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedCraterTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refreshsquare(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedRoadTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refreshsquare(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedForestTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refreshsquare(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedRubbleTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refreshsquare(x, y)) LOGFAIL(errno)
       break;
 
     case kMinedGrassTerrain:
-      if (refresh(x, y)) LOGFAIL(errno)
+      if (refreshsquare(x, y)) LOGFAIL(errno)
       break;
 
     default:
@@ -2719,7 +2719,7 @@ int fogtilefor(int x, int y, int tile) {
 }
 
 
-int refresh(int x, int y) {
+int refreshsquare(int x, int y) {
   int i, j;
   Recti rect;
   int image;
@@ -2796,7 +2796,7 @@ TRY
 
         for (j = 0; j < client.nbases; j++) {
           if (client.bases[j].owner == i) {
-            refresh(client.bases[j].x, client.bases[j].y);
+            refreshsquare(client.bases[j].x, client.bases[j].y);
 
             if (client.setbasestatus) {
               client.setbasestatus(j);
@@ -2811,7 +2811,7 @@ TRY
               if (increasevis(makerect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
             }
 
-            refresh(client.pills[j].x, client.pills[j].y);
+            refreshsquare(client.pills[j].x, client.pills[j].y);
 
             if (client.setpillstatus) {
               client.setpillstatus(j);
@@ -2872,7 +2872,7 @@ TRY
 
         for (j = 0; j < client.nbases; j++) {
           if (client.bases[j].owner == i) {
-            refresh(client.bases[j].x, client.bases[j].y);
+            refreshsquare(client.bases[j].x, client.bases[j].y);
             if (client.setbasestatus) {
               client.setbasestatus(j);
             }
@@ -2883,7 +2883,7 @@ TRY
           if (client.pills[j].owner == i) {
             /* fog of war */
             if (client.pills[j].armour != ONBOARD) {
-              if (refresh(client.pills[j].x, client.pills[j].y)) LOGFAIL(errno)
+              if (refreshsquare(client.pills[j].x, client.pills[j].y)) LOGFAIL(errno)
 
               if (client.pills[j].armour > 0) {
                 if (decreasevis(makerect(client.pills[j].x - 7, client.pills[j].y - 7, 15, 15))) LOGFAIL(errno)
