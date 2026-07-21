@@ -65,11 +65,16 @@ with the GSUIDump tool (`XBolo -GSDumpUI YES [-GSDumpUIPath <file>]`), which
 dumps the live window/view/outlet/menu tree as JSON for regression-diffing
 UI changes.
 
+## Quick Look
+
+The Map Thumbnails target builds a Quick Look thumbnail extension
+(embedded in XBolo.app) that renders .map files as the classic
+mini-map in Finder and Quick Look.  It replaces the retired
+.qlgenerator plug-in; the rendering is a port of the original
+generator.
+
 ## Known legacy items
 
-- `XBolo Quick Look Plug-in/` builds a `.qlgenerator`, a plug-in format that
-  no longer loads on modern macOS; it needs porting to a Quick Look app
-  extension to be useful again.
 
 ## Community
 
