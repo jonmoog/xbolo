@@ -27,9 +27,8 @@ static void writenibble(void *buf, size_t i, int nibble);
 static int defaulttile(int x, int y);
 
 int readrun(size_t *y, size_t *x, struct BMAP_Run *run, void *data, int terrain[][WIDTH]) {
-  int nibs, len, i, retval;
+  int nibs, len, i;
 
-TRY
   while (*y < WIDTH) {  /* find the beginning of a run */
     while (*x < WIDTH) {
       if (terraintotile(terrain[*y][*x]) != defaulttile((int)*x, (int)*y)) {
@@ -69,8 +68,7 @@ TRY
         run->endx = *x;
         run->datalen = sizeof(struct BMAP_Run) + (nibs + 1)/2;
 
-        retval = 0;
-        SUCCESS
+        return 0;
       }
 
       (*x)++;
@@ -86,17 +84,7 @@ TRY
   run->startx = 0xff;
   run->endx = 0xff;
 
-  retval = 1;
-
-CLEANUP
-  switch (errno) {
-  case 0:
-    RETURN(retval)
-
-  default:
-    RETERR(-1)
-  }
-END
+  return 1;
 }
 
 int writerun(struct BMAP_Run run, const void *buf, int terrain[][WIDTH]) {
@@ -105,14 +93,13 @@ int writerun(struct BMAP_Run run, const void *buf, int terrain[][WIDTH]) {
   int offset;
   int serverTileType;
 
-TRY
   x = run.startx;
   offset = 0;
 
   while (x < run.endx) {
     int len;
 
-    if (sizeof(struct BMAP_Run) + (offset + 2)/2 > run.datalen) LOGFAIL(ECORFILE)
+    if (sizeof(struct BMAP_Run) + (offset + 2)/2 > run.datalen) return ERRLOG(ECORFILE);
 
     len = readnibble(buf, offset++);
 
@@ -120,12 +107,12 @@ TRY
       len += 1;
 
       if (sizeof(struct BMAP_Run) + (offset + len + 1)/2 > run.datalen) {
-        LOGFAIL(ECORFILE)
+        return ERRLOG(ECORFILE);
       }
 
       for (i = 0; i < len; i++) {
         if ((serverTileType = tiletoterrain(readnibble(buf, offset++))) == -1) {
-          LOGFAIL(ECORFILE)
+          return ERRLOG(ECORFILE);
         }
 
         terrain[run.y][x++] = serverTileType;
@@ -135,11 +122,11 @@ TRY
       len -= 6;
 
       if (sizeof(struct BMAP_Run) + (offset + 2)/2 > run.datalen) {
-        LOGFAIL(ECORFILE)
+        return ERRLOG(ECORFILE);
       }
 
       if ((serverTileType = tiletoterrain(readnibble(buf, offset++))) == -1) {
-        LOGFAIL(ECORFILE)
+        return ERRLOG(ECORFILE);
       }
 
       for (i = 0; i < len; i++) {
@@ -147,17 +134,15 @@ TRY
       }
     }
     else {
-      LOGFAIL(ECORFILE)
+      return ERRLOG(ECORFILE);
     }
   }
 
   if (sizeof(struct BMAP_Run) + (offset + 1)/2 != run.datalen) {
-    LOGFAIL(ECORFILE)
+    return ERRLOG(ECORFILE);
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+  return 0;
 }
 
 int readnibble(const void *buf, size_t i) {

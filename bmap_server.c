@@ -28,7 +28,6 @@ int serverloadmap(const void *buf, size_t nbytes) {
   int runDataLen;
   int offset;
 
-TRY
   /* wipe the map clean */
   for (y = 0; y < WIDTH; y++) {
     for (x = 0; x < WIDTH; x++) {
@@ -36,27 +35,27 @@ TRY
     }
   }
 
-  if (nbytes < sizeof(struct BMAP_Preamble)) LOGFAIL(ECORFILE)
+  if (nbytes < sizeof(struct BMAP_Preamble)) return ERRLOG(ECORFILE);
 
   preamble = buf;
 
   if (strncmp((char *)preamble->ident, MAP_FILE_IDENT, MAP_FILE_IDENT_LEN) != 0)
-    LOGFAIL(ECORFILE)
+    return ERRLOG(ECORFILE);
 
-  if (preamble->version != CURRENT_MAP_VERSION) LOGFAIL(EINCMPAT)
+  if (preamble->version != CURRENT_MAP_VERSION) return ERRLOG(EINCMPAT);
 
-  if (preamble->npills > MAXPILLS) LOGFAIL(ECORFILE)
+  if (preamble->npills > MAXPILLS) return ERRLOG(ECORFILE);
 
-  if (preamble->nbases > MAXBASES) LOGFAIL(ECORFILE)
+  if (preamble->nbases > MAXBASES) return ERRLOG(ECORFILE);
 
-  if (preamble->nstarts > MAX_STARTS) LOGFAIL(ECORFILE)
+  if (preamble->nstarts > MAX_STARTS) return ERRLOG(ECORFILE);
 
   if (nbytes <
       sizeof(struct BMAP_Preamble) +
       preamble->npills*sizeof(struct BMAP_PillInfo) +
       preamble->nbases*sizeof(struct BMAP_BaseInfo) +
       preamble->nstarts*sizeof(struct BMAP_StartInfo))
-    LOGFAIL(ECORFILE)
+    return ERRLOG(ECORFILE);
 
   pillInfos = (struct BMAP_PillInfo *)(preamble + 1);
   baseInfos = (struct BMAP_BaseInfo *)(pillInfos + preamble->npills);
@@ -112,7 +111,7 @@ TRY
 
     if (offset + sizeof(struct BMAP_Run) > runDataLen) {
       break;  /* ran out of bytes */
-//      LOGFAIL(ECORFILE)
+//      return ERRLOG(ECORFILE);
     }
 
     run = *(struct BMAP_Run *)(runData + offset);
@@ -126,8 +125,8 @@ TRY
       break;
     }
 
-    if (offset + run.datalen > runDataLen) LOGFAIL(ECORFILE)
-    if (writerun(run, runData + offset + sizeof(struct BMAP_Run), server.terrain) == -1) LOGFAIL(errno)
+    if (offset + run.datalen > runDataLen) return ERRLOG(ECORFILE);
+    if (writerun(run, runData + offset + sizeof(struct BMAP_Run), server.terrain) == -1) return ERRLOG(errno);
     offset += run.datalen;
   }
 
@@ -251,9 +250,7 @@ TRY
     }
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+  return 0;
 }
 
 ssize_t serversavemap(void **data) {
@@ -270,12 +267,11 @@ ssize_t serversavemap(void **data) {
 
   *data = NULL;
 
-TRY
   /* find the size of the map */
-  if ((size = serverloadmapsize()) == -1) LOGFAIL(errno)
+  if ((size = serverloadmapsize()) == -1) return ERRLOG(errno);
 
   /* allocate memory */
-  if ((*data = malloc(size)) == NULL) LOGFAIL(errno)
+  if ((*data = malloc(size)) == NULL) return ERRLOG(errno);
 
   /* zero the bytes */
   bzero(*data, size);
@@ -328,27 +324,26 @@ TRY
     int r;
 
     run = runData + offset;
-    if ((r = readrun(&y, &x, run, run + 1, server.terrain)) == -1) LOGFAIL(errno)
+
+    if ((r = readrun(&y, &x, run, run + 1, server.terrain)) == -1) {
+      int err = errno;
+
+      free(*data);
+      *data = NULL;
+      errno = err;
+      return ERRLOG(err);
+    }
+
     if (r == 1) break;
     offset += run->datalen;
   }
 
-  data = NULL;
-
-CLEANUP
-  if (data != NULL && *data != NULL) {
-    free(*data);
-    *data = NULL;
-  }
-
-ERRHANDLER(size, -1)
-END
+  return size;
 }
 
 ssize_t serverloadmapsize() {
   size_t x, y, len;
 
-TRY
   x = 0;
   y = 0;
   len =
@@ -362,13 +357,9 @@ TRY
     struct BMAP_Run run;
     char buf[256];
     
-    if ((r = readrun(&y, &x, &run, buf, server.terrain)) == -1) LOGFAIL(errno)
+    if ((r = readrun(&y, &x, &run, buf, server.terrain)) == -1) return ERRLOG(errno);
     len += run.datalen;
     /* if this is the last run */
-    if (r == 1) SUCCESS
+    if (r == 1) return len;
   }
-
-CLEANUP
-ERRHANDLER(len, -1)
-END
 }

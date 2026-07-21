@@ -26,7 +26,6 @@ int clientloadmap(const void *buf, size_t len) {
   int runDataLen;
   int offset;
 
-TRY
   /* wipe the map clean */
   for (y = 0; y < WIDTH; y++) {
     for (x = 0; x < WIDTH; x++) {
@@ -35,27 +34,27 @@ TRY
     }
   }
 
-  if (len < sizeof(struct BMAP_Preamble)) LOGFAIL(ECORFILE)
+  if (len < sizeof(struct BMAP_Preamble)) return ERRLOG(ECORFILE);
 
   /* initialize the preamble pointer */
   preamble = buf;
 
-  if (preamble->npills > MAXPILLS) LOGFAIL(ECORFILE)
+  if (preamble->npills > MAXPILLS) return ERRLOG(ECORFILE);
 
-  if (preamble->nbases > MAXBASES) LOGFAIL(ECORFILE)
+  if (preamble->nbases > MAXBASES) return ERRLOG(ECORFILE);
 
-  if (preamble->nstarts > MAX_STARTS) LOGFAIL(ECORFILE)
+  if (preamble->nstarts > MAX_STARTS) return ERRLOG(ECORFILE);
 
   if (strncmp((char *)preamble->ident, MAP_FILE_IDENT, MAP_FILE_IDENT_LEN) != 0)
-    LOGFAIL(ECORFILE)
+    return ERRLOG(ECORFILE);
 
-  if (preamble->version != CURRENT_MAP_VERSION) LOGFAIL(EINCMPAT)
+  if (preamble->version != CURRENT_MAP_VERSION) return ERRLOG(EINCMPAT);
 
   if (len < sizeof(struct BMAP_Preamble) +
       preamble->npills*sizeof(struct BMAP_PillInfo) +
       preamble->nbases*sizeof(struct BMAP_BaseInfo) +
       preamble->nstarts*sizeof(struct BMAP_StartInfo))
-    LOGFAIL(ECORFILE)
+    return ERRLOG(ECORFILE);
 
   pillInfos = (struct BMAP_PillInfo *)(preamble + 1);
   baseInfos = (struct BMAP_BaseInfo *)(pillInfos + preamble->npills);
@@ -103,7 +102,7 @@ TRY
     struct BMAP_Run run;
 
     if (offset + sizeof(struct BMAP_Run) > runDataLen) {
-      LOGFAIL(ECORFILE)
+      return ERRLOG(ECORFILE);
     }
 
     run = *(struct BMAP_Run *)(runData + offset);
@@ -111,18 +110,18 @@ TRY
     if (run.datalen == 4 && run.y == 0xff &&
         run.startx == 0xff && run.endx == 0xff) {  /* last run */
       if (offset + run.datalen != runDataLen) {
-        LOGFAIL(ECORFILE)
+        return ERRLOG(ECORFILE);
       }
 
       break;
     }
 
     if (offset + run.datalen > runDataLen) {
-      LOGFAIL(ECORFILE)
+      return ERRLOG(ECORFILE);
     }
 
     if (writerun(run, runData + offset + sizeof(struct BMAP_Run), client.terrain) == -1) {
-      LOGFAIL(errno)
+      return ERRLOG(errno);
     }
 
     offset += run.datalen;
@@ -181,8 +180,6 @@ TRY
     }
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+  return 0;
 }
 

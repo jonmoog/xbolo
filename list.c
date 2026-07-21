@@ -18,21 +18,18 @@ int initlist(struct ListNode *list) {
   list->prev = NULL;
   list->next = NULL;
   list->ptr = NULL;
-
-TRY
-
-CLEANUP
-ERRHANDLER(0, -1)
-END
+  return 0;
 }
 
 
 int addlist(struct ListNode *list, void *ptr) {
-  struct ListNode *node = NULL;
+  struct ListNode *node;
+
   assert(list != NULL);
 
-TRY
-  if ((node = (struct ListNode *)malloc(sizeof(struct ListNode))) == NULL) LOGFAIL(errno)
+  if ((node = (struct ListNode *)malloc(sizeof(struct ListNode))) == NULL) {
+    return ERRLOG(errno);
+  }
 
   node->prev = list;
   node->next = list->next;
@@ -43,21 +40,7 @@ TRY
   }
 
   node->ptr = ptr;
-
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    RETURN(0)
-
-  default:
-    if (node != NULL) {
-      free(node);
-      node = NULL;
-    }
-
-    RETERR(-1)
-  }
-END
+  return 0;
 }
 
 

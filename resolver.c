@@ -3,7 +3,7 @@
  *  XBolo
  *
  *  Created by Robert Chrzanowski on 11/12/09.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Copyright 2009 Robert Chrzanowski. All rights reserved.
  *
  */
 
@@ -46,50 +46,64 @@ int nslookup(const char *hostname) {
 
   assert(hostname != NULL);
 
-TRY
-  if ((info = (struct GetHostByName *)malloc(sizeof(struct GetHostByName))) == NULL) LOGFAIL(errno)
-  if ((info->hostname = (char *)malloc(strlen(hostname) + 1)) == NULL) LOGFAIL(errno)
+  if ((info = (struct GetHostByName *)malloc(sizeof(struct GetHostByName))) == NULL) {
+    ERRLOG(errno);
+    goto fail;
+  }
+
+  if ((info->hostname = (char *)malloc(strlen(hostname) + 1)) == NULL) {
+    ERRLOG(errno);
+    goto fail;
+  }
+
   strcpy(info->hostname, hostname);
 
   if (pipe(fildes)) {
     fildes[0] = -1;
     fildes[1] = -1;
-    LOGFAIL(errno)
+    ERRLOG(errno);
+    goto fail;
   }
 
   info->pipe = fildes[1];
 
-  if ((err = pthread_create(&thread, NULL, (void *)gethostbynamethread, info))) LOGFAIL(err)
+  if ((err = pthread_create(&thread, NULL, (void *)gethostbynamethread, info))) {
+    ERRLOG(err);
+    goto fail;
+  }
+
+  /* the thread owns these now */
   fildes[1] = -1;
   info = NULL;
 
-  if ((err = pthread_detach(thread))) LOGFAIL(err)
-
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    RETURN(fildes[0])
-
-  default:
-    if (fildes[1] != -1) {
-      closesock(fildes + 1);
-    }
-
-    if (fildes[0] != -1) {
-      closesock(fildes);
-    }
-
-    if (info) {
-      if (info->hostname) {
-        free(info->hostname);
-      }
-
-      free(info);
-    }
-
-    RETERR(-1)
+  if ((err = pthread_detach(thread))) {
+    ERRLOG(err);
+    goto fail;
   }
-END
+
+  return fildes[0];
+
+fail:
+  err = errno;
+
+  if (fildes[1] != -1) {
+    closesock(fildes + 1);
+  }
+
+  if (fildes[0] != -1) {
+    closesock(fildes);
+  }
+
+  if (info) {
+    if (info->hostname) {
+      free(info->hostname);
+    }
+
+    free(info);
+  }
+
+  errno = err;
+  return -1;
 }
 
 int nslookupresult(int pipe, struct in_addr *addr) {
@@ -98,23 +112,25 @@ int nslookupresult(int pipe, struct in_addr *addr) {
   assert(pipe != -1);
   assert(addr != NULL);
 
-TRY
-  if (readblock(pipe, &result, sizeof(result)) == -1) LOGFAIL(errno)
-  if (result.err) FAIL(result.err)
-  *addr = result.addr;
+  if (readblock(pipe, &result, sizeof(result)) == -1) {
+    return ERRLOG(errno);
+  }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+  if (result.err) {
+    errno = result.err;
+    return -1;
+  }
+
+  *addr = result.addr;
+  return 0;
 }
 
 int nslookupcancel(int pipe) {
-TRY
-  if (closesock(&pipe)) LOGFAIL(errno)
+  if (closesock(&pipe)) {
+    return ERRLOG(errno);
+  }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+  return 0;
 }
 
 void *gethostbynamethread(struct GetHostByName *info) {
@@ -123,8 +139,8 @@ void *gethostbynamethread(struct GetHostByName *info) {
 
   assert(info != NULL);
 
-TRY
   bzero(&result, sizeof(result));
+  result.err = 0;
 
   /* use udp */
   sethostent(0);
@@ -137,13 +153,13 @@ TRY
         continue;
       }
       else if (h_errno == HOST_NOT_FOUND) {
-        FAIL(EHOSTNOTFOUND)
+        result.err = EHOSTNOTFOUND;
       }
       else if (h_errno == NO_RECOVERY) {
-        FAIL(EHOSTNORECOVERY)
+        result.err = EHOSTNORECOVERY;
       }
       else if (h_errno == NO_DATA) {
-        FAIL(EHOSTNODATA)
+        result.err = EHOSTNODATA;
       }
       else {
         assert(0);
@@ -159,23 +175,17 @@ TRY
 
   endhostent();
 
-CLEANUP
-  result.err = ERROR;
-
   writeblock(info->pipe, &result, sizeof(result));
 
   if (info->pipe != -1) {
-    if (closesock(&info->pipe)) LOGFAIL(errno)
+    closesock(&info->pipe);
   }
 
   if (info->hostname) {
     free(info->hostname);
   }
 
-  if (info) {
-    free(info);
-  }
+  free(info);
 
   pthread_exit(NULL);
-END
 }
