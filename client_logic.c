@@ -3588,6 +3588,13 @@ int clientfindbase(int x, int y) {
 
 
 int testalliance(int p1, int p2) {
+  /* callers pass pill/base owners that may be NEUTRAL (255) or otherwise
+     out of range; an invalid or neutral player is allied with no one, and
+     this keeps the players[] indexing in bounds */
+  if (p1 < 0 || p1 >= MAXPLAYERS || p2 < 0 || p2 >= MAXPLAYERS) {
+    return 0;
+  }
+
   return client.players[p1].used && client.players[p2].used && (client.players[p1].alliance & (1 << p2)) && (client.players[p2].alliance & (1 << p1));
 }
 

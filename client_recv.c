@@ -50,6 +50,8 @@ TRY
 
   srsendmesg = (struct SRSendMesg *)client.recvbuf.ptr;
 
+  if (srsendmesg->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
+
   /* print the message on the client side */
   if (client.printmessage) {
     if (asprintf(&messagetext, "%s: %s", client.players[srsendmesg->player].name, (char *)(srsendmesg + 1)) == -1) LOGFAIL(errno)
@@ -509,6 +511,8 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRPlayerJoin)) FAIL(EAGAIN)
   srplayerjoin = (struct SRPlayerJoin *)client.recvbuf.ptr;
 
+  if (srplayerjoin->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
+
   client.players[srplayerjoin->player].used = 1;
   client.players[srplayerjoin->player].connected = 1;
   client.players[srplayerjoin->player].seq = 0;
@@ -549,6 +553,8 @@ int recvsrplayerrejoin() {
 TRY
   if (client.recvbuf.nbytes < sizeof(struct SRPlayerRejoin)) FAIL(EAGAIN)
   srplayerrejoin = (struct SRPlayerRejoin *)client.recvbuf.ptr;
+
+  if (srplayerrejoin->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
 
   client.players[srplayerrejoin->player].connected = 1;
   client.players[srplayerrejoin->player].seq = 0;
@@ -599,6 +605,8 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRPlayerExit)) FAIL(EAGAIN)
   srplayerexit = (struct SRPlayerExit *)client.recvbuf.ptr;
 
+  if (srplayerexit->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
+
   if (client.printmessage) {
     if (asprintf(&text, "%s left", client.players[srplayerexit->player].name) == -1) LOGFAIL(errno)
     client.printmessage(MSGGAME, text);
@@ -636,6 +644,8 @@ int recvsrplayerdisc() {
 TRY
   if (client.recvbuf.nbytes < sizeof(struct SRPlayerDisc)) FAIL(EAGAIN)
   srplayerdisc = (struct SRPlayerDisc *)client.recvbuf.ptr;
+
+  if (srplayerdisc->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
 
   if (client.printmessage) {
     if (asprintf(&text, "%s disconnected", client.players[srplayerdisc->player].name) == -1) LOGFAIL(errno)
@@ -675,6 +685,8 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRPlayerKick)) FAIL(EAGAIN)
   srplayerkick = (struct SRPlayerKick *)client.recvbuf.ptr;
 
+  if (srplayerkick->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
+
   if (client.printmessage) {
     if (asprintf(&text, "%s kicked", client.players[srplayerkick->player].name) == -1) LOGFAIL(errno)
     client.printmessage(MSGGAME, text);
@@ -713,6 +725,8 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRPlayerBan)) FAIL(EAGAIN)
   srplayerban = (struct SRPlayerBan *)client.recvbuf.ptr;
 
+  if (srplayerban->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
+
   if (client.printmessage) {
     if (asprintf(&text, "%s banned", client.players[srplayerban->player].name) == -1) LOGFAIL(errno)
     client.printmessage(MSGGAME, text);
@@ -749,6 +763,8 @@ int recvsrrepairpill() {
 TRY
   if (client.recvbuf.nbytes < sizeof(struct SRRepairPill)) FAIL(EAGAIN)
   srrepairpill = (struct SRRepairPill *)client.recvbuf.ptr;
+
+  if (srrepairpill->pill >= client.npills) LOGFAIL(ECORFILE)
 
   /* update the fog of war and status */
   if (
@@ -792,6 +808,8 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRCoolPill)) FAIL(EAGAIN)
   srcoolpill = (struct SRCoolPill *)client.recvbuf.ptr;
 
+  if (srcoolpill->pill >= client.npills) LOGFAIL(ECORFILE)
+
   /* cool pill */
   client.pills[srcoolpill->pill].speed++;
 
@@ -810,6 +828,8 @@ int recvsrcapturepill() {
 TRY
   if (client.recvbuf.nbytes < sizeof(struct SRCapturePill)) FAIL(EAGAIN)
   srcapturepill = (struct SRCapturePill *)client.recvbuf.ptr;
+
+  if (srcapturepill->pill >= client.npills || srcapturepill->owner >= MAXPLAYERS) LOGFAIL(ECORFILE)
 
   if (client.printmessage && client.pills[srcapturepill->pill].owner != srcapturepill->owner) {
     if (client.pills[srcapturepill->pill].owner == NEUTRAL) {
@@ -916,6 +936,8 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRBuildPill)) FAIL(EAGAIN)
   srbuildpill = (struct SRBuildPill *)client.recvbuf.ptr;
 
+  if (srbuildpill->pill >= client.npills) LOGFAIL(ECORFILE)
+
   client.pills[srbuildpill->pill].x = srbuildpill->x;
   client.pills[srbuildpill->pill].y = srbuildpill->y;
   client.pills[srbuildpill->pill].armour = srbuildpill->armour;
@@ -959,6 +981,8 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRDropPill)) FAIL(EAGAIN)
   srdroppill = (struct SRDropPill *)client.recvbuf.ptr;
 
+  if (srdroppill->pill >= client.npills) LOGFAIL(ECORFILE)
+
   client.pills[srdroppill->pill].x = srdroppill->x;
   client.pills[srdroppill->pill].y = srdroppill->y;
   client.pills[srdroppill->pill].armour = 0;
@@ -986,6 +1010,8 @@ int recvsrreplenishbase() {
 TRY
   if (client.recvbuf.nbytes < sizeof(struct SRReplenishBase)) FAIL(EAGAIN)
   srreplenishbase = (struct SRReplenishBase *)client.recvbuf.ptr;
+
+  if (srreplenishbase->base >= client.nbases) LOGFAIL(ECORFILE)
 
   if (++client.bases[srreplenishbase->base].armour > MAXBASEARMOUR) {
     client.bases[srreplenishbase->base].armour = MAXBASEARMOUR;
@@ -1018,6 +1044,8 @@ int recvsrcapturebase() {
 TRY
   if (client.recvbuf.nbytes < sizeof(struct SRCaptureBase)) FAIL(EAGAIN)
   srcapturebase = (struct SRCaptureBase *)client.recvbuf.ptr;
+
+  if (srcapturebase->base >= client.nbases || srcapturebase->owner >= MAXPLAYERS) LOGFAIL(ECORFILE)
 
   if (client.bases[srcapturebase->base].owner == NEUTRAL) {
     if (client.printmessage) {
@@ -1071,7 +1099,7 @@ TRY
   if (client.recvbuf.nbytes < sizeof(struct SRRefuel)) FAIL(EAGAIN)
   srrefuel = (struct SRRefuel *)client.recvbuf.ptr;
 
-  assert(srrefuel->base < client.nbases);
+  if (srrefuel->base >= client.nbases) LOGFAIL(ECORFILE)
 
   client.bases[srrefuel->base].armour -= srrefuel->armour;
   client.bases[srrefuel->base].shells -= srrefuel->shells;
@@ -1285,15 +1313,20 @@ TRY
     client.terrain[srsuperboom->y][srsuperboom->x] = kCraterTerrain;
     if (refreshsquare(srsuperboom->x, srsuperboom->y)) LOGFAIL(errno)
   }
-  if (client.terrain[srsuperboom->y][srsuperboom->x + 1] != kSeaTerrain && client.terrain[srsuperboom->y][srsuperboom->x + 1] != kMinedSeaTerrain) {
+  /* the +1 crater tiles must stay inside the terrain array (x,y are 0-255
+     and the array is [256][256], so x+1/y+1 can run off the edge) */
+  if (srsuperboom->x + 1 < WIDTH &&
+      client.terrain[srsuperboom->y][srsuperboom->x + 1] != kSeaTerrain && client.terrain[srsuperboom->y][srsuperboom->x + 1] != kMinedSeaTerrain) {
     client.terrain[srsuperboom->y][srsuperboom->x + 1] = kCraterTerrain;
     if (refreshsquare(srsuperboom->x + 1, srsuperboom->y)) LOGFAIL(errno)
   }
-  if (client.terrain[srsuperboom->y + 1][srsuperboom->x] != kSeaTerrain && client.terrain[srsuperboom->y + 1][srsuperboom->x] != kMinedSeaTerrain) {
+  if (srsuperboom->y + 1 < WIDTH &&
+      client.terrain[srsuperboom->y + 1][srsuperboom->x] != kSeaTerrain && client.terrain[srsuperboom->y + 1][srsuperboom->x] != kMinedSeaTerrain) {
     client.terrain[srsuperboom->y + 1][srsuperboom->x] = kCraterTerrain;
     if (refreshsquare(srsuperboom->x, srsuperboom->y + 1)) LOGFAIL(errno)
   }
-  if (client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] != kSeaTerrain && client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] != kMinedSeaTerrain) {
+  if (srsuperboom->x + 1 < WIDTH && srsuperboom->y + 1 < WIDTH &&
+      client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] != kSeaTerrain && client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] != kMinedSeaTerrain) {
     client.terrain[srsuperboom->y + 1][srsuperboom->x + 1] = kCraterTerrain;
     if (refreshsquare(srsuperboom->x + 1, srsuperboom->y + 1)) LOGFAIL(errno)
   }
@@ -1478,6 +1511,8 @@ int recvsrsetalliance() {
 TRY
   if (client.recvbuf.nbytes < sizeof(struct SRSetAlliance)) FAIL(EAGAIN)
   srsetalliance = (struct SRSetAlliance *)client.recvbuf.ptr;
+
+  if (srsetalliance->player >= MAXPLAYERS) LOGFAIL(ECORFILE)
 
   /* convert byte order */
   srsetalliance->alliance = ntohs(srsetalliance->alliance);

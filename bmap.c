@@ -115,6 +115,12 @@ int writerun(struct BMAP_Run run, const void *buf, int terrain[][WIDTH]) {
           return ERRLOG(ECORFILE);
         }
 
+        /* a run may not write past the end of its row (crafted maps can
+           encode a run that overshoots run.endx / the map width) */
+        if (x >= WIDTH) {
+          return ERRLOG(ECORFILE);
+        }
+
         terrain[run.y][x++] = serverTileType;
       }
     }
@@ -130,6 +136,10 @@ int writerun(struct BMAP_Run run, const void *buf, int terrain[][WIDTH]) {
       }
 
       for (i = 0; i < len; i++) {
+        if (x >= WIDTH) {
+          return ERRLOG(ECORFILE);
+        }
+
         terrain[run.y][x++] = serverTileType;
       }
     }

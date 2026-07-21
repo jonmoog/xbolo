@@ -409,6 +409,22 @@ END
 }
 
 
+/* clamps an untrusted coordinate to the map so (int)coord is always a
+   valid array index; the leading !(>=0) test also rejects NaN, which raw
+   network bytes decoded as a float can produce */
+static float clampcoord(float c) {
+  if (!(c >= 0.0f)) {
+    return 0.0f;
+  }
+
+  if (c > FWIDTH - 1.0f) {
+    return FWIDTH - 1.0f;
+  }
+
+  return c;
+}
+
+
 int joinclient() {
   int i;
   struct JOIN_Preamble joinpreamble;
@@ -600,6 +616,11 @@ TRY
     }
   }
   */
+
+  /* the server-assigned player id becomes our persistent index into
+     client.players[]; reject an out-of-range value from an untrusted
+     server before it is used everywhere as an array index */
+  if (bolopreamble.player >= MAXPLAYERS) LOGFAIL(EBADVERSION)
 
   /* modify client */
   if (lockclient()) LOGFAIL(errno)
@@ -947,7 +968,7 @@ TRY
           if (dgramclient()) LOGFAIL(errno)
 
           if (unlockclient()) LOGFAIL(errno)
-          gotlock = 1;
+          gotlock = 0;
         }
 
         if (FD_ISSET(client.cntlsock, &readfds)) {
@@ -1267,15 +1288,15 @@ TRY
         client.players[clupdate.hdr.player].dead = clupdate.hdr.tankstatus == kTankDead;
         client.players[clupdate.hdr.player].boat = clupdate.hdr.tankstatus == kTankOnBoat;
         client.players[clupdate.hdr.player].dir = clupdate.hdr.tankdir*((k2Pif)/FWIDTH);
-        client.players[clupdate.hdr.player].tank.x = unpackfloat(&clupdate.hdr.tankx);
-        client.players[clupdate.hdr.player].tank.y = unpackfloat(&clupdate.hdr.tanky);
+        client.players[clupdate.hdr.player].tank.x = clampcoord(unpackfloat(&clupdate.hdr.tankx));
+        client.players[clupdate.hdr.player].tank.y = clampcoord(unpackfloat(&clupdate.hdr.tanky));
         client.players[clupdate.hdr.player].speed = unpackfloat(&clupdate.hdr.tankspeed);
         client.players[clupdate.hdr.player].turnspeed = unpackfloat(&clupdate.hdr.tankturnspeed);
         client.players[clupdate.hdr.player].kickdir = unpackfloat(&clupdate.hdr.tankkickdir);
         client.players[clupdate.hdr.player].kickspeed = unpackfloat(&clupdate.hdr.tankkickspeed);
         client.players[clupdate.hdr.player].builderstatus = clupdate.hdr.builderstatus;
-        client.players[clupdate.hdr.player].builder.x = unpackfloat(&clupdate.hdr.builderx);
-        client.players[clupdate.hdr.player].builder.y = unpackfloat(&clupdate.hdr.buildery);
+        client.players[clupdate.hdr.player].builder.x = clampcoord(unpackfloat(&clupdate.hdr.builderx));
+        client.players[clupdate.hdr.player].builder.y = clampcoord(unpackfloat(&clupdate.hdr.buildery));
         client.players[clupdate.hdr.player].buildertarget.x = clupdate.hdr.buildertargetx;
         client.players[clupdate.hdr.player].buildertarget.y = clupdate.hdr.buildertargety;
         client.players[clupdate.hdr.player].builderwait = clupdate.hdr.builderwait;
@@ -1363,7 +1384,20 @@ TRY
 
         /* extrapolate the future position of the tank and builder to compensate for latency */
         if (clupdate.hdr.seq[client.player] != 0) {  /* make sure they have one update from us */
-          for (i = 0; i < ((client.players[client.player].seq - clupdate.hdr.seq[client.player])/2); i++) {
+          int extrapolate = 0;
+
+          /* seqs are unsigned; only extrapolate when we are ahead, and cap
+             the count so a malicious/garbage seq cannot spin this loop
+             (legitimate latency compensation is only a few ticks) */
+          if (client.players[client.player].seq > clupdate.hdr.seq[client.player]) {
+            extrapolate = (client.players[client.player].seq - clupdate.hdr.seq[client.player])/2;
+          }
+
+          if (extrapolate > TICKSPERSEC) {
+            extrapolate = TICKSPERSEC;
+          }
+
+          for (i = 0; i < extrapolate; i++) {
             if (tankmovelogic(clupdate.hdr.player)) LOGFAIL(errno)
             if (builderlogic(clupdate.hdr.player)) LOGFAIL(errno)
             if (shelllogic(clupdate.hdr.player)) LOGFAIL(errno)

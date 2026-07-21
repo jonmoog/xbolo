@@ -527,6 +527,10 @@ TRY
   if (server.players[player].recvbuf.nbytes < sizeof(struct CLBuildPill)) FAIL(EAGAIN)
   clbuildpill = (struct CLBuildPill *)server.players[player].recvbuf.ptr;
 
+  /* the pill index is attacker-controlled (0-255); reject out-of-range
+     values before they index server.pills[MAXPILLS] */
+  if (clbuildpill->pill >= server.npills) LOGFAIL(ECORFILE)
+
   if (findpill(clbuildpill->x, clbuildpill->y) == -1 && findbase(clbuildpill->x, clbuildpill->y) == -1) {
     switch (server.terrain[clbuildpill->y][clbuildpill->x]) {
     case kSwampTerrain0:
@@ -847,9 +851,13 @@ TRY
           break;
 
         case kRoadTerrain:
+          /* neighbour lookups must stay inside the terrain array; a tile on
+             the map edge simply has no water neighbour on that side */
           if (
-            (isWaterLikeTerrain(server.terrain[cldamage->y][cldamage->x - 1]) && isWaterLikeTerrain(server.terrain[cldamage->y][cldamage->x + 1])) ||
-            (isWaterLikeTerrain(server.terrain[cldamage->y - 1][cldamage->x]) && isWaterLikeTerrain(server.terrain[cldamage->y + 1][cldamage->x]))
+            (cldamage->x > 0 && cldamage->x < WIDTH - 1 &&
+             isWaterLikeTerrain(server.terrain[cldamage->y][cldamage->x - 1]) && isWaterLikeTerrain(server.terrain[cldamage->y][cldamage->x + 1])) ||
+            (cldamage->y > 0 && cldamage->y < WIDTH - 1 &&
+             isWaterLikeTerrain(server.terrain[cldamage->y - 1][cldamage->x]) && isWaterLikeTerrain(server.terrain[cldamage->y + 1][cldamage->x]))
           ) {
             server.terrain[cldamage->y][cldamage->x] = kRiverTerrain;
           }

@@ -144,6 +144,7 @@ int clientloadmap(const void *buf, size_t len) {
         client.seentiles[client.bases[i].y][client.bases[i].x] = kNeutralBaseTile;
       }
       else if (
+        client.bases[i].owner < MAXPLAYERS &&
         (client.players[client.bases[i].owner].alliance & (1 << client.player)) &&
         (client.players[client.player].alliance & (1 << client.bases[i].owner))
       ) {
@@ -162,6 +163,7 @@ int clientloadmap(const void *buf, size_t len) {
           client.seentiles[client.pills[i].y][client.pills[i].x] = kHostilePill00Tile + client.pills[i].armour;
         }
         else if (
+          client.pills[i].owner < MAXPLAYERS &&
           (client.players[client.pills[i].owner].alliance & (1 << client.player)) &&
           (client.players[client.player].alliance & (1 << client.pills[i].owner))
         ) {
