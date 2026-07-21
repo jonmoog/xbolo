@@ -94,18 +94,17 @@ int main(int argc, const char *argv[]) {
 
   listensock = -1;
 
-TRY
   /* ignore SIGPIPE */
   if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
     fprintf(stderr, "Error Ignoring SIGPIPE\n");
   }
 
-  if ((err = pthread_mutex_init(&mutex, NULL))) LOGFAIL(err)
+  if ((err = pthread_mutex_init(&mutex, NULL))) return ERRLOG(err);
 
-  if (initlist(&gamelist)) LOGFAIL(errno)
+  if (initlist(&gamelist)) return ERRLOG(errno);
 
   /* initialize listensock */
-  if ((listensock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
+  if ((listensock = socket(AF_INET, SOCK_STREAM, 0)) == -1) return ERRLOG(errno);
 
   /* initialize name to INADDR_ANY port */
   addr.sin_family = AF_INET;
@@ -114,10 +113,10 @@ TRY
   bzero(addr.sin_zero, 8);
 
   /* bind listensock to name */
-  if (bind(listensock, (void *)&addr, INET_ADDRSTRLEN)) LOGFAIL(errno)
+  if (bind(listensock, (void *)&addr, INET_ADDRSTRLEN)) return ERRLOG(errno);
 
   /* begin listening */
-  if (listen(listensock, 3)) LOGFAIL(errno)
+  if (listen(listensock, 3)) return ERRLOG(errno);
 
   for (;;) {
     addrlen = INET_ADDRSTRLEN;
@@ -125,7 +124,7 @@ TRY
     sock = accept(listensock, (void *)&addr, &addrlen);
     if (sock == -1) {
       if (errno != ECONNABORTED) {
-        LOGFAIL(errno)
+        return ERRLOG(errno);
       }
       else {
         continue;
@@ -133,17 +132,16 @@ TRY
     }
 
     threadinfo = (struct ThreadInfo *)malloc(sizeof(struct ThreadInfo));
-    if (threadinfo == NULL) LOGFAIL(errno)
+    if (threadinfo == NULL) return ERRLOG(errno);
     threadinfo->sock = sock;
     threadinfo->s_addr = addr.sin_addr.s_addr;
     err = pthread_create(&thread, NULL, (void *)child, threadinfo);
-    if (err) LOGFAIL(err)
-    if ((err = pthread_detach(thread))) LOGFAIL(err)
+    if (err) return ERRLOG(err);
+    if ((err = pthread_detach(thread))) return ERRLOG(err);
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 void *child(struct ThreadInfo *threadinfo) {
@@ -159,36 +157,35 @@ void *child(struct ThreadInfo *threadinfo) {
   struct ListNode *node = NULL;
   int i;
 
-TRY
   sock = threadinfo->sock;
   s_addr = threadinfo->s_addr;
   free(threadinfo);
 
-  if (recvblock(sock, &preamble, sizeof(preamble)) == -1) LOGFAIL(errno)
+  if (recvblock(sock, &preamble, sizeof(preamble)) == -1) { ERRLOG(errno); goto fail; }
 
-  if (bcmp(preamble.ident, TRACKERIDENT, sizeof(preamble.ident)) != 0) LOGFAIL(EBADIDENT)
+  if (bcmp(preamble.ident, TRACKERIDENT, sizeof(preamble.ident)) != 0) { ERRLOG(EBADIDENT); goto fail; }
 
   if (preamble.version != TRACKERVERSION) {
     msg = kTrackerVersionErr;
-    if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
-    if (closesock(&sock)) LOGFAIL(errno)
-    SUCCESS
+    if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) { ERRLOG(errno); goto fail; }
+    if (closesock(&sock)) { ERRLOG(errno); goto fail; }
+    goto done;
   }
 
   msg = kTrackerVersionOK;
-  if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
+  if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) { ERRLOG(errno); goto fail; }
 
   for (;;) {
-    if (recvblock(sock, &msg, sizeof(msg)) == -1) LOGFAIL(errno)
+    if (recvblock(sock, &msg, sizeof(msg)) == -1) { ERRLOG(errno); goto fail; }
 
     if (msg == kTrackerHost) {
       trackerhostlist = (struct TrackerHostList *)malloc(sizeof(struct TrackerHostList));
       trackerhostlist->addr.s_addr = s_addr;
-      if (recvblock(sock, &trackerhostlist->game, sizeof(struct TrackerHost)) == -1) LOGFAIL(errno)
+      if (recvblock(sock, &trackerhostlist->game, sizeof(struct TrackerHost)) == -1) { ERRLOG(errno); goto fail; }
 
       /* check ports are open */
 
-      if ((testsock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
+      if ((testsock = socket(AF_INET, SOCK_STREAM, 0)) == -1) { ERRLOG(errno); goto fail; }
 
       testaddr.sin_family = AF_INET;
       testaddr.sin_port = trackerhostlist->game.port;
@@ -198,19 +195,19 @@ TRY
       /* connect to tcp port */
       if (connect(testsock, (struct sockaddr *)&testaddr, INET_ADDRSTRLEN)) {
         msg = kTrackerTCPPortClosed;
-        if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
-        if (closesock(&sock)) LOGFAIL(errno)
-        SUCCESS
+        if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) { ERRLOG(errno); goto fail; }
+        if (closesock(&sock)) { ERRLOG(errno); goto fail; }
+        goto done;
       }
 
       /* no longer need testsock */
-      if (closesock(&testsock)) LOGFAIL(errno)
+      if (closesock(&testsock)) { ERRLOG(errno); goto fail; }
 
       /* send tcp port ok */
       msg = kTrackerTCPPortOK;
-      if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
+      if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) { ERRLOG(errno); goto fail; }
 
-      if ((testsock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) LOGFAIL(errno)
+      if ((testsock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) { ERRLOG(errno); goto fail; }
 
       testaddr.sin_family = AF_INET;
       testaddr.sin_port = trackerhostlist->game.port;
@@ -218,7 +215,7 @@ TRY
       bzero(addr.sin_zero, 8);
 
       /* designate the destination for the dgram socket */
-      if (connect(testsock, (void *)&testaddr, INET_ADDRSTRLEN)) LOGFAIL(errno)
+      if (connect(testsock, (void *)&testaddr, INET_ADDRSTRLEN)) { ERRLOG(errno); goto fail; }
 
       for (i = 0; i < NUDP; i++) {
         fd_set readfds;
@@ -229,7 +226,7 @@ TRY
         /* send dgram packet */
         bzero(&clupdate, sizeof(clupdate));
         clupdate.hdr.player = 255;
-        if (send(testsock, &clupdate, sizeof(clupdate.hdr), 0) == -1) LOGFAIL(errno)
+        if (send(testsock, &clupdate, sizeof(clupdate.hdr), 0) == -1) { ERRLOG(errno); goto fail; }
 
         /* listen for return packet for 2 seconds */
         do {
@@ -245,7 +242,7 @@ TRY
         );
 
         if (ret == -1) {  /* an error occured */
-          LOGFAIL(errno)
+          { ERRLOG(errno); goto fail; }
         }
         else if (ret == 0) {  /* time ran out */
           continue;
@@ -259,7 +256,7 @@ TRY
           } while (r == -1 && errno == EINTR);
 
           if (r == -1) {
-            LOGFAIL(errno)
+            { ERRLOG(errno); goto fail; }
           }
           else if (r != sizeof(clupdate.hdr)) {
             continue;
@@ -271,40 +268,40 @@ TRY
       }
 
       /* no longer need testsock */
-      if (closesock(&testsock)) LOGFAIL(errno)
+      if (closesock(&testsock)) { ERRLOG(errno); goto fail; }
 
       /* if udp pings never came back */
       if (!(i < NUDP)) {
         msg = kTrackerUDPPortClosed;
-        if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
+        if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) { ERRLOG(errno); goto fail; }
       }
       else {
         /* send udp port ok */
         msg = kTrackerUDPPortOK;
-        if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
+        if (sendblock(sock, &msg, sizeof(msg)) != sizeof(msg)) { ERRLOG(errno); goto fail; }
 
-        if ((err = pthread_mutex_lock(&mutex))) LOGFAIL(err)
-        if (addlist(&gamelist, trackerhostlist)) LOGFAIL(errno)
+        if ((err = pthread_mutex_lock(&mutex))) { ERRLOG(err); goto fail; }
+        if (addlist(&gamelist, trackerhostlist)) { ERRLOG(errno); goto fail; }
         trackerhostlist = NULL;
         node = nextlist(&gamelist);
-        if ((err = pthread_mutex_unlock(&mutex))) LOGFAIL(err)
+        if ((err = pthread_mutex_unlock(&mutex))) { ERRLOG(err); goto fail; }
 
         /* receive updates */
         for (;;) {
           struct TrackerHost trackerhost;
 
-          if (recvblock(sock, &trackerhost, sizeof(trackerhost)) == -1) LOGFAIL(errno)
+          if (recvblock(sock, &trackerhost, sizeof(trackerhost)) == -1) { ERRLOG(errno); goto fail; }
 
-          if ((err = pthread_mutex_lock(&mutex))) LOGFAIL(err)
+          if ((err = pthread_mutex_lock(&mutex))) { ERRLOG(err); goto fail; }
           ((struct TrackerHostList *)ptrlist(node))->game = trackerhost;
-          if ((err = pthread_mutex_unlock(&mutex))) LOGFAIL(err)
+          if ((err = pthread_mutex_unlock(&mutex))) { ERRLOG(err); goto fail; }
         }
       }
     }
     else if (msg == kTrackerList) {
       uint32_t i;
 
-      if ((err = pthread_mutex_lock(&mutex))) LOGFAIL(err)
+      if ((err = pthread_mutex_lock(&mutex))) { ERRLOG(err); goto fail; }
 
       for (i = 0, node = nextlist(&gamelist); node; node = nextlist(node)) {
         i++;
@@ -313,7 +310,7 @@ TRY
       node = NULL;
       i = htonl(i);
 
-      if (sendblock(sock, &i, sizeof(i)) != sizeof(i)) LOGFAIL(errno)
+      if (sendblock(sock, &i, sizeof(i)) != sizeof(i)) { ERRLOG(errno); goto fail; }
 
       for (node = nextlist(&gamelist); node; node = nextlist(node)) {
         if (
@@ -322,44 +319,37 @@ TRY
           ) != sizeof(struct TrackerHostList)
         ) {
           node = NULL;
-          LOGFAIL(errno)
+          { ERRLOG(errno); goto fail; }
         }
       }
 
-      if ((err = pthread_mutex_unlock(&mutex))) LOGFAIL(err)
+      if ((err = pthread_mutex_unlock(&mutex))) { ERRLOG(err); goto fail; }
     }
   }
 
-  if (closesock(&sock)) LOGFAIL(errno)
+  if (closesock(&sock)) { ERRLOG(errno); goto fail; }
 
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    break;
-
-  default:
-    if (node != NULL) {
-      pthread_mutex_lock(&mutex);
-      removelist(node, free);
-      pthread_mutex_unlock(&mutex);
-    }
-
-    if (sock != -1) {
-      closesock(&sock);
-    }
-
-    if (testsock != -1) {
-      closesock(&testsock);
-    }
-
-    PNONCRIT("tracker thread error", ERROR)
-    printlineinfo();
-    CLEARERRLOG
-    break;
-  }
-
+done:
   CLEARERRLOG
   pthread_exit(NULL);
-END
+
+fail:
+  if (node != NULL) {
+    pthread_mutex_lock(&mutex);
+    removelist(node, free);
+    pthread_mutex_unlock(&mutex);
+  }
+
+  if (sock != -1) {
+    closesock(&sock);
+  }
+
+  if (testsock != -1) {
+    closesock(&testsock);
+  }
+
+  PNONCRIT("tracker thread error", errno)
+  printlineinfo();
+  goto done;
 }
 

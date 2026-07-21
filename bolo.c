@@ -51,43 +51,26 @@ static void *trackerthread(struct TrackerThreadInfo *trackerthreadinfo);
 
 int allowjoinserver() {
   int ret;
-  int gotlock = 0;
 
-TRY
-  if (lockclient()) LOGFAIL(errno)
-  gotlock = 1;
+  if (lockclient()) return ERRLOG(errno);
 
   ret = server.allowjoin;
 
-  if (unlockclient()) LOGFAIL(errno)
-  gotlock = 0;
+  if (unlockclient()) return ERRLOG(errno);
 
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    RETURN(ret)
-
-  default:
-    if (gotlock) {
-      unlockclient();
-    }
-
-    RETERR(-1)
-  }
-END
+  return ret;
 }
   
 int initbolo(void (*setplayerstatusfunc)(int player), void (*setpillstatusfunc)(int pill), void (*setbasestatusfunc)(int base), void (*settankstatusfunc)(), void (*playsound)(int sound), void (*printmessagefunc)(int type, const char *text), void (*joinprogress)(int statuscode, float scale), void (*clientloopupdate)(void)) {
   int err;
 
-TRY
   /* ignore SIGPIPE */
   if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
     fprintf(stderr, "Error Ignoring SIGPIPE\n");
   }
 
   /* init tracker */
-  if ((err = pthread_mutex_init(&tracker.mutex, NULL))) LOGFAIL(err)
+  if ((err = pthread_mutex_init(&tracker.mutex, NULL))) { ERRLOG(err); return errno; }
 
   /* initialize the random number generator */
 #if __APPLE__
@@ -97,14 +80,13 @@ TRY
 #endif
 
   /* init server */
-  if (initserver()) LOGFAIL(errno)
+  if (initserver()) { ERRLOG(errno); return errno; }
 
   /* init client */
-  if (initclient(setplayerstatusfunc, setpillstatusfunc, setbasestatusfunc, settankstatusfunc, playsound, printmessagefunc, joinprogress, clientloopupdate)) LOGFAIL(errno)
+  if (initclient(setplayerstatusfunc, setpillstatusfunc, setbasestatusfunc, settankstatusfunc, playsound, printmessagefunc, joinprogress, clientloopupdate)) { ERRLOG(errno); return errno; }
 
-CLEANUP
-ERRHANDLER(0, errno)
-END
+
+  return 0;
 }
 
 void pauseresumegame() {
@@ -364,40 +346,41 @@ static void *trackerthread(struct TrackerThreadInfo *trackerthreadinfo) {
   int lookup;
 //  int err;
 
-TRY
+  int fail_err = 0;
+
 /*
-  if ((gethostbynamethreadinfo = (struct GetHostByNameThreadInfo *)malloc(sizeof(struct GetHostByNameThreadInfo))) == NULL) LOGFAIL(errno)
-  if ((gethostbynamethreadinfo->hostname = (char *)malloc(strlen(trackerthreadinfo->hostname) + 1)) == NULL) LOGFAIL(errno);
+  if ((gethostbynamethreadinfo = (struct GetHostByNameThreadInfo *)malloc(sizeof(struct GetHostByNameThreadInfo))) == NULL) { ERRLOG(errno); fail_err = errno; goto done; }
+  if ((gethostbynamethreadinfo->hostname = (char *)malloc(strlen(trackerthreadinfo->hostname) + 1)) == NULL) { ERRLOG(errno); fail_err = errno; goto done; };
   strncpy(gethostbynamethreadinfo->hostname, trackerthreadinfo->hostname, strlen(trackerthreadinfo->hostname) + 1);
   bzero(&gethostbynamethreadinfo->sin_addr, sizeof(gethostbynamethreadinfo->sin_addr));
-  if ((err = pthread_mutex_init(&gethostbynamethreadinfo->parentmutex, NULL))) LOGFAIL(err)
-  if ((err = pthread_mutex_init(&gethostbynamethreadinfo->childmutex, NULL))) LOGFAIL(err)
-  if ((err = pthread_mutex_lock(&gethostbynamethreadinfo->parentmutex))) LOGFAIL(err)
-  if ((err = pthread_mutex_lock(&gethostbynamethreadinfo->childmutex))) LOGFAIL(err)
+  if ((err = pthread_mutex_init(&gethostbynamethreadinfo->parentmutex, NULL))) { ERRLOG(err); fail_err = errno; goto done; }
+  if ((err = pthread_mutex_init(&gethostbynamethreadinfo->childmutex, NULL))) { ERRLOG(err); fail_err = errno; goto done; }
+  if ((err = pthread_mutex_lock(&gethostbynamethreadinfo->parentmutex))) { ERRLOG(err); fail_err = errno; goto done; }
+  if ((err = pthread_mutex_lock(&gethostbynamethreadinfo->childmutex))) { ERRLOG(err); fail_err = errno; goto done; }
 
   if (trackerthreadinfo->trackerstatus) {
     trackerthreadinfo->trackerstatus(kGetListTrackerRESOLVING);
   }
 
-  if ((err = pthread_create(&thread, NULL, (void *)gethostbynamethread, gethostbynamethreadinfo))) LOGFAIL(err)
-  if ((err = pthread_detach(thread))) LOGFAIL(err)
+  if ((err = pthread_create(&thread, NULL, (void *)gethostbynamethread, gethostbynamethreadinfo))) { ERRLOG(err); fail_err = errno; goto done; }
+  if ((err = pthread_detach(thread))) { ERRLOG(err); fail_err = errno; goto done; }
 
   for (;;) {
     usleep(100);
 
-    if ((err = pthread_mutex_lock(&tracker.mutex))) LOGFAIL(err)
+    if ((err = pthread_mutex_lock(&tracker.mutex))) { ERRLOG(err); fail_err = errno; goto done; }
 
     if (tracker.sock == -1) {
-      if ((err = pthread_mutex_unlock(&tracker.mutex))) LOGFAIL(err)
-      if ((err = pthread_mutex_unlock(&gethostbynamethreadinfo->parentmutex))) LOGFAIL(err)
-      LOGFAIL(ECONNABORTED)
+      if ((err = pthread_mutex_unlock(&tracker.mutex))) { ERRLOG(err); fail_err = errno; goto done; }
+      if ((err = pthread_mutex_unlock(&gethostbynamethreadinfo->parentmutex))) { ERRLOG(err); fail_err = errno; goto done; }
+      { ERRLOG(ECONNABORTED); fail_err = errno; goto done; }
     }
 
-    if ((err = pthread_mutex_unlock(&tracker.mutex))) LOGFAIL(err)
+    if ((err = pthread_mutex_unlock(&tracker.mutex))) { ERRLOG(err); fail_err = errno; goto done; }
 
     if ((err = pthread_mutex_trylock(&gethostbynamethreadinfo->childmutex))) {
       if (err != EBUSY) {
-        LOGFAIL(err)
+        { ERRLOG(err); fail_err = errno; goto done; }
       }
       else {
         continue;
@@ -405,7 +388,7 @@ TRY
     }
     else {
       if (gethostbynamethreadinfo->err) {
-        LOGFAIL(gethostbynamethreadinfo->err)
+        { ERRLOG(gethostbynamethreadinfo->err); fail_err = errno; goto done; }
       }
       else {
         break;
@@ -414,53 +397,54 @@ TRY
   }
   */
   /* lookup address */
-  if ((lookup = nslookup(trackerthreadinfo->hostname)) == -1) LOGFAIL(errno)
+  if ((lookup = nslookup(trackerthreadinfo->hostname)) == -1) { ERRLOG(errno); fail_err = errno; goto done; }
 
   /* get nslookup result */
-  if (nslookupresult(lookup, &addr.sin_addr)) LOGFAIL(errno)
-  if (closesock(&lookup)) LOGFAIL(errno)
+  if (nslookupresult(lookup, &addr.sin_addr)) { ERRLOG(errno); fail_err = errno; goto done; }
+  if (closesock(&lookup)) { ERRLOG(errno); fail_err = errno; goto done; }
 
   addr.sin_family = AF_INET;
   addr.sin_port = htons(TRACKERPORT);
   bzero(addr.sin_zero, 8);
-//  if ((err = pthread_mutex_unlock(&gethostbynamethreadinfo->parentmutex))) LOGFAIL(err)
+//  if ((err = pthread_mutex_unlock(&gethostbynamethreadinfo->parentmutex))) { ERRLOG(err); fail_err = errno; goto done; }
 
   /* connect */
   trackerthreadinfo->trackerstatus(kGetListTrackerCONNECTING);
-  if ((connect(tracker.sock, (void *)&addr, INET_ADDRSTRLEN))) LOGFAIL(errno)
+  if ((connect(tracker.sock, (void *)&addr, INET_ADDRSTRLEN))) { ERRLOG(errno); fail_err = errno; goto done; }
 
   /* send preamble */
   bcopy(TRACKERIDENT, preamble.ident, sizeof(preamble.ident));
   preamble.version = TRACKERVERSION;
-  if (sendblock(tracker.sock, &preamble, sizeof(preamble)) != sizeof(preamble)) LOGFAIL(errno)
+  if (sendblock(tracker.sock, &preamble, sizeof(preamble)) != sizeof(preamble)) { ERRLOG(errno); fail_err = errno; goto done; }
 
   /* receive ok */
-  if (recvblock(tracker.sock, &msg, sizeof(msg)) == -1) LOGFAIL(errno)
-  if (msg != kTrackerVersionOK) LOGFAIL(EBADVERSION)
+  if (recvblock(tracker.sock, &msg, sizeof(msg)) == -1) { ERRLOG(errno); fail_err = errno; goto done; }
+  if (msg != kTrackerVersionOK) { ERRLOG(EBADVERSION); fail_err = errno; goto done; }
 
   /* send list request */
   trackerthreadinfo->trackerstatus(kGetListTrackerGETTINGLIST);
   msg = kTrackerList;
-  if (sendblock(tracker.sock, &msg, sizeof(msg)) != sizeof(msg)) LOGFAIL(errno)
+  if (sendblock(tracker.sock, &msg, sizeof(msg)) != sizeof(msg)) { ERRLOG(errno); fail_err = errno; goto done; }
 
   /* receive number of games */
-  if (recvblock(tracker.sock, &n, sizeof(n)) == -1) LOGFAIL(errno)
+  if (recvblock(tracker.sock, &n, sizeof(n)) == -1) { ERRLOG(errno); fail_err = errno; goto done; }
   n = ntohl(n);
 
   /* receive games list */
   for (i = 0; i < n; i++) {
-    if ((trackerlist = (void *)malloc(sizeof(struct TrackerHostList))) == NULL) LOGFAIL(errno)
+    if ((trackerlist = (void *)malloc(sizeof(struct TrackerHostList))) == NULL) { ERRLOG(errno); fail_err = errno; goto done; }
 
-    if (recvblock(tracker.sock, trackerlist, sizeof(struct TrackerHostList)) == -1) LOGFAIL(errno)
+    if (recvblock(tracker.sock, trackerlist, sizeof(struct TrackerHostList)) == -1) { ERRLOG(errno); fail_err = errno; goto done; }
 
     trackerlist->game.port = ntohs(trackerlist->game.port);
     trackerlist->game.timelimit = ntohl(trackerlist->game.timelimit);
 
-    if (addlist(trackerthreadinfo->node, trackerlist)) LOGFAIL(errno)
+    if (addlist(trackerthreadinfo->node, trackerlist)) { ERRLOG(errno); fail_err = errno; goto done; }
   }
 
-CLEANUP
-  switch (ERROR) {
+
+done:
+  switch (fail_err) {
   case 0:
     if (trackerthreadinfo->trackerstatus) {
       trackerthreadinfo->trackerstatus(kGetListTrackerSUCCESS);
@@ -549,7 +533,7 @@ CLEANUP
     break;
 
   default:
-    PCRIT(ERROR)
+    PCRIT(fail_err)
     printlineinfo();
     CLEARERRLOG
     exit(EXIT_FAILURE);
@@ -563,7 +547,6 @@ CLEANUP
   pthread_mutex_unlock(&tracker.mutex);
   CLEARERRLOG
   pthread_exit(NULL);
-END
 }
 
 int listtracker(const char trackerhostname[], struct ListNode *node, void(*trackerstatus)(int status)) {
@@ -573,22 +556,20 @@ int listtracker(const char trackerhostname[], struct ListNode *node, void(*track
 
   assert(trackerhostname && node && trackerstatus);
 
-TRY
-  if ((trackerthreadinfo = (struct TrackerThreadInfo *)malloc(sizeof(struct TrackerThreadInfo))) == NULL) LOGFAIL(errno)
-  if ((trackerthreadinfo->hostname = (char *)malloc(strlen(trackerhostname) + 1)) == NULL) LOGFAIL(errno)
+  if ((trackerthreadinfo = (struct TrackerThreadInfo *)malloc(sizeof(struct TrackerThreadInfo))) == NULL) return ERRLOG(errno);
+  if ((trackerthreadinfo->hostname = (char *)malloc(strlen(trackerhostname) + 1)) == NULL) return ERRLOG(errno);
   strcpy(trackerthreadinfo->hostname, trackerhostname);
   trackerthreadinfo->node = node;
   trackerthreadinfo->trackerstatus = trackerstatus;
 
-  if ((err = pthread_mutex_lock(&tracker.mutex))) LOGFAIL(err)
-  if ((tracker.sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) LOGFAIL(errno)
-  if ((err = pthread_create(&thread, NULL, (void *)trackerthread, trackerthreadinfo))) LOGFAIL(err)
-  if ((err = pthread_detach(thread))) LOGFAIL(err)
-  if ((err = pthread_mutex_unlock(&tracker.mutex))) LOGFAIL(err)
+  if ((err = pthread_mutex_lock(&tracker.mutex))) return ERRLOG(err);
+  if ((tracker.sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) return ERRLOG(errno);
+  if ((err = pthread_create(&thread, NULL, (void *)trackerthread, trackerthreadinfo))) return ERRLOG(err);
+  if ((err = pthread_detach(thread))) return ERRLOG(err);
+  if ((err = pthread_mutex_unlock(&tracker.mutex))) return ERRLOG(err);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 void stoptracker() {

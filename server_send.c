@@ -17,7 +17,6 @@ int sendsrsendmesg(int player, int to, uint16_t mask, const char *text) {
   assert(player < MAXPLAYERS);
   assert(text != NULL);
 
-TRY
   srsendmesg.type = SRSENDMESG;
   srsendmesg.player = player;
   srsendmesg.to = to;
@@ -25,15 +24,14 @@ TRY
 
   for (i = 0; i < MAXPLAYERS; i++) {
     if (server.players[i].cntlsock != -1 && (mask & (1 << i))) {
-      if (writebuf(&server.players[i].sendbuf, &srsendmesg, sizeof(srsendmesg)) == -1) LOGFAIL(errno)
-      if (writebuf(&server.players[i].sendbuf, text, len) == -1) LOGFAIL(errno)
-//      if (sendplayerbufserver(i)) LOGFAIL(errno)
+      if (writebuf(&server.players[i].sendbuf, &srsendmesg, sizeof(srsendmesg)) == -1) return ERRLOG(errno);
+      if (writebuf(&server.players[i].sendbuf, text, len) == -1) return ERRLOG(errno);
+//      if (sendplayerbufserver(i)) return ERRLOG(errno);
     }
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -47,18 +45,16 @@ int sendsrdamage(int player, int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srdamage.type = SRDAMAGE;
   srdamage.player = player;
   srdamage.x = x;
   srdamage.y = y;
   srdamage.terrain = server.terrain[y][x];
 
-  if (sendtoall(&srdamage, sizeof(srdamage))) LOGFAIL(errno)
+  if (sendtoall(&srdamage, sizeof(srdamage))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -70,16 +66,14 @@ int sendsrgrabtrees(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srgrabtrees.type = SRGRABTREES;
   srgrabtrees.x = x;
   srgrabtrees.y = y;
 
-  if (sendtoall(&srgrabtrees, sizeof(srgrabtrees))) LOGFAIL(errno)
+  if (sendtoall(&srgrabtrees, sizeof(srgrabtrees))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -91,18 +85,16 @@ int sendsrbuild(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srbuild.type = SRBUILD;
   srbuild.x = x;
   srbuild.y = y;
 
   srbuild.terrain = server.terrain[y][x];
 
-  if (sendtoall(&srbuild, sizeof(srbuild))) LOGFAIL(errno)
+  if (sendtoall(&srbuild, sizeof(srbuild))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -114,16 +106,14 @@ int sendsrgrow(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srgrow.type = SRGROW;
   srgrow.x = x;
   srgrow.y = y;
 
-  if (sendtoall(&srgrow, sizeof(srgrow))) LOGFAIL(errno)
+  if (sendtoall(&srgrow, sizeof(srgrow))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -135,16 +125,14 @@ int sendsrflood(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srflood.type = SRFLOOD;
   srflood.x = x;
   srflood.y = y;
 
-  if (sendtoall(&srflood, sizeof(srflood))) LOGFAIL(errno)
+  if (sendtoall(&srflood, sizeof(srflood))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -158,17 +146,15 @@ int sendsrplacemine(int player, int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srplacemine.type = SRPLACEMINE;
   srplacemine.player = player;
   srplacemine.x = x;
   srplacemine.y = y;
 
-  if (sendtoall(&srplacemine, sizeof(srplacemine))) LOGFAIL(errno)
+  if (sendtoall(&srplacemine, sizeof(srplacemine))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -182,17 +168,15 @@ int sendsrdropmine(int player, int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srdropmine.type = SRDROPMINE;
   srdropmine.player = player;
   srdropmine.x = x;
   srdropmine.y = y;
 
-  if (sendtoall(&srdropmine, sizeof(srdropmine))) LOGFAIL(errno)
+  if (sendtoall(&srdropmine, sizeof(srdropmine))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -204,16 +188,14 @@ int sendsrdropboat(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srdropboat.type = SRDROPBOAT;
   srdropboat.x = x;
   srdropboat.y = y;
 
-  if (sendtoall(&srdropboat, sizeof(srdropboat))) LOGFAIL(errno)
+  if (sendtoall(&srdropboat, sizeof(srdropboat))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -223,7 +205,6 @@ int sendsrplayerjoin(int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srplayerjoin.type = SRPLAYERJOIN;
   srplayerjoin.player = player;
   bzero(srplayerjoin.name, sizeof(srplayerjoin.name));
@@ -231,11 +212,10 @@ TRY
   bzero(srplayerjoin.host, sizeof(srplayerjoin.host));
   strncpy(srplayerjoin.host, server.players[player].host, sizeof(srplayerjoin.host) - 1);
 
-  if (sendtoall(&srplayerjoin, sizeof(srplayerjoin))) LOGFAIL(errno)
+  if (sendtoall(&srplayerjoin, sizeof(srplayerjoin))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -245,17 +225,15 @@ int sendsrplayerrejoin(int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srplayerrejoin.type = SRPLAYERREJOIN;
   srplayerrejoin.player = player;
   bzero(srplayerrejoin.host, sizeof(srplayerrejoin.host));
   strncpy(srplayerrejoin.host, server.players[player].host, sizeof(srplayerrejoin.host) - 1);
 
-  if (sendtoall(&srplayerrejoin, sizeof(srplayerrejoin))) LOGFAIL(errno)
+  if (sendtoall(&srplayerrejoin, sizeof(srplayerrejoin))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -265,24 +243,22 @@ int sendsrplayerexit(int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srplayerexit.type = SRPLAYEREXIT;
   srplayerexit.player = player;
 
   if (sendtoone(&srplayerexit, sizeof(srplayerexit), player)) {
     if (errno != EPIPE) {
-      LOGFAIL(errno)
+      return ERRLOG(errno);
     }
     else {
       CLEARERRLOG
     }
   }
 
-  if (sendtoallex(&srplayerexit, sizeof(srplayerexit), player)) LOGFAIL(errno)
+  if (sendtoallex(&srplayerexit, sizeof(srplayerexit), player)) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -292,15 +268,13 @@ int sendsrplayerdisc(int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srplayerdisc.type = SRPLAYERDISC;
   srplayerdisc.player = player;
 
-  if (sendtoallex(&srplayerdisc, sizeof(srplayerdisc), player)) LOGFAIL(errno)
+  if (sendtoallex(&srplayerdisc, sizeof(srplayerdisc), player)) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -310,15 +284,13 @@ int sendsrplayerkick(int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srplayerkick.type = SRPLAYERKICK;
   srplayerkick.player = player;
 
-  if (sendtoall(&srplayerkick, sizeof(srplayerkick))) LOGFAIL(errno)
+  if (sendtoall(&srplayerkick, sizeof(srplayerkick))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -328,15 +300,13 @@ int sendsrplayerban(int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srplayerban.type = SRPLAYERBAN;
   srplayerban.player = player;
 
-  if (sendtoall(&srplayerban, sizeof(srplayerban))) LOGFAIL(errno)
+  if (sendtoall(&srplayerban, sizeof(srplayerban))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -346,15 +316,13 @@ int sendsrpause(int pause) {
   assert(pause >= 0);
   assert(pause < 256);
 
-TRY
   srpause.type = SRPAUSE;
   srpause.pause = pause;
 
-  if (sendtoall(&srpause, sizeof(srpause))) LOGFAIL(errno)
+  if (sendtoall(&srpause, sizeof(srpause))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -365,16 +333,14 @@ int sendsrrepairpill(int pill) {
   assert(pill < server.npills);
   assert(server.pills[pill].armour != ONBOARD);
 
-TRY
   srrepairpill.type = SRREPAIRPILL;
   srrepairpill.pill = pill;
   srrepairpill.armour = server.pills[pill].armour;
 
-  if (sendtoall(&srrepairpill, sizeof(srrepairpill))) LOGFAIL(errno)
+  if (sendtoall(&srrepairpill, sizeof(srrepairpill))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -385,15 +351,13 @@ int sendsrcoolpill(int pill) {
   assert(pill < server.npills);
   assert(server.pills[pill].armour != ONBOARD);
 
-TRY
   srcoolpill.type = SRCOOLPILL;
   srcoolpill.pill = pill;
 
-  if (sendtoall(&srcoolpill, sizeof(srcoolpill))) LOGFAIL(errno)
+  if (sendtoall(&srcoolpill, sizeof(srcoolpill))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -404,16 +368,14 @@ int sendsrcapturepill(int pill) {
   assert(pill < server.npills);
   assert(server.pills[pill].armour == ONBOARD);
 
-TRY
   srcapturepill.type = SRCAPTUREPILL;
   srcapturepill.pill = pill;
   srcapturepill.owner = server.pills[pill].owner;
 
-  if (sendtoall(&srcapturepill, sizeof(srcapturepill))) LOGFAIL(errno)
+  if (sendtoall(&srcapturepill, sizeof(srcapturepill))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -424,18 +386,16 @@ int sendsrbuildpill(int pill) {
   assert(pill < server.npills);
   assert(server.pills[pill].armour != ONBOARD);
 
-TRY
   srbuildpill.type = SRBUILDPILL;
   srbuildpill.pill = pill;
   srbuildpill.x = server.pills[pill].x;
   srbuildpill.y = server.pills[pill].y;
   srbuildpill.armour = server.pills[pill].armour;
 
-  if (sendtoall(&srbuildpill, sizeof(srbuildpill))) LOGFAIL(errno)
+  if (sendtoall(&srbuildpill, sizeof(srbuildpill))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -446,17 +406,15 @@ int sendsrdroppill(int pill) {
   assert(pill < server.npills);
   assert(server.pills[pill].armour != ONBOARD);
 
-TRY
   srdroppill.type = SRDROPPILL;
   srdroppill.pill = pill;
   srdroppill.x = server.pills[pill].x;
   srdroppill.y = server.pills[pill].y;
 
-  if (sendtoall(&srdroppill, sizeof(srdroppill))) LOGFAIL(errno)
+  if (sendtoall(&srdroppill, sizeof(srdroppill))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -466,15 +424,13 @@ int sendsrreplenishbase(int base) {
   assert(base >= 0);
   assert(base < server.nbases);
 
-TRY
   srreplenishbase.type = SRREPLENISHBASE;
   srreplenishbase.base = base;
 
-  if (sendtoall(&srreplenishbase, sizeof(srreplenishbase))) LOGFAIL(errno)
+  if (sendtoall(&srreplenishbase, sizeof(srreplenishbase))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -484,16 +440,14 @@ int sendsrcapturebase(int base) {
   assert(base >= 0);
   assert(base < server.nbases);
 
-TRY
   srcaputurebase.type = SRCAPTUREBASE;
   srcaputurebase.base = base;
   srcaputurebase.owner = server.bases[base].owner;
 
-  if (sendtoall(&srcaputurebase, sizeof(srcaputurebase))) LOGFAIL(errno)
+  if (sendtoall(&srcaputurebase, sizeof(srcaputurebase))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -512,18 +466,16 @@ int sendsrrefuel(int player, int base, int armour, int shells, int mines) {
   assert(mines >= 0);
   assert(mines < 256);
 
-TRY
   srrefuel.type = SRREFUEL;
   srrefuel.base = base;
   srrefuel.armour = armour;
   srrefuel.shells = shells;
   srrefuel.mines = mines;
 
-  if (sendtoallex(&srrefuel, sizeof(srrefuel), player)) LOGFAIL(errno)
+  if (sendtoallex(&srrefuel, sizeof(srrefuel), player)) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -537,17 +489,15 @@ int sendsrgrabboat(int player, int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   srgrabboat.type = SRGRABBOAT;
   srgrabboat.player = player;
   srgrabboat.x = x;
   srgrabboat.y = y;
 
-  if (sendtoall(&srgrabboat, sizeof(srgrabboat))) LOGFAIL(errno)
+  if (sendtoall(&srgrabboat, sizeof(srgrabboat))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -557,15 +507,13 @@ int sendsrmineack(int player, int success) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srmineack.type = SRMINEACK;
   srmineack.success = success != 0;
 
-  if (sendtoone(&srmineack, sizeof(srmineack), player)) LOGFAIL(errno)
+  if (sendtoone(&srmineack, sizeof(srmineack), player)) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -582,17 +530,15 @@ int sendsrbuilderack(int player, int mines, int trees, int pill) {
   assert(pill >= 0);
   assert(pill < server.npills || pill == 255);
 
-TRY
   srbuilderack.type = SRBUILDERACK;
   srbuilderack.mines = mines;
   srbuilderack.trees = trees;
   srbuilderack.pill = pill;
 
-  if (sendtoone(&srbuilderack, sizeof(srbuilderack), player)) LOGFAIL(errno)
+  if (sendtoone(&srbuilderack, sizeof(srbuilderack), player)) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -606,17 +552,15 @@ int sendsrsmallboom(int player, int x, int y) {
   assert(y >= 0);
   assert(y < 256);
 
-TRY
   srsmallboom.type = SRSMALLBOOM;
   srsmallboom.player = player;
   srsmallboom.x = x;
   srsmallboom.y = y;
 
-  if (sendtoall(&srsmallboom, sizeof(srsmallboom))) LOGFAIL(errno)
+  if (sendtoall(&srsmallboom, sizeof(srsmallboom))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -630,17 +574,15 @@ int sendsrsuperboom(int player, int x, int y) {
   assert(y >= 0);
   assert(y < 256);
 
-TRY
   srsuperboom.type = SRSUPERBOOM;
   srsuperboom.player = player;
   srsuperboom.x = x;
   srsuperboom.y = y;
 
-  if (sendtoall(&srsuperboom, sizeof(srsuperboom))) LOGFAIL(errno)
+  if (sendtoall(&srsuperboom, sizeof(srsuperboom))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -650,16 +592,14 @@ int sendsrhittank(int player, uint32_t dir) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srhittank.type = SRHITTANK;
   srhittank.player = player;
   srhittank.dir = dir;
 
-  if (sendtoone(&srhittank, sizeof(srhittank), player)) LOGFAIL(errno)
+  if (sendtoone(&srhittank, sizeof(srhittank), player)) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -669,46 +609,40 @@ int sendsrsetalliance(int player, uint16_t alliance) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   srsetalliance.type = SRSETALLIANCE;
   srsetalliance.player = player;
   srsetalliance.alliance = htons(alliance);
 
-  if (sendtoallex(&srsetalliance, sizeof(srsetalliance), player)) LOGFAIL(errno)
+  if (sendtoallex(&srsetalliance, sizeof(srsetalliance), player)) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
 int sendsrtimelimit(uint16_t timeremaining) {
   struct SRTimeLimit srtimelimit;
 
-TRY
   srtimelimit.type = SRTIMELIMIT;
   srtimelimit.timeremaining = htons(timeremaining);
   
-  if (sendtoall(&srtimelimit, sizeof(srtimelimit))) LOGFAIL(errno)
+  if (sendtoall(&srtimelimit, sizeof(srtimelimit))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
 int sendsrbasecontrol(uint16_t timeleft) {
   struct SRBaseControl srbasecontrol;
 
-TRY
   srbasecontrol.type = SRBASECONTROL;
   srbasecontrol.timeleft = htons(timeleft);
   
-  if (sendtoall(&srbasecontrol, sizeof(srbasecontrol))) LOGFAIL(errno)
+  if (sendtoall(&srbasecontrol, sizeof(srbasecontrol))) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -717,17 +651,15 @@ int sendtoall(const void *data, size_t nbytes) {
 
   assert(data != NULL);
 
-TRY
   for (i = 0; i < MAXPLAYERS; i++) {
     if (server.players[i].cntlsock != -1) {
-      if (writebuf(&server.players[i].sendbuf, data, nbytes) == -1) LOGFAIL(errno)
-//      if (sendplayerbufserver(i)) LOGFAIL(errno)
+      if (writebuf(&server.players[i].sendbuf, data, nbytes) == -1) return ERRLOG(errno);
+//      if (sendplayerbufserver(i)) return ERRLOG(errno);
     }
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -738,17 +670,15 @@ int sendtoallex(const void *data, size_t nbytes, int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   for (i = 0; i < MAXPLAYERS; i++) {
     if (player != i && server.players[i].cntlsock != -1) {
-      if (writebuf(&server.players[i].sendbuf, data, nbytes) == -1) LOGFAIL(errno)
-//      if (sendplayerbufserver(i)) LOGFAIL(errno)
+      if (writebuf(&server.players[i].sendbuf, data, nbytes) == -1) return ERRLOG(errno);
+//      if (sendplayerbufserver(i)) return ERRLOG(errno);
     }
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -757,14 +687,12 @@ int sendtoone(const void *data, size_t nbytes, int player) {
   assert(player >= 0);
   assert(player < MAXPLAYERS);
 
-TRY
   if (server.players[player].cntlsock != -1) {
-    if (writebuf(&server.players[player].sendbuf, data, nbytes) == -1) LOGFAIL(errno)
-//    if (sendplayerbufserver(player)) LOGFAIL(errno)
+    if (writebuf(&server.players[player].sendbuf, data, nbytes) == -1) return ERRLOG(errno);
+//    if (sendplayerbufserver(player)) return ERRLOG(errno);
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 

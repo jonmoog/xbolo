@@ -16,16 +16,14 @@ int sendclsmallboom(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clsmallboom.type = CLSMALLBOOM;
   clsmallboom.x = x;
   clsmallboom.y = y;
 
-  if (writebuf(&client.sendbuf, &clsmallboom, sizeof(clsmallboom)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clsmallboom, sizeof(clsmallboom)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -37,16 +35,14 @@ int sendclsuperboom(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clsuperboom.type = CLSUPERBOOM;
   clsuperboom.x = x;
   clsuperboom.y = y;
 
-  if (writebuf(&client.sendbuf, &clsuperboom, sizeof(clsuperboom)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clsuperboom, sizeof(clsuperboom)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -58,16 +54,14 @@ int sendcldropmine(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   cldropmine.type = CLDROPMINE;
   cldropmine.x = x;
   cldropmine.y = y;
 
-  if (writebuf(&client.sendbuf, &cldropmine, sizeof(cldropmine)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &cldropmine, sizeof(cldropmine)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -79,16 +73,14 @@ int sendcltouch(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   cltouch.type = CLTOUCH;
   cltouch.x = x;
   cltouch.y = y;
 
-  if (writebuf(&client.sendbuf, &cltouch, sizeof(cltouch)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &cltouch, sizeof(cltouch)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -100,16 +92,14 @@ int sendclgrabtile(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clgrabtile.type = CLGRABTILE;
   clgrabtile.x = x;
   clgrabtile.y = y;
 
-  if (writebuf(&client.sendbuf, &clgrabtile, sizeof(clgrabtile)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clgrabtile, sizeof(clgrabtile)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -121,16 +111,14 @@ int sendclgrabtrees(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clgrabtrees.type = CLGRABTREES;
   clgrabtrees.x = x;
   clgrabtrees.y = y;
 
-  if (writebuf(&client.sendbuf, &clgrabtrees, sizeof(clgrabtrees)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clgrabtrees, sizeof(clgrabtrees)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -142,17 +130,15 @@ int sendclbuildroad(int x, int y, int trees) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clbuildroad.type = CLBUILDROAD;
   clbuildroad.x = x;
   clbuildroad.y = y;
   clbuildroad.trees = trees;
 
-  if (writebuf(&client.sendbuf, &clbuildroad, sizeof(clbuildroad)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clbuildroad, sizeof(clbuildroad)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -164,17 +150,15 @@ int sendclbuildwall(int x, int y, int trees) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clbuildwall.type = CLBUILDWALL;
   clbuildwall.x = x;
   clbuildwall.y = y;
   clbuildwall.trees = trees;
 
-  if (writebuf(&client.sendbuf, &clbuildwall, sizeof(clbuildwall)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clbuildwall, sizeof(clbuildwall)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -186,17 +170,15 @@ int sendclbuildboat(int x, int y, int trees) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clbuildboat.type = CLBUILDBOAT;
   clbuildboat.x = x;
   clbuildboat.y = y;
   clbuildboat.trees = trees;
 
-  if (writebuf(&client.sendbuf, &clbuildboat, sizeof(clbuildboat)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clbuildboat, sizeof(clbuildboat)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -208,18 +190,16 @@ int sendclbuildpill(int x, int y, int trees, int pill) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clbuildpill.type = CLBUILDPILL;
   clbuildpill.x = x;
   clbuildpill.y = y;
   clbuildpill.trees = trees;
   clbuildpill.pill = pill;
 
-  if (writebuf(&client.sendbuf, &clbuildpill, sizeof(clbuildpill)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clbuildpill, sizeof(clbuildpill)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -231,17 +211,15 @@ int sendclrepairpill(int x, int y, int trees) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clrepairpill.type = CLREPAIRPILL;
   clrepairpill.x = x;
   clrepairpill.y = y;
   clrepairpill.trees = trees;
 
-  if (writebuf(&client.sendbuf, &clrepairpill, sizeof(clrepairpill)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clrepairpill, sizeof(clrepairpill)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -253,16 +231,14 @@ int sendclplacemine(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   clplacemine.type = CLPLACEMINE;
   clplacemine.x = x;
   clplacemine.y = y;
 
-  if (writebuf(&client.sendbuf, &clplacemine, sizeof(clplacemine)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clplacemine, sizeof(clplacemine)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -274,17 +250,15 @@ int sendcldamage(int x, int y, int boat) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   cldamage.type = CLDAMAGE;
   cldamage.x = x;
   cldamage.y = y;
   cldamage.boat = boat;
 
-  if (writebuf(&client.sendbuf, &cldamage, sizeof(cldamage)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &cldamage, sizeof(cldamage)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -296,16 +270,14 @@ int sendcldropboat(int x, int y) {
   assert(y >= 0);
   assert(y < WIDTH);
 
-TRY
   cldropboat.type = CLDROPBOAT;
   cldropboat.x = x;
   cldropboat.y = y;
 
-  if (writebuf(&client.sendbuf, &cldropboat, sizeof(cldropboat)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &cldropboat, sizeof(cldropboat)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -326,17 +298,15 @@ int sendcldroppills(float x, float y, uint16_t pills) {
 
   assert((pills >> i) == 0);
 
-TRY
   cldroppills.type = CLDROPPILLS;
   cldroppills.x = htonl(*((uint32_t *)&x));
   cldroppills.y = htonl(*((uint32_t *)&y));
   cldroppills.pills = htons(pills);
 
-  if (writebuf(&client.sendbuf, &cldroppills, sizeof(cldroppills)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &cldroppills, sizeof(cldroppills)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -352,18 +322,16 @@ int sendclrefuel(int base, int armour, int shells, int mines) {
   assert(mines >= 0);
   assert(mines < 256);
 
-TRY
   clrefuel.type = CLREFUEL;
   clrefuel.base = base;
   clrefuel.armour = armour;
   clrefuel.shells = shells;
   clrefuel.mines = mines;
 
-  if (writebuf(&client.sendbuf, &clrefuel, sizeof(clrefuel)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clrefuel, sizeof(clrefuel)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -375,16 +343,14 @@ int sendclhittank(int player, float dir) {
   assert(dir >= 0.0);
   assert(dir < k2Pif);
 
-TRY
   clhittank.type = CLHITTANK;
   clhittank.player = player;
   clhittank.dir = htonl(*((uint32_t *)&dir));
 
-  if (writebuf(&client.sendbuf, &clhittank, sizeof(clhittank)) == -1) LOGFAIL(errno)
+  if (writebuf(&client.sendbuf, &clhittank, sizeof(clhittank)) == -1) return ERRLOG(errno);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -395,7 +361,6 @@ int sendclupdate() {
   struct ListNode *node;
   int i;
 
-TRY
   client.players[client.player].lastupdate = client.players[client.player].seq;
 
   clupdate.hdr.player = client.player;
@@ -465,11 +430,10 @@ TRY
   }
 
   if (send(client.dgramsock, &clupdate, sizeof(clupdate.hdr) + clupdate.hdr.nshells*sizeof(struct CLUpdateShell) + clupdate.hdr.nexplosions*sizeof(struct CLUpdateExplosion), 0) == -1) {
-    LOGFAIL(errno)
+    return ERRLOG(errno);
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 

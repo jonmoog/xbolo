@@ -300,7 +300,6 @@ void growtrees(int nplayers) {
 int chainat(int x, int y) {
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
-TRY
   switch (server.terrain[y][x]) {
   case kMinedSeaTerrain:
   case kMinedSwampTerrain:
@@ -309,16 +308,15 @@ TRY
   case kMinedForestTerrain:
   case kMinedRubbleTerrain:
   case kMinedGrassTerrain:
-    if (explosionat(NEUTRAL, x, y)) LOGFAIL(errno)
+    if (explosionat(NEUTRAL, x, y)) return ERRLOG(errno);
     break;
 
   default:
     break;
   }
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
@@ -327,7 +325,6 @@ int floodat(int x, int y) {
 
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
-TRY
   switch (server.terrain[y][x]) {
   case kMinedSwampTerrain:
   case kMinedCraterTerrain:
@@ -335,16 +332,16 @@ TRY
   case kMinedForestTerrain:
   case kMinedRubbleTerrain:
   case kMinedGrassTerrain:
-    if (explosionat(NEUTRAL, x, y)) LOGFAIL(errno)
+    if (explosionat(NEUTRAL, x, y)) { ERRLOG(errno); goto fail; }
     break;
 
   case kCraterTerrain:
     server.terrain[y][x] = kRiverTerrain;
     sendsrflood(x, y);
-    if ((flood = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+    if ((flood = (Pointi *)malloc(sizeof(Pointi))) == NULL) { ERRLOG(errno); goto fail; }
     flood->x = x;
     flood->y = y;
-    if (addlist(server.floods + (server.ticks - 1)%(FLOODTICKS + 1), flood)) LOGFAIL(errno)
+    if (addlist(server.floods + (server.ticks - 1)%(FLOODTICKS + 1), flood)) { ERRLOG(errno); goto fail; }
     flood = NULL;
     break;
 
@@ -352,19 +349,18 @@ TRY
     break;
   }
 
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    RETURN(0)
 
-  default:
-    if (flood != NULL) {
-      free(flood);
-    }
+  return 0;
 
-    RETERR(-1)
+fail:
+  if (flood != NULL) {
+    int err = errno;
+
+    free(flood);
+    errno = err;
   }
-END
+
+  return -1;
 }
 
 
@@ -374,16 +370,15 @@ int floodtest(int x, int y) {
   flood = NULL;
   assert(x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
-TRY
   switch (server.terrain[y][x]) {
   case kRiverTerrain:
   case kSeaTerrain:
   case kMinedSeaTerrain:
   case kBoatTerrain:
-    if ((flood = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+    if ((flood = (Pointi *)malloc(sizeof(Pointi))) == NULL) { ERRLOG(errno); goto fail; }
     flood->x = x;
     flood->y = y;
-    if (addlist(server.floods + (server.ticks - 1)%(FLOODTICKS + 1), flood)) LOGFAIL(errno)
+    if (addlist(server.floods + (server.ticks - 1)%(FLOODTICKS + 1), flood)) { ERRLOG(errno); goto fail; }
     flood = NULL;
     break;
 
@@ -391,19 +386,18 @@ TRY
     break;
   }
 
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    RETURN(0)
 
-  default:
-    if (flood != NULL) {
-      free(flood);
-    }
+  return 0;
 
-    RETERR(-1);
+fail:
+  if (flood != NULL) {
+    int err = errno;
+
+    free(flood);
+    errno = err;
   }
-END
+
+  return -1;
 }
 
 
@@ -412,7 +406,6 @@ int explosionat(int player, int x, int y) {
 
   assert(((player >= 0 && player < MAXPLAYERS) || player == NEUTRAL) && x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
-TRY
   switch (server.terrain[y][x]) {
   case kBoatTerrain:
   case kWallTerrain:
@@ -443,14 +436,14 @@ TRY
   case kMinedRubbleTerrain:
   case kMinedGrassTerrain:
     server.terrain[y][x] = kCraterTerrain;
-    if (floodtest(x, y - 1)) LOGFAIL(errno)
-    if (floodtest(x - 1, y)) LOGFAIL(errno)
-    if (floodtest(x + 1, y)) LOGFAIL(errno)
-    if (floodtest(x, y + 1)) LOGFAIL(errno)
-    if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+    if (floodtest(x, y - 1)) { ERRLOG(errno); goto fail; }
+    if (floodtest(x - 1, y)) { ERRLOG(errno); goto fail; }
+    if (floodtest(x + 1, y)) { ERRLOG(errno); goto fail; }
+    if (floodtest(x, y + 1)) { ERRLOG(errno); goto fail; }
+    if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) { ERRLOG(errno); goto fail; }
     chain->x = x;
     chain->y = y;
-    if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
+    if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) { ERRLOG(errno); goto fail; }
     chain = NULL;
     sendsrsmallboom(NEUTRAL, x, y);
     break;
@@ -463,19 +456,18 @@ TRY
     break;
   }
 
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    RETURN(0)
 
-  default:
-    if (chain != NULL) {
-      free(chain);
-    }
+  return 0;
 
-    RETERR(-1)
+fail:
+  if (chain != NULL) {
+    int err = errno;
+
+    free(chain);
+    errno = err;
   }
-END
+
+  return -1;
 }
 
 
@@ -484,7 +476,6 @@ int superboomat(int player, int x, int y) {
 
   assert(player >= 0 && player < MAXPLAYERS && x >= 0 && x < WIDTH && y >= 0 && y < WIDTH);
 
-TRY
   /* turn terrain to crater */
   if (server.terrain[y][x] != kSeaTerrain && server.terrain[y][x] != kMinedSeaTerrain) {
     server.terrain[y][x] = kCraterTerrain;
@@ -500,94 +491,89 @@ TRY
   }
 
   /* begin flood test */
-  if (floodtest(x, y - 1)) LOGFAIL(errno)
-  if (floodtest(x + 1, y - 1)) LOGFAIL(errno)
-  if (floodtest(x - 1, y)) LOGFAIL(errno)
-  if (floodtest(x - 1, y + 1)) LOGFAIL(errno)
-  if (floodtest(x + 2, y)) LOGFAIL(errno)
-  if (floodtest(x + 2, y + 1)) LOGFAIL(errno)
-  if (floodtest(x, y + 2)) LOGFAIL(errno)
-  if (floodtest(x + 1, y + 2)) LOGFAIL(errno)
+  if (floodtest(x, y - 1)) { ERRLOG(errno); goto fail; }
+  if (floodtest(x + 1, y - 1)) { ERRLOG(errno); goto fail; }
+  if (floodtest(x - 1, y)) { ERRLOG(errno); goto fail; }
+  if (floodtest(x - 1, y + 1)) { ERRLOG(errno); goto fail; }
+  if (floodtest(x + 2, y)) { ERRLOG(errno); goto fail; }
+  if (floodtest(x + 2, y + 1)) { ERRLOG(errno); goto fail; }
+  if (floodtest(x, y + 2)) { ERRLOG(errno); goto fail; }
+  if (floodtest(x + 1, y + 2)) { ERRLOG(errno); goto fail; }
 
   /* begin chain explosions */
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) { ERRLOG(errno); goto fail; }
   chain->x = x;
   chain->y = y;
-  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) { ERRLOG(errno); goto fail; }
+  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) { ERRLOG(errno); goto fail; }
   chain->x = x + 1;
   chain->y = y;
-  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) { ERRLOG(errno); goto fail; }
+  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) { ERRLOG(errno); goto fail; }
   chain->x = x;
   chain->y = y + 1;
-  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
-  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) LOGFAIL(errno)
+  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) { ERRLOG(errno); goto fail; }
+  if ((chain = (Pointi *)malloc(sizeof(Pointi))) == NULL) { ERRLOG(errno); goto fail; }
   chain->x = x + 1;
   chain->y = y + 1;
-  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) LOGFAIL(errno)
+  if (addlist(server.chains + (server.ticks - 1)%(CHAINTICKS + 1), chain)) { ERRLOG(errno); goto fail; }
   chain = NULL;
 
   /* send superboom to clients */
   sendsrsuperboom(player, x, y);
 
-CLEANUP
-  switch (ERROR) {
-  case 0:
-    RETURN(0)
 
-  default:
-    if (chain) {
-      free(chain);
-    }
+  return 0;
 
-    RETERR(-1)
+fail:
+  if (chain != NULL) {
+    int err = errno;
+
+    free(chain);
+    errno = err;
   }
-END
+
+  return -1;
 }
 
 
 int chain() {
   struct ListNode *node;
 
-TRY
   for (node = nextlist(server.chains + server.ticks%(CHAINTICKS + 1)); node != NULL; node = nextlist(node)) {
     Pointi *chain;
 
     chain = ptrlist(node);
-    if (chainat(chain->x, chain->y - 1)) LOGFAIL(errno)
-    if (chainat(chain->x - 1, chain->y)) LOGFAIL(errno)
-    if (chainat(chain->x + 1, chain->y)) LOGFAIL(errno)
-    if (chainat(chain->x, chain->y + 1)) LOGFAIL(errno)
+    if (chainat(chain->x, chain->y - 1)) return ERRLOG(errno);
+    if (chainat(chain->x - 1, chain->y)) return ERRLOG(errno);
+    if (chainat(chain->x + 1, chain->y)) return ERRLOG(errno);
+    if (chainat(chain->x, chain->y + 1)) return ERRLOG(errno);
   }
 
   clearlist(server.chains + server.ticks%(CHAINTICKS + 1), free);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
 int flood() {
   struct ListNode *node;
 
-TRY
   for (node = nextlist(server.floods + server.ticks%(FLOODTICKS + 1)); node != NULL; node = nextlist(node)) {
     Pointi *flood;
 
     flood = ptrlist(node);
-    if (floodat(flood->x, flood->y - 1)) LOGFAIL(errno)
-    if (floodat(flood->x - 1, flood->y)) LOGFAIL(errno)
-    if (floodat(flood->x + 1, flood->y)) LOGFAIL(errno)
-    if (floodat(flood->x, flood->y + 1)) LOGFAIL(errno)
+    if (floodat(flood->x, flood->y - 1)) return ERRLOG(errno);
+    if (floodat(flood->x - 1, flood->y)) return ERRLOG(errno);
+    if (floodat(flood->x + 1, flood->y)) return ERRLOG(errno);
+    if (floodat(flood->x, flood->y + 1)) return ERRLOG(errno);
   }
 
   clearlist(server.floods + server.ticks%(FLOODTICKS + 1), free);
 
-CLEANUP
-ERRHANDLER(0, -1)
-END
+
+  return 0;
 }
 
 
